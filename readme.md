@@ -123,9 +123,15 @@ https://github.com/altocodenl/cell?tab=readme-ov-file#the-data-vocabulary-fourda
 
 ### Pillar 2: unification in the dataspace
 
+Everything has an address. The address is the path.
+
 ### Pillar 3: explicitness at every step
 
+This is why REST is better than non-REST, why microservices are more tractable than monoliths.
+
 ### Pillar 4: code is data
+
+Write code in the same vocabulary that you use for data. It's already parsed. And it forces you to think all in terms of explicit data at every step. Also, it is unified.
 
 ### Pillar 5: interfaces are data
 
@@ -147,7 +153,7 @@ From the happy new world to the difficult vistas it reveals.
 - Running the system
 - Sciences
 
-DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); most of the stuff is there, but it has to undergo intense transformations to achieve a more stable shape. Below go many ideas that will probably make their way to the final version. They are quite unreadable, but if you're curious, there they are. If they don't make sense to you, it's likely because they don't make sense.
+DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); most of the stuff is there, but it has to undergo intense transformations to achieve a more stable shape. Below go many ideas that will probably make their way to the final version. They are quite unreadable, but if you're curious, there they are. If they don't make sense to you, it's likely because they don't make sense at all.
 
 ```
 
@@ -165,7 +171,6 @@ DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wik
    - focus on data, not code (explicitness); vs code instead of data
    - for unification: put everything in single dataspace; rather than breaking it in little boxes.
    - Obstacles: implicitness, fragmentation of the dataspace.
-- toois or todis? I think todis.
 - The entire thing is about data: when the data is seen, the trivial becomes difficult, the nontrivial impossible.
 - The data from the call changes the sequence into something else.
 - Digital information systems provide a central way to organize human society. Therein lies their importance.
