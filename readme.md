@@ -58,11 +58,15 @@ The challenge of communicating and transforming data is compounded by the fact t
 
 The challenge to understand an information system is subtle, because most of the software that runs our world is composed of straightforward - even trivial - data transformations. What makes a system challenging to understand is not a single, thorny part of it. But rather: how do all the parts fit together with each other? The parts of an information system are closely and subtly interrelated; and most information systems are comprised of a large number of parts. Therein lies the difficulty in fully understanding the system: how each of the parts work, and how do they relate to each other?
 
+Occasionally, there's a thorny algorithmic problem that's critical to an information system; these are hard and they are fun to tackle. Most of them have efficient solutions that you can just use off the shelf. What's distinctly difficult to pull off the shelf is a way to turn a complex system, made of many trivial parts, into a simple one.
+
 Simple systems are easier to understand than complex systems. Rich Hickey [brilliantly defines simplicity](https://github.com/matthiasn/talk-transcripts/blob/master/Hickey_Rich/SimpleMadeEasy.md) as something that is not intertwined or entangled with other things; whereas complex things are things that are "folded together", therefore requiring you to understand them not just in isolation, but in all their possible interrelations.
 
 According to [Fred Brooks](https://en.wikipedia.org/wiki/Fred_Brooks), complexity can be divided into two: essential complexity, which is the minimum possible complexity of a system that implements a set of features; and accidental complexity, which is complexity that can be avoided by a better design. In other words, essential complexity is the minimum possible complexity of a given system.
 
 Whether you pick Hickey's or Brooks' definition, the art of system design is the making of systems that are as simple as possible. For Fred Brooks, the main quality of simple systems is conceptual integrity. Conceptual integrity is an emergent property of a system that is designed by either one person or a small group of persons who have an unified vision of how the system should be. The notion of the concepts of the system being "integral" resonates deeply with Christopher Alexander's notion of strong centers as the main quality of good architectural designs. These two authors may well be talking about the same thing: a good system is composed of consistent parts that are organized harmoniously.
+
+Fred Brooks' recommendation to tackle conceptual integrity was to try to fit the design in the head of a single architect, or of a small and highly coordinated group of architects. I am intrigued by the possibility of going beyond this, and finding conceptual tools that allow information workers to co-create information systems that evolve towards simplicity and create a harmonious whole, not unlike what workmen did five hundred years ago when building a cathedral.
 
 **The limiting factor of those who create information systems is complexity**. Data transformations, by themselves, are extremely cheap (in terms of the time and the energy used by the computer resources required to do them) and have extremely low error rates. It is the making and maintaining of a coherent information system that can make or break an organization, an institution, and even perhaps the global economy.
 
@@ -95,6 +99,8 @@ All of the above are necessary, but they are merely tools - means to an end. And
 
 But, at the time of writing, this is not the prevalent paradigm. The way I see it, those making DIS are painters that only look at their their brush or their palette; only rarely do they give a fleeting glimpse to the picture that they are painting.
 
+New developments such as generative AI or big data don't change these facts; the paradigm is neutral towards them.
+
 If you take away one thing from this treatise, it should be this one: **if you are working with a DIS, look at the painting (the data) as much as possible. And ignore as much as possible the brush and the palette (The List).**
 
 Why not look at data and focus on The List? Normally, nobody even asks this question. When I raised it, I obtained two arguments against looking at the data:
@@ -106,6 +112,8 @@ This entire treatise is built on toppling these two myths with the following (hy
 
 1. Once we decide to look at the data directly, there are ways in which we can abridge it without losing descriptive power. And these ways are much simpler than The List. "These ways" is what fills up the rest of this treatise.
 2. Makers of DIS are in dire need of humility. Simple data is powerful, even exciting. The details matter. They can be joined into harmonious wholes. But to eschew details because they are beneath oneself is *exactly* what's keeping us mired in a mess of our own making.
+
+Our contemporary attitude towards software is focused, perhaps naturally, on software itself, and not on the data which flows through it and which justifies the existence of software itself. But it is perfectly possible to see code as the negative impression (just like a picture taken with film has a [negative](https://en.wikipedia.org/wiki/Negative_(photography))) of the data flows it enables.
 
 When the data is not seen, the trivial becomes difficult and the nontrivial impossible.
 
@@ -157,6 +165,11 @@ This is why REST is better than non-REST, why microservices are more tractable t
 Write code in the same vocabulary that you use for data. It's already parsed. And it forces you to think all in terms of explicit data at every step. Also, it is unified.
 
 - Higher level languages let you focus on data at a human level.
+- The data from the call changes the sequence into something else.
+
+Levels where you draw lines have sublevels down to a single chip operation.
+
+a flow as a sequence.
 
 ### Pillar 5: interfaces are code, therefore data
 
@@ -175,43 +188,19 @@ Write code in the same vocabulary that you use for data. It's already parsed. An
 - Design
 - Implementation & testing
 - Security
+   - For security: make it about data, not about perimeter; it's zero trust but naturally. And kerchoffs principle: no unnecessary layers.
 - Running the system
 - Sciences
 
 DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); most of the stuff is there, but it has to undergo intense transformations to achieve a more stable shape. Below go many ideas that will probably make their way to the final version. They are quite unreadable, but if you're curious, there they are. If they don't make sense to you, it's likely because they don't make sense at all.
 
 ```
-
-- New developments such as generative AI or big data don't change these facts; the paradigm is neutral towards them.
-- The data from the call changes the sequence into something else.
-- Digital information systems provide a central way to organize human society. Therein lies their importance.
-- For security: make it about data, not about perimeter; it's zero trust but naturally. And kerchoffs principle: no unnecessary layers.
-
-Reference to cell
-
-Means of computation are widespread. The main problem is to organize them. Trivial operations compound.
-
-Not difficulty of algorithms, just making coherent wholes.
-
 Communication as basis.
-Patterns: fire forget, fire and return (with optional value)
 Read is write
-This can explain everything
 
-Levels where you draw lines have sublevels down to a single chip operation.
-
-the hypotheses (plural):
-- The best way to understand any information system is the data it transmits, transforms and stores.
-- Data can be used to express concrete data sequences dynamically, not just statically.
 - Any analytically capable person can read and write these data sequences.
 - These data sequences define 90-99% of the implementation and its tests.
 - Working on the data sequences directly is the most effective way to create a simple and reliable system.
-
-a flow as a sequence.
-
-Here I intend to explore software from the perspective of data, as a fresh angle that can yield useful insights. Our contemporary attitude towards software is focused, perhaps naturally, on software itself, and not on the data which flows through it and which justifies the existence of software itself. But it is perfectly possible to see code as the negative impression (just like a picture taken with film has a [negative](https://en.wikipedia.org/wiki/Negative_(photography))) of the data flows it enables.
-
-By switching the emphasis from code to data, my goal is to find conceptual tools that can help us reason about and design better information systems. Fred Brooks' recommendation to tackle conceptual integrity was to try to fit the design in the head of a single architect, or of a small and highly coordinated group of architects. I am intrigued by the possibility of going beyond this, and finding conceptual tools that allow information workers to co-create information systems that evolve towards simplicity and create a harmonious whole, not unlike what workmen did five hundred years ago when building a cathedral.
 
 By focusing on the data, we also can just retain the essential details of the hardware and the network. The core concept we will examine is that of a *digital component* (or just *component*), which is both a source and a repository of data.
 
