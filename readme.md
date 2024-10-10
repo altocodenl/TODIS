@@ -68,6 +68,8 @@ Whether you pick Hickey's or Brooks' definition, the art of system design is the
 
 This is quite interesting, because in pre-information economies, it was energy, not organization, that is the limiting factor of the creation of wealth. Therefore the search for simplicity is not merely an interesting or reasonable pursuit: it is the central way in which complexity, the limiting factor of an information economy, and therefore of wealth creation, can be tackled.
 
+Perhaps we can draw a line between simple systems and complex systems: simple systems are those whose complexity grows linearly (or less than linearly) with the value they produce; whereas complex systems are those which grow quadratically (or more) in complexity with the value they produce.
+
 ## The main thesis: to organize the system, always focus on the data
 
 The main contention of this treatise is that *the* way to design simple DIS is to focus on the data that they communicate, transform and store. It is as simple as that.
@@ -105,7 +107,9 @@ This entire treatise is built on toppling these two myths with the following (hy
 1. Once we decide to look at the data directly, there are ways in which we can abridge it without losing descriptive power. And these ways are much simpler than The List. "These ways" is what fills up the rest of this treatise.
 2. Makers of DIS are in dire need of humility. Simple data is powerful, even exciting. The details matter. They can be joined into harmonious wholes. But to eschew details because they are beneath oneself is *exactly* what's keeping us mired in a mess of our own making.
 
-Data itself is simple. By using data to understand and make a DIS, we can find the simplest possible expression of the system that will get the job done.
+When the data is not seen, the trivial becomes difficult and the nontrivial impossible.
+
+Data itself is simple and can be directly seen. By using data to understand and make a DIS, we can find the simplest possible expression of the system that will get the job done.
 
 This is the central thesis of this treatise. We'll explore now how to make this a reality through five practical concepts, called pillars.
 
@@ -121,23 +125,44 @@ This is the central thesis of this treatise. We'll explore now how to make this 
 
 https://github.com/altocodenl/cell?tab=readme-ov-file#the-data-vocabulary-fourdata
 
+main obstacle: lack of consistent data vocabulary
+
 ### Pillar 2: unification in the dataspace
 
-Everything has an address. The address is the path.
+Everything has a path. Address is path.
+
+Let's call them keys. a path is one or more keys, followed by a value.
+
+- Dataspace: access vs control. Open access, use control to determine when to block.
+
+- Web is a single dataspace.
+
+main obstacle: fragmentation
 
 ### Pillar 3: explicitness at every step
 
+The traditional approach: input, program and result. For now, let's ignore the program and focus on the input and result, which are data. The focus is generally on those two, at best. The intermediate steps are not shown, except in logs or debugger.
+
+- Logs are necessary as long as we're doing "blind manipulation of symbols" (get that quote).
+
+- REST is great because it is about sending data for changes. Changes represented as data.
+- Microservices give you more rest. Corba also. Vs rpc; rpc can be represented as data, but less contractual.
+
 This is why REST is better than non-REST, why microservices are more tractable than monoliths.
+
+- Obstacles: implicitness, being blind at the process
 
 ### Pillar 4: code is data
 
 Write code in the same vocabulary that you use for data. It's already parsed. And it forces you to think all in terms of explicit data at every step. Also, it is unified.
 
-### Pillar 5: interfaces are data
+- Higher level languages let you focus on data at a human level.
+
+### Pillar 5: interfaces are code, therefore data
 
 ## On scaling, consistency and parallelism
 
-From the happy new world to the difficult vistas it reveals.
+- Distributed and parallel: consistency. Scalability with that assured is trivial (throw more nodes in), except for the "inside api" problem that Hickey points out.
 
 ## How to test the (hypo)thesis of this treatise
 
@@ -157,21 +182,7 @@ DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wik
 
 ```
 
-- REST is great because it is about sending data for changes. Changes represented as data.
-- Dataspace: access vs control. Open access, use control to determine when to block.
-- Higher level languages let you focus on data at a human level.
-- Web is a single dataspace.
-- Microservices give you more rest. Corba also. Vs rpc; rpc can be represented as data, but less contractual.
-- Distributed and parallel: consistency. Scalability with that assured is trivial (throw more nodes in), except for the "inside api" problem that Hickey points out.
-- Organization, not energy as limiting factor. Energy goes up up up in the absence of good organization. Organization as what keeps energy flat (linear or quad, perhaps subquad).
 - New developments such as generative AI or big data don't change these facts; the paradigm is neutral towards them.
-- In a nutshell: infosys are about data.
-- Logs are necessary as long as we're doing "blind manipulation of symbols" (get that quote).
-- Goodness of system depends on two qualities: unification and explicitness.
-   - focus on data, not code (explicitness); vs code instead of data
-   - for unification: put everything in single dataspace; rather than breaking it in little boxes.
-   - Obstacles: implicitness, fragmentation of the dataspace.
-- The entire thing is about data: when the data is seen, the trivial becomes difficult, the nontrivial impossible.
 - The data from the call changes the sequence into something else.
 - Digital information systems provide a central way to organize human society. Therein lies their importance.
 - For security: make it about data, not about perimeter; it's zero trust but naturally. And kerchoffs principle: no unnecessary layers.
