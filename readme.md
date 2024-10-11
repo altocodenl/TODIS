@@ -1,5 +1,9 @@
 # The Organization of Digital Information Systems
 
+> "The fundamental problem of communication is that of reproducing at one point either exactly or approximately a message selected at another point." -- [Claude Shannon](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf)
+
+> "To a great extent the act of coding is one of organization." -- [James Hague](https://prog21.dadgum.com/177.html)
+
 ## Purpose
 
 We currently live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age). The revolution of digital technology has made information pervasive and central to human economy, politics, society and culture.
@@ -72,8 +76,6 @@ Fred Brooks' recommendation to tackle conceptual integrity was to try to fit the
 
 This is quite interesting, because in pre-information economies, it was energy, not organization, that is the limiting factor of the creation of wealth. Therefore the search for simplicity is not merely an interesting or reasonable pursuit: it is the central way in which complexity, the limiting factor of an information economy, and therefore of wealth creation, can be tackled.
 
-Perhaps we can draw a line between simple systems and complex systems: simple systems are those whose complexity grows linearly (or less than linearly) with the value they produce; whereas complex systems are those which grow quadratically (or more) in complexity with the value they produce.
-
 ## The main thesis: to organize the system, always focus on the data
 
 The main contention of this treatise is that *the* way to design simple DIS is to focus on the data that they communicate, transform and store. It is as simple as that.
@@ -84,6 +86,7 @@ What is this everything else that holds the attention of makers or DIS? Here are
 
 - Programming languages.
 - Programming paradigms.
+- Type systems.
 - Libraries.
 - Communication protocols.
 - Operating systems.
@@ -121,6 +124,8 @@ Data itself is simple and can be directly seen. By using data to understand and 
 
 This is the central thesis of this treatise. We'll explore now how to make this a reality through five practical concepts, called pillars.
 
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); most of the stuff is there, but it has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+
 ## The five pillars
 
 1. **Vocabulary**: Have a simple and consistent data vocabulary. We use cell's fourdata, in alf (abridged line format).
@@ -141,24 +146,47 @@ Everything has a path. Address is path.
 
 Let's call them keys. a path is one or more keys, followed by a value.
 
+Path is how you reference a value. There's no notion of a value without a path. Everything exists in a space and everything has a handle. There's no "floating" or "dangling" data.
+
 - Dataspace: access vs control. Open access, use control to determine when to block.
 
-- Web is a single dataspace.
+What makes an unified information space powerful is that you can address everything from it. This is why the web is powerful, because it is a single dataspace.
+
+Not everything actually "is" in dataspace, but if you can map it, then it is there. For example, a relational database is not using cell, but you can associate its data and operations to the dataspace. That's how you can put it in the dataspace. Representation can stand for existence. But you need a part of your system to actually provide those mappings so that you can do "as if" it was there.
+
+By focusing on the data, we also can just retain the essential details of the hardware and the network. The core concept we will examine is that of a *digital component* (or just *component*), which is both a source and a repository of data.
+Let's first define what is a digital component. A digital component is something that can transmit, transform and store data. Draw the boundaries wherever you want: entire system, program, function.
+
+Can you model a chip, with registers and memory locations as addresses?
 
 main obstacle: fragmentation
 
-### Pillar 3: explicitness at every step
+### Pillar 3: explicitness at every transformation
+
+problem: express change. we need an unified model for transformations.
+all change happens through communication.
+we assume that communication happens.
+Communication in the Shannon sense is done one way. call and response model, it can all be understood like that.
+
+When you make a call, you allocate. Or rather, with the response, you call the storage.
 
 The traditional approach: input, program and result. For now, let's ignore the program and focus on the input and result, which are data. The focus is generally on those two, at best. The intermediate steps are not shown, except in logs or debugger.
 
-- Logs are necessary as long as we're doing "blind manipulation of symbols" (get that quote).
+- Logs are necessary as long as we're doing "blind manipulation of symbols" (cannot remember the origin of that quote).
+
+explicitness gives feedback at every step.
 
 - REST is great because it is about sending data for changes. Changes represented as data.
 - Microservices give you more rest. Corba also. Vs rpc; rpc can be represented as data, but less contractual.
 
 This is why REST is better than non-REST, why microservices are more tractable than monoliths.
 
+Calls are the transitions.
+
 - Obstacles: implicitness, being blind at the process
+
+Communication as basis.
+Read is write
 
 ### Pillar 4: code is data
 
@@ -171,11 +199,14 @@ Levels where you draw lines have sublevels down to a single chip operation.
 
 a flow as a sequence.
 
+the problem with expressions: they are not automatically referenceable from outside of their immediate context. solved by pillar 3.
+the problem with statements: they are not data. solved by pillar 4.
+
 ### Pillar 5: interfaces are code, therefore data
 
-## On scaling, consistency and parallelism
-
-- Distributed and parallel: consistency. Scalability with that assured is trivial (throw more nodes in), except for the "inside api" problem that Hickey points out.
+this is all great for backend, but what about interfaces?
+An interface is a way for a human to interact with software - always through hardware.
+interface mapped to state! see the data being displayed and the possible transformations.
 
 ## How to test the (hypo)thesis of this treatise
 
@@ -185,200 +216,61 @@ a flow as a sequence.
 
 ## Applications of the theory
 
-- Design
-- Implementation & testing
-- Security
-   - For security: make it about data, not about perimeter; it's zero trust but naturally. And kerchoffs principle: no unnecessary layers.
 - Running the system
 - Sciences
 
-DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); most of the stuff is there, but it has to undergo intense transformations to achieve a more stable shape. Below go many ideas that will probably make their way to the final version. They are quite unreadable, but if you're curious, there they are. If they don't make sense to you, it's likely because they don't make sense at all.
+### Team composition & direction
+
+For creation of general DIS:
+- Any analytically capable person can read and write these data sequences. Focus on analysis and [organizational principles](https://prog21.dadgum.com/177.html). These data sequences define 90-99% of the implementation and its tests. Working on the data sequences directly is the most effective way to create a simple and reliable system.
+- Specialization works for certain areas: interface design, tool making, data science.
+
+### Understanding existing systems
+
+- put the dbs first into dataspace: the data itself, and the constraints too
+- capture logs of operation, all inputs and outputs and put them in the space too. see the transitions. feel free to add more logging of the data.
+- use the system for real, eschew unit tests. go with the real thing. unit tests are only useful in highly documented, high quality systems.
+- network analysis to see who's who.
+- go 80/20 rather than all in
+- valuable code is only that that performs nontrivial operations, and can usually be isolated.
+- feed data to an llm to find patterns for you too.
+
+### Designing and implementing new systems
+
+- design data at rest
+- design data transitions
+- build up surfaces for those data transitions
+
+### Security
+
+It is about data, not about perimeter; it's zero trust but naturally. And kerchoffs principle: no unnecessary layers.
+Control is still key.
+
+### On scaling, consistency and parallelism
+
+- Distributed and parallel: consistency. Scalability with that assured is trivial (throw more nodes in), except for the "inside api" problem that Hickey points out.
+
+### Quality
+
+Implementing the Toyota Production System
+- autoactivation
+- flow backwards, with reactive
+
+testing
+- convergence to mathematical proof
+- to generate, you must understand the order of validations.
+- see errors as valid outputs, validate all the way.
+
+
+
+
 
 ```
-Communication as basis.
-Read is write
+call can be a function call, a call to the OS, over the network. it's all the same.
 
-- Any analytically capable person can read and write these data sequences.
-- These data sequences define 90-99% of the implementation and its tests.
-- Working on the data sequences directly is the most effective way to create a simple and reliable system.
-
-By focusing on the data, we also can just retain the essential details of the hardware and the network. The core concept we will examine is that of a *digital component* (or just *component*), which is both a source and a repository of data.
-
-It is my contention that the challenge of designing information systems in a simple way can be drastically reduced by understanding it in terms of data flows going through digital components. The architecture of the system can emerge from the desired data flows that the system will enable. More importantly, a concrete understanding of the system can emerge, with which we can understand, replace and modify existing information systems.
-
-My hope is that through the very concrete abstractions of digital components and data flows, we'll be able to make more sense of our digital world, both as individuals and collectively.
-
-### Data flows through digital components
-
-"The fundamental problem of communication is that of reproducing at one point either exactly or approximately a message selected at another point."
-
-Communication in the Shannon sense is done one way.
-call and response model, it can all be understood like that
-communication is about the call getting to the other side
-here we study transformations.
-what about reading? We can see it as a sort of call and response.
-
-what about communication? that was covered by Shannon. We can assume that it can happen.
-
-call is always a function call. the function call can be local, or make calls to toher processes - other processes can be seen as the network, whether local or outside.
-
-things that fold onto themselves: function call, call to the OS, call to the network.
-
-function allows you to have abstraction. function as a layer.
-component is a function! indistinguishable.
-
-return vs respond. control vs data. but isn't it the same, with the data taking over the channel for a while?
-
-transform as communication, through call?
-
-response = call + arguments + state
-
-Read is a call. Transform is a call. Everything has an address. Call is to an address, the result is written to an address. Why? Because every piece of computation (one of the three) responds to a call.
-It is all calls, even cron.
-When you make a call, you allocate. Or rather, with the response, you call the storage.
-
-Address 7890 of what you call. But what called it also has an address! Where's the execution is written? In another set of addresses. Internal would be one way, but what about when it involves an external server? Ir also has an execution space that needs ro be addressed. This has to be named.
-
-Reactivity event system is just doing it through those calls through the event system.
-This is the third layer?
-
-Context is a way of resolving urls in a way where you're looking at the last part of the path starting from your area and then going one out. This is the second layer.
-
-This is it. Together with the data types and the 10? Verbs.
-
-Can you model a chip, with registers and memory locations as addresses?
-A way to comfortably and directly represent all computation.
-Yep, it's a new model for computation. Practical enough to implement, intuitive enough to directly understand.
-
-Minimum verbs: reference and conditional. Assumes it is always going further. Without that assumption, you can see that a reference to the function is an execution. And therefore you need a quote foe the function itself. Is this the right way? Yes, because you execute functions far more than you reference/quote them.
-
-Is there standalone data? At least in the arg calls?
-Function is call
-The response is the transformation of the call
-Side effects as change in state that is indirect. If it was calls elsewhere without wrote no problem. An intended write to the DB coming from a POST would not considered side effect except for absolute purists.
-
-data flow: data is text, but can be structured. discrete vs continuous flows.
-digital component: conncomp/human
-t
-where do we draw the boundaries on both data flows and digital components? nested.
-- for a data flow: call/response, only between two. to understand more complex things you can see them as chains of requests/responses.
-
-data can be represented as text for humans to consume. there are other ways in which humans can see data, but we'll use text as the main one (later we'll see that interfaces, to a considerable extent, can be transformed to textual representations).
-data can be communicated, stored and transformed through digital computers connected to the network.
-
-Let's take a couple steps back.
-
-Digital data can be represented as text. This text can be 1) read by humans (through interfaces); 2) processed digitally.
-
-The digital is about text. A character is not a half character, but a whole one.
-
-Let's first define what is a digital component. A digital component is:
-1. A computer.
-2. Connected to the internet.
-3. That can run some software.
-
-Digital components have the ability to communicate, store and transform data.
-
-A small piece of the same program can be considered a component, if you want. Draw the boundaries wherever you want?
-
-data must be serializable. if there's internal data shared, then represent that flow explicitly.
-
-Lang is machine sat atop the machine. Also for humans. Transformation and communication happen, as well as retrieval. Humans as elements of an information system.
-No need for an extra description layer, that's the software itself. The software itself rather than a concrete map. Leave funs undefined yet if needed.
-It's not that we have to send multiple commands of the same kind, like enough soldiers for the battle, for it to go through. That's not the issue. There's a low error rate.
-First define the data representation. Then extend. Data rep has no vars! The var is the first step.
-Funs are lists that have each outermost step starting with a fun.
-Deserialization as the beginning of structured data, from text to that. text is unstructured data.
-message vs continuous flow. this is a boundary on time, and it could also be of chunks if you're multiplexing. see channel as only one at a time. this is what shannon gave us.
-
-digital component: something running on top of hardware+software+network
-the digital is physical, still physical. but so subtle, so compact, that that is what gives it its value.
-Where you draw the boundaries?
-within a computer you could have many services at the same time. and a service can be astride multiple computers.
-single thread, computer and human with lang
-
-paths: all can be expressed as path, the value is the last part!
-
-Data vocabulary
-Code vocabulary
-
-Feat of null. Just empty string. Bool is n
-empty string is '
-we need to create a textual representation for all info
-
-Shared mem
-Single statement as machine?
-Turing machine also catches of sorts
-
-- the digital is physical
-- where do you draw the boundaries?
-- see data with a vocabulary
-- all addressable in one space
-- transformations: code
-- you can draw the boundary at the atomic function level
-- a practical example: a service with DB
-
-how to see flows concretely, through layers? because the layers or elements we can draw boundaries around. what's the boundary for a dynamic process? does it happen with initiation and finish?
-
-Is an abstraction layer just a transformation? Or perhaps just a component.
-
-what I call a path is called a resource, even by Tim Berners-Lee
-
-.and
-.or
-.if
-.loop
-like assembler instructions!
-
-dot to specify access
-.id
-
-scope of memory
-you have internal memory and external memory? no. you only have other components, and your own memory.
-does this hold under a shared memory paradigm?
-
-.define .hello
-   1
-   2
-   3
-
-.define .hello
-   a 1
-   b 2
-   c 3
-
-.hello.1
-.hello.a
-
-return as just having the address to which to jump to afterwards.
-return is going to the next.
-
-registers in arm:
-- general purpose
-- stack pointer: point to top of the current stack
-
-R13 (SP, Stack Pointer): Used to point to the top of the current stack. It's essential in function call conventions and for managing the stack frame.
-R14 (LR, Link Register): Used to store the return address in function calls. When a function is called, the address of the next instruction (return address) is saved in LR.
-R15 (PC, Program Counter): Holds the address of the next instruction to be executed. It's effectively the pointer to the current point of execution in the program.
+return is going to the next. or waiting for an answer to proceed.
 
 But what do we mean by data flows? A flow of data is data that goes through the boundary of the component of an information system. Information systems are made of components that are connected through a network, or through shared memory. When data comes to a component, we consider that to be a *request* done to the component.
-
-Software is a set of instructions given to a computer to execute.
-software is a set of data (calls) to modify data.
-
-What makes an unified information space powerful is that you can address everything from it. You might not be allowed, but you can. There are no overlapping names. Think of telephone numbers, or URLs.
-
-Use data to represent it
-
-turing five argument function:
-- current position of the tape
-- value on the current position of the tape
-- current configuration
-
-this generates:
-- optional write on the tape
-- optional move on the tape
-- jump to another configuration
 
 request model of data:
 - a component has a set of endpoints. component + endpoint give you an URL (universal resource locator).
@@ -394,18 +286,6 @@ request model of data:
    - Function: which was implicit all along in your unit of what's going on. see the outermost handler of a request as a function. you can actually even see functions as components, because they really are.
    - Errors: the essence is that they jump up many levels, through a different channel than the return. They are irreducible.
 
-I need a way to express try catches that can bubble up. the return never jumps levels.
-
-scope of a function IS the autopoietic boundary of the center! scope, or rather closure. What's stunning about this is that the boundary, in an informational system, is about context, context being reducible to reference. Reference is a computation, a dereferencing that happens within a context as a data flow unfolds.
-
-So:
-- Address
-- Incoming request
-- List of requests done to other components, seeing how the data moves between subparts.
-- Response.
-
-but I need addressability of the sequence itself!
-
 The two concepts of presentation and transformation of data hint at a conceptual elephant in the room: the system has an "inside" and an "outside". The data going from the inside to the outside of the system is the data being presented, while the data that comes into the system is the data being transformed. Some of the data being transformed will also be stored, while other parts of it will not. It is up to the information system to decide which data to store.
 
 The data stored by the system at any point in time can be called "state". Henceforth, when we refer to the "state" of the system, we will refer to the entirety of the data that it stores.
@@ -414,17 +294,7 @@ A system does not emit data randomly. Systems are built to handle requests. A re
 
 Requests and responses are done through the network; the network belongs to the "outside" of the system.
 
-algorithmic challenge vs mapping challenge
-
-this is all great for backend, but what about interfaces?
-An interface is a way for a human to interact with software - always through hardware.
-interface mapped to state! see the data being displayed and the possible transformations.
-
-state machine 2 args?
-
-interfaces + data flows - but isn't flow a lower level thing?
-
-batch and queue is not storing, just presenting and transforming.
+batch and queue is not storing, just presenting and transforming. but the output is a storage place.
 info system is executable by machines, hence a lot of calculations can be done cheaply and precisely.
 
 surfaces, entrypoints + flows.
@@ -467,39 +337,6 @@ data on the wire vs data ready for processing.
 metcalfe on info space. reverse: utility of the network (network size squared) as multiplier of the value that a system can bring.
 but that makes no sense. we already have one network.
 
-## implications for existing systems
-
-data discovery!
-- look at the data first, the logs second, finally the code.
-- use data tools to look at the data.
-- you can replace only parts of the system by doing 80/20.
-- valuable code is only that that performs nontrivial operations, and can usually be isolated.
-- the core is to find the data constraints of the system.
-- contrast with data as done today: don't just look at the data at rest, look at the data going through boundaries to understand the mappings/transformations.
-
-- setup flows:
-   - rest requests
-   - websockets requests
-   - db queries
-- analysis:
-   - network analysis (who whom)
-   - 80/20 analysis of endpoints & body forms
-   - use llm to analyse bodies
-- implications for rebuild:
-   - know what's really going on
-   - go look for essential code that produces certain transformations
-
-implications for new systems
-- design the data flows.
-
-implications for testing
-- convergence to mathematical proof
-- to generate, whitelist
-- and yet, how to do it from existing thing?
-
-implications for disciplines
-- economics: economic system as information system to determine resource use constraints without recourse to legal intervention or force. info system as the "business as usual" allocation of resources, except for force or law changes.
-- biology: autopoiesis: see surfaces internally that communicate with each other. it's like input output but with many families per surface + entrypoint. and notion of no data in itself, only read or written, makes everything autopoietic. what's the equivalent of data in biology? an info system has always constant voltage/energy, it is very very controlled/unchanging. life flows with bursts of energy and matter; perhaps there could be a data representation of matter and energy as information. but this would miss the truth, because data
 ```
 
 ## License
