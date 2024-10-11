@@ -167,8 +167,13 @@ problem: express change. we need an unified model for transformations.
 all change happens through communication.
 we assume that communication happens.
 Communication in the Shannon sense is done one way. call and response model, it can all be understood like that.
+no, not even. call.
+call is data received by
 
 When you make a call, you allocate. Or rather, with the response, you call the storage.
+
+the call is the essence of pillar 3: see the effects as 1) expansions; 2) the subcalls as part of the same mechanism.
+if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data.
 
 The traditional approach: input, program and result. For now, let's ignore the program and focus on the input and result, which are data. The focus is generally on those two, at best. The intermediate steps are not shown, except in logs or debugger.
 
@@ -246,6 +251,8 @@ For creation of general DIS:
 It is about data, not about perimeter; it's zero trust but naturally. And kerchoffs principle: no unnecessary layers.
 Control is still key.
 
+auth as extra info. zero trust as checking the auth credentials with someone you trust. yet, how do you know that someone you trust is there? if https, it's not zero trust. it'd have to be through a key exchange, but what about getting the keys in the first place? you need to trust. if you're in the same place and then you separate, then you had a trust network that then got partitioned.
+
 ### On scaling, consistency and parallelism
 
 - Distributed and parallel: consistency. Scalability with that assured is trivial (throw more nodes in), except for the "inside api" problem that Hickey points out.
@@ -267,12 +274,10 @@ testing
 
 ```
 call can be a function call, a call to the OS, over the network. it's all the same.
-
 return is going to the next. or waiting for an answer to proceed.
-
 But what do we mean by data flows? A flow of data is data that goes through the boundary of the component of an information system. Information systems are made of components that are connected through a network, or through shared memory. When data comes to a component, we consider that to be a *request* done to the component.
 
-request model of data:
+request model of data transformations:
 - a component has a set of endpoints. component + endpoint give you an URL (universal resource locator).
 - - there's then the request data itself.
    - http: request headers, body.
@@ -309,8 +314,6 @@ all the way down: chip + memory is info system, request is executed instruction 
 
 state as data inside the surface
 
-auth as extra info. zero trust as checking the auth credentials with someone you trust. yet, how do you know that someone you trust is there? if https, it's not zero trust. it'd have to be through a key exchange, but what about getting the keys in the first place? you need to trust. if you're in the same place and then you separate, then you had a trust network that then got partitioned.
-
 the code is a negative impression of the data flows
 
 consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
@@ -327,16 +330,6 @@ understanding CAP: when distributed surface (distributed as amenable to experien
 by oop nesting, you cannot just bring things from the side
 
 request response vs call response. the core is request response. event system does the calls, in practice. listener as a polling
-
-rest vs sql
-sql could be databases, could be tables.
-funny how graphql is like sql.
-
-data on the wire vs data ready for processing.
-
-metcalfe on info space. reverse: utility of the network (network size squared) as multiplier of the value that a system can bring.
-but that makes no sense. we already have one network.
-
 ```
 
 ## License
