@@ -146,6 +146,10 @@ Everything has a path. Address is path.
 
 Let's call them keys. a path is one or more keys, followed by a value.
 
+Component is where we draw the lines.
+State of a component is the data inside the component at a point in time.
+The data stored by the system at any point in time can be called "state". But we'll just call it the data of the component.
+
 Path is how you reference a value. There's no notion of a value without a path. Everything exists in a space and everything has a handle. There's no "floating" or "dangling" data.
 
 - Dataspace: access vs control. Open access, use control to determine when to block.
@@ -163,16 +167,30 @@ main obstacle: fragmentation
 
 ### Pillar 3: explicitness at every transformation
 
+pillar 3 is the central pillar. From communication to changes in data.
+
 problem: express change. we need an unified model for transformations.
 all change happens through communication.
 we assume that communication happens.
 Communication in the Shannon sense is done one way. call and response model, it can all be understood like that.
 no, not even. call.
 call is data received by
+call can be a function call, a call to the OS, over the network. it's all the same.
+Requests and responses are done through the network; the network belongs to the "outside" of the system.
+
+call changes data in receiver. can be 1 or n. then you have possible wait to acknowledgement. This is return; the acknowledgment is also information that changes something in the sender. Use this mechanism to express all computation. These calls represent change. Draw the line at computer instructions.
+
+bytes: "01234567"
+
+can see the final result of the call or can see all the intermediate calls.
+
+call goes beyond csp and actor. more simple. three examples: computer instruction (without even assembler), function call inside a hll and an API call.
 
 When you make a call, you allocate. Or rather, with the response, you call the storage.
 
 the call is the essence of pillar 3: see the effects as 1) expansions; 2) the subcalls as part of the same mechanism.
+the call is data that represents communication and transformation of data. from, to. can have multiple tos. A single to can be a dispatcher too.
+
 if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data.
 
 The traditional approach: input, program and result. For now, let's ignore the program and focus on the input and result, which are data. The focus is generally on those two, at best. The intermediate steps are not shown, except in logs or debugger.
@@ -191,7 +209,16 @@ Calls are the transitions.
 - Obstacles: implicitness, being blind at the process
 
 Communication as basis.
-Read is write
+Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
+
+request model of data transformations:
+- a component has a set of endpoints. component + endpoint give you an URL (universal resource locator).
+- - there's then the request data itself.
+   - http: request headers, body.
+   - sql: query.
+   - fs: operation + data.
+
+responder or surface?
 
 ### Pillar 4: code is data
 
@@ -207,7 +234,15 @@ a flow as a sequence.
 the problem with expressions: they are not automatically referenceable from outside of their immediate context. solved by pillar 3.
 the problem with statements: they are not data. solved by pillar 4.
 
-### Pillar 5: interfaces are code, therefore data
+- then there's what happens inside the component. only see what happens with regards to the other components. inner data mappings are irrelevant or fold. The essential computing model:
+   - call
+   - Variable subsitution as call.
+   - Sequence.
+   - Conditional.
+   - Loop as conditional.
+   - Errors: the essence is that they jump up many levels, through a different channel than the return. It can be seen as a conditional return based on value.
+
+### Pillar 5: interfaces are code
 
 this is all great for backend, but what about interfaces?
 An interface is a way for a human to interact with software - always through hardware.
@@ -221,10 +256,7 @@ interface mapped to state! see the data being displayed and the possible transfo
 
 ## Applications of the theory
 
-- Running the system
-- Sciences
-
-### Team composition & direction
+### Team organization
 
 For creation of general DIS:
 - Any analytically capable person can read and write these data sequences. Focus on analysis and [organizational principles](https://prog21.dadgum.com/177.html). These data sequences define 90-99% of the implementation and its tests. Working on the data sequences directly is the most effective way to create a simple and reliable system.
@@ -246,6 +278,10 @@ For creation of general DIS:
 - design data transitions
 - build up surfaces for those data transitions
 
+### Running systems
+
+Logs are data. Keep them. Query them with the same mechanisms.
+
 ### Security
 
 It is about data, not about perimeter; it's zero trust but naturally. And kerchoffs principle: no unnecessary layers.
@@ -256,6 +292,8 @@ auth as extra info. zero trust as checking the auth credentials with someone you
 ### On scaling, consistency and parallelism
 
 - Distributed and parallel: consistency. Scalability with that assured is trivial (throw more nodes in), except for the "inside api" problem that Hickey points out.
+
+understanding CAP: when distributed surface (distributed as amenable to experiencing partitioning) receives data, it either rejects (rejection as the lack of upating and also reading, indicating that that's not data) and presents/maintains consistency, vs remains available and has either temporary or permanent inconsistency. consistent system, in a partition does not present or update state, only stores it.
 
 ### Quality
 
@@ -268,69 +306,7 @@ testing
 - to generate, you must understand the order of validations.
 - see errors as valid outputs, validate all the way.
 
-
-
-
-
-```
-call can be a function call, a call to the OS, over the network. it's all the same.
-return is going to the next. or waiting for an answer to proceed.
-But what do we mean by data flows? A flow of data is data that goes through the boundary of the component of an information system. Information systems are made of components that are connected through a network, or through shared memory. When data comes to a component, we consider that to be a *request* done to the component.
-
-request model of data transformations:
-- a component has a set of endpoints. component + endpoint give you an URL (universal resource locator).
-- - there's then the request data itself.
-   - http: request headers, body.
-   - sql: query.
-   - fs: operation + data.
-- then there's what happens inside the component. only see what happens with regards to the other components. inner data mappings are irrelevant or fold. The essential computing model:
-   - Sequence.
-   - Variable subsitution as sequence.
-   - Conditional.
-   - Loop as conditional.
-   - Function: which was implicit all along in your unit of what's going on. see the outermost handler of a request as a function. you can actually even see functions as components, because they really are.
-   - Errors: the essence is that they jump up many levels, through a different channel than the return. They are irreducible.
-
-The two concepts of presentation and transformation of data hint at a conceptual elephant in the room: the system has an "inside" and an "outside". The data going from the inside to the outside of the system is the data being presented, while the data that comes into the system is the data being transformed. Some of the data being transformed will also be stored, while other parts of it will not. It is up to the information system to decide which data to store.
-
-The data stored by the system at any point in time can be called "state". Henceforth, when we refer to the "state" of the system, we will refer to the entirety of the data that it stores.
-
-A system does not emit data randomly. Systems are built to handle requests. A request is an incoming unit of data. In any system that functions correctly, the request will be processed and a response will be provided to the caller.
-
-Requests and responses are done through the network; the network belongs to the "outside" of the system.
-
-batch and queue is not storing, just presenting and transforming. but the output is a storage place.
-info system is executable by machines, hence a lot of calculations can be done cheaply and precisely.
-
-surfaces, entrypoints + flows.
-a system is a surface and can have multiple surfaces. better analogy than layer, because surfaces are not necessarily concentric.
-request & response
-families of data.
-implicit contracts.
-
-turing machine is an information system. but a single request and it keeps on going forever.
-
-all the way down: chip + memory is info system, request is executed instruction with arguments, response is change to memory and next set of instructions. turing machine is an info system!
-
-state as data inside the surface
-
-the code is a negative impression of the data flows
-
-consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
-
-what do you mean by "details"? things you can change and still have the same system from the pov of outside the surface. it's relative to your frame of reference.
-
-amenable to proof.
-
-lowest level: machine code. highest level: specify the data transformations and the code is generated by an algorithm.
-data grammar: the constructs to express data transformations. not constraints, transformations. the family of transformations also defines the constraints.
-
-understanding CAP: when distributed surface (distributed as amenable to experiencing partitioning) receives data, it either rejects (rejection as the lack of upating and also reading, indicating that that's not data) and presents/maintains consistency, vs remains available and has either temporary or permanent inconsistency. consistent system, in a partition does not present or update state, only stores it.
-
-by oop nesting, you cannot just bring things from the side
-
-request response vs call response. the core is request response. event system does the calls, in practice. listener as a polling
-```
+Simple systems are amenable to proof.
 
 ## License
 
