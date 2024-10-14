@@ -82,7 +82,7 @@ The main contention of this treatise is that *the* way to design simple DIS is t
 
 Designing DIS is already a complex task. However, it becomes exponentially harder when those responsible for building or understanding a system are distracted by everything except the data it handles.
 
-What is this everything else that holds the attention of makers or DIS? Here are a few examples:
+What is this everything else that holds the attention of makers of DIS? Here are a few examples:
 
 - Programming languages.
 - Programming paradigms.
