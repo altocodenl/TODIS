@@ -132,15 +132,18 @@ This is the central thesis of this treatise. We'll explore now how to make this 
 2. **Unification**: Put all the data in a single dataspace. Unification. (and addressability is there if the data is split). Representation can be existence, whether it is there or not is not that important, as long as it can be understood to be there.
 3. **Explicitness**: see the data at every level: coming in, at each transformation, going out. That's why we use logs! That's why layers are helpful!
 4. **Code is data**: code as data that produces data. The call is data, the responder is data, the transformation is data. The result is only part of the transformation. Understand code in terms of sequences: linear, cond, iteration, jump. Program + call = result. Data1 + data2 = data3.
-5. **Interfaces are data**: interfaces as windows to data, and themselves data.
+5. **Interface is code**: interface is code, therefore data.
 
-### Pillar 1: data vocabulary
+### Pillar 1: single representation of data
 
 https://github.com/altocodenl/cell?tab=readme-ov-file#the-data-vocabulary-fourdata
 
 main obstacle: lack of consistent data vocabulary
 
-### Pillar 2: unification in the dataspace
+
+fourdata is the vocabulary. alf is how to represent it using text. each text character maps to a number, given by unicode (character set). unicode is used with utf8 to make it into (our out) of a sequence of bytes. In the UI, each character maps to a graphical representation, usually using bezier curves.
+
+### Pillar 2: single dataspace
 
 Everything has a path. Address is path.
 
@@ -165,9 +168,10 @@ Can you model a chip, with registers and memory locations as addresses?
 
 main obstacle: fragmentation
 
-### Pillar 3: explicitness at every transformation
+### Pillar 3: see every call
 
 pillar 3 is the central pillar. From communication to changes in data.
+calls represent communication, transformation and storage. storage is considered calls to data repositories, like disks or memory? but no, even a register is a data repository. anywhere where you can put data is a repository, even if then you replace it immediately. it doesn't matter. then, why is storage important? Because you need to get it back. The place where you cannot store data is the network. But you can store it in registers, memory and disk and tape.
 
 problem: express change. we need an unified model for transformations.
 all change happens through communication.
@@ -177,6 +181,8 @@ no, not even. call.
 call is data received by
 call can be a function call, a call to the OS, over the network. it's all the same.
 Requests and responses are done through the network; the network belongs to the "outside" of the system.
+
+call represents transformation and communication.
 
 call changes data in receiver. can be 1 or n. then you have possible wait to acknowledgement. This is return; the acknowledgment is also information that changes something in the sender. Use this mechanism to express all computation. These calls represent change. Draw the line at computer instructions.
 
@@ -242,7 +248,7 @@ the problem with statements: they are not data. solved by pillar 4.
    - Loop as conditional.
    - Errors: the essence is that they jump up many levels, through a different channel than the return. It can be seen as a conditional return based on value.
 
-### Pillar 5: interfaces are code
+### Pillar 5: interface is code
 
 this is all great for backend, but what about interfaces?
 An interface is a way for a human to interact with software - always through hardware.
