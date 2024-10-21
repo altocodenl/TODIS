@@ -145,7 +145,16 @@ fourdata is the vocabulary. alf is how to represent it using text. each text cha
 
 ### Pillar 2: single dataspace
 
+Data cannot be floating. It has to be somewhere. Path is how you reference a value. There's no notion of a value without a path. Everything exists in a space and everything has a handle. There's no "floating" or "dangling" data.
+
+A particular point in the dataspace is a *place*. Places are data.
+
+two servers
+one database
+
 Everything has a path. Address is path.
+
+A space and a name are the same thing.
 
 Let's call them keys. a path is one or more keys, followed by a value.
 
@@ -153,7 +162,6 @@ Component is where we draw the lines.
 State of a component is the data inside the component at a point in time.
 The data stored by the system at any point in time can be called "state". But we'll just call it the data of the component.
 
-Path is how you reference a value. There's no notion of a value without a path. Everything exists in a space and everything has a handle. There's no "floating" or "dangling" data.
 
 - Dataspace: access vs control. Open access, use control to determine when to block.
 
@@ -168,7 +176,7 @@ Can you model a chip, with registers and memory locations as addresses?
 
 main obstacle: fragmentation
 
-### Pillar 3: see every call
+### Pillar 3: call and response
 
 pillar 3 is the central pillar. From communication to changes in data.
 calls represent communication, transformation and storage. storage is considered calls to data repositories, like disks or memory? but no, even a register is a data repository. anywhere where you can put data is a repository, even if then you replace it immediately. it doesn't matter. then, why is storage important? Because you need to get it back. The place where you cannot store data is the network. But you can store it in registers, memory and disk and tape.
@@ -183,10 +191,14 @@ call can be a function call, a call to the OS, over the network. it's all the sa
 Requests and responses are done through the network; the network belongs to the "outside" of the system.
 
 call represents transformation and communication.
+call goes downstream, response goes upstream.
 
 call changes data in receiver. can be 1 or n. then you have possible wait to acknowledgement. This is return; the acknowledgment is also information that changes something in the sender. Use this mechanism to express all computation. These calls represent change. Draw the line at computer instructions.
 
 bytes: "01234567"
+
+storage is a matter of timescale. while processing a call, data is stored in API. but that doesn't outlive the call.
+side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
 
 can see the final result of the call or can see all the intermediate calls.
 
