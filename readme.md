@@ -138,7 +138,7 @@ To see data, we must find a good way to represent it. The data that goes through
 
 Here I will propose a data representation based on *text*. While data representations can also be graphical (though always using text), I've chosen to go with the portability and compactness of text.
 
-Whether you use this data representation or some other representation, it is my contention that without a clear and sufficient data representation, you cannot directly look at the data in a DIS. **Therefore, the first step towards seeing the data is to have a single representation of data** and use it for *everyting*.
+Whether you use this data representation or some other representation, it is my contention that without a clear and sufficient data representation, you cannot directly look at the data in a DIS. **Therefore, the first step towards seeing the data is to have a single representation of data** and use it for *everything*.
 
 A data representation requires us to define two things:
 
