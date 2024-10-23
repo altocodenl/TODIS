@@ -142,7 +142,7 @@ Whether you use this data representation or some other representation, it is my 
 
 A data representation requires us to define two things:
 
-- Ways to set boundaries between one *value* and the next. Values are meaningful pieces of data.
+- Ways to set boundaries between one *value* and another value. Values are discrete units of data.
 - Specify basic *types* of data.
 
 [Elsewhere](https://github.com/altocodenl/cell?tab=readme-ov-file#the-data-vocabulary-fourdata), I have presented a data representation, called *fourdata*. This representation is purely based in text and has four types of data:
@@ -176,7 +176,7 @@ Hashes don't have a particular order to their keys; however, fourdata orders the
 
 Simple as it is, this data representation can be used to represent any data relevant to an information system. Here are a few examples:
 
-**An HTTP request and response pair**
+**An [HTTP](https://en.wikipedia.org/wiki/HTTP) request and response pair**
 
 ```
 request headers Accept application/json
@@ -225,7 +225,7 @@ ProgramCounter "1100001010101011"
 StatusRegister "00100101"
 ```
 
-**The HTML of a small page**
+**The [HTML](https://en.wikipedia.org/wiki/HTML) of a small page**
 
 ```
 head title "Welcome to my site"
