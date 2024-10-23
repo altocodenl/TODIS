@@ -108,7 +108,7 @@ If you take away one thing from this treatise, it should be this one: **if you a
 
 Why not look at data and focus on The List? Normally, nobody asks this question. When I happen to raise it, I obtain two arguments against just focusing on the data:
 
-1. There's too much data, so we cannot look directly at it. That's why we have programming languages, programming paradigms, libraries (The List).
+1. There's too much data, so we cannot look directly at it. That's why we have programming languages, programming paradigms, libraries, etc. (The List).
 2. Data is just a detail. We should be focused on bigger, deeper things, not on low-level things.
 
 This entire treatise is built on toppling these two myths with the following (hypo)theses:
@@ -123,8 +123,6 @@ When the data is not seen, the trivial becomes difficult and the nontrivial impo
 Data itself is simple and can be directly seen. By using data to understand and make a DIS, we can find the simplest possible expression of the system that will get the job done.
 
 This is the central thesis of this treatise. We'll explore now how to make this a reality through five practical concepts, fancily called *pillars*. Each pillar removes an obstacle to seeing the data flowing through an information system.
-
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); most of the stuff is there, but it has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 ## The five pillars
 
@@ -237,6 +235,8 @@ body 1 h1 "Hello World!"
 ```
 
 Now, where does this data "go"? That's what we tackle in the next pillar.
+
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 ### Pillar 2: single dataspace
 
