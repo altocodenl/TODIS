@@ -106,9 +106,9 @@ New developments such as generative AI or big data don't change these facts; the
 
 If you take away one thing from this treatise, it should be this one: **if you are working with a DIS, look at the painting (the data) as much as possible. And ignore as much as possible the brush and the palette (The List).**
 
-Why not look at data and focus on The List? Normally, nobody even asks this question. When I raised it, I obtained two arguments against looking at the data:
+Why not look at data and focus on The List? Normally, nobody asks this question. When I happen to raise it, I obtain two arguments against just focusing on the data:
 
-1. There's too much data, so we cannot look directly at it. That's why we have programming languages, programming paradigms, libraries, etc.
+1. There's too much data, so we cannot look directly at it. That's why we have programming languages, programming paradigms, libraries (The List).
 2. Data is just a detail. We should be focused on bigger, deeper things, not on low-level things.
 
 This entire treatise is built on toppling these two myths with the following (hypo)theses:
@@ -122,29 +122,125 @@ When the data is not seen, the trivial becomes difficult and the nontrivial impo
 
 Data itself is simple and can be directly seen. By using data to understand and make a DIS, we can find the simplest possible expression of the system that will get the job done.
 
-This is the central thesis of this treatise. We'll explore now how to make this a reality through five practical concepts, called pillars.
+This is the central thesis of this treatise. We'll explore now how to make this a reality through five practical concepts, fancily called *pillars*. Each pillar removes an obstacle to seeing the data flowing through an information system.
 
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); most of the stuff is there, but it has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 ## The five pillars
 
-1. **Vocabulary**: Have a simple and consistent data vocabulary. We use cell's fourdata, in alf (abridged line format).
-2. **Unification**: Put all the data in a single dataspace. Unification. (and addressability is there if the data is split). Representation can be existence, whether it is there or not is not that important, as long as it can be understood to be there.
-3. **Explicitness**: see the data at every level: coming in, at each transformation, going out. That's why we use logs! That's why layers are helpful!
-4. **Code is data**: code as data that produces data. The call is data, the responder is data, the transformation is data. The result is only part of the transformation. Understand code in terms of sequences: linear, cond, iteration, jump. Program + call = result. Data1 + data2 = data3.
-5. **Interface is code**: interface is code, therefore data.
+1. **Single representation of data**
+2. **Single dataspace**
+3. **Call and response**
+4. **Code is data**
+5. **Interface is code**
 
 ### Pillar 1: single representation of data
 
-https://github.com/altocodenl/cell?tab=readme-ov-file#the-data-vocabulary-fourdata
+To see data, we must find a good way to represent it. The data that goes through our digital systems is binary, consisting of [bits](https://en.wikipedia.org/wiki/Bit). Bits can be represented by zeroes and ones. Working with zeroes and ones, however, is not at all practical or desirable. In programmer parlance, they are too *low-level* for humans to read and write.
 
-main obstacle: lack of consistent data vocabulary
+Here I will propose a data representation based on *text*. While data representations can also be graphical (though always using text), I've chosen to go with the portability and compactness of text.
 
+Whether you use this data representation or some other representation, it is my contention that without a clear and sufficient data representation, you cannot directly look at the data in a DIS. **Therefore, the first step towards seeing the data is to have a single representation of data** and use it for *everyting*.
 
-fourdata is the vocabulary. alf is how to represent it using text. each text character maps to a number, given by unicode (character set). unicode is used with utf8 to make it into (our out) of a sequence of bytes. In the UI, each character maps to a graphical representation, usually using bezier curves.
+A data representation requires us to define two things:
+
+- Ways to set boundaries between one *value* and the next. Values are meaningful pieces of data.
+- Specify basic *types* of data.
+
+[Elsewhere](https://github.com/altocodenl/cell?tab=readme-ov-file#the-data-vocabulary-fourdata), I have presented a data representation, called *fourdata*. This representation is purely based in text and has four types of data:
+
+1. Number
+2. Text
+3. List
+4. Hash
+
+Number and text are self explanatory. Those are *single* data types. For example, `1234`, or `Hello!`.
+
+Single data types, however, need to be organized into structured wholes. Fourdata also provides two *multiple* data types, where one value can hold multiple values *inside* itself. The first multiple data type is the *list*, which is a sequence of ordered values.
+
+```
+1 Eggs
+2 Butter
+3 Lettuce
+```
+
+In the list above, each item has a number next to it. This is its *key*, which is always a number.
+
+The second multiple data type is the *hash*. In a hash, the keys are texts:
+
+```
+born 1959
+firstName Gustavo
+lastName Cerati
+```
+
+Hashes don't have a particular order to their keys; however, fourdata orders them alphabetically, so that two equivalent hashes are represented with the exact same text.
+
+Simple as it is, this data representation can be used to represent any data relevant to an information system. Here are a few examples:
+
+**An HTTP request and response pair**
+
+```
+request headers Accept application/json
+                User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        host example.com
+        method GET
+        path /api/books/1234
+        type HTTP/1.1
+response code "200 OK"
+         headers Content-Length 83
+                 Content-Type application/json
+         body author "Edward Said"
+              id 1234
+              isbn "978-0-394-42814-7"
+              title Orientalism
+```
+
+**A table in a [relational database](https://en.wikipedia.org/wiki/Relational_database)**
+
+```
+books 1 author "Edward Said"
+        created "2024-10-23T20:24:15.936Z"
+        id 1234
+        isbn "978-0-394-42814-7"
+        title Orientalism
+      2 author "Michel Houellebecq"
+        created "2024-10-23T20:25:22.411Z"
+        id 1235
+        isbn "978-2-08-147175-7"
+        title Serotonin
+      3 author "Paul Graham"
+        created "2024-10-23T20:30:44.602Z"
+        id 1237
+        isbn "978-0130305527"
+        title "On Lisp"
+```
+
+**The data in the registers of a [6502 processor](https://en.wikipedia.org/wiki/MOS_Technology_6502)**
+
+```
+Accumulator "00110100"
+X "01100001"
+Y "11001010"
+StackPointer "11110111"
+ProgramCounter "1100001010101011"
+StatusRegister "00100101"
+```
+
+**The HTML of a small page**
+
+```
+head title "Welcome to my site"
+body 1 h1 "Hello World!"
+     2 p 1 class text
+         2 "This is my site"
+```
+
+Now, where does this data "go"? That's what we tackle in the next pillar.
 
 ### Pillar 2: single dataspace
 
+ Put all the data in a single dataspace. Unification. (and addressability is there if the data is split). Representation can be existence, whether it is there or not is not that important, as long as it can be understood to be there.
 Data cannot be floating. It has to be somewhere. Path is how you reference a value. There's no notion of a value without a path. Everything exists in a space and everything has a handle. There's no "floating" or "dangling" data.
 
 A particular point in the dataspace is a *place*. Places are data.
@@ -177,6 +273,8 @@ Can you model a chip, with registers and memory locations as addresses?
 main obstacle: fragmentation
 
 ### Pillar 3: call and response
+
+: see the data at every level: coming in, at each transformation, going out. That's why we use logs! That's why layers are helpful!
 
 pillar 3 is the central pillar. From communication to changes in data.
 calls represent communication, transformation and storage. storage is considered calls to data repositories, like disks or memory? but no, even a register is a data repository. anywhere where you can put data is a repository, even if then you replace it immediately. it doesn't matter. then, why is storage important? Because you need to get it back. The place where you cannot store data is the network. But you can store it in registers, memory and disk and tape.
@@ -240,6 +338,8 @@ responder or surface?
 
 ### Pillar 4: code is data
 
+code as data that produces data. The call is data, the responder is data, the transformation is data. The result is only part of the transformation. Understand code in terms of sequences: linear, cond, iteration, jump. Program + call = result. Data1 + data2 = data3.
+
 Write code in the same vocabulary that you use for data. It's already parsed. And it forces you to think all in terms of explicit data at every step. Also, it is unified.
 
 - Higher level languages let you focus on data at a human level.
@@ -262,6 +362,7 @@ the problem with statements: they are not data. solved by pillar 4.
 
 ### Pillar 5: interface is code
 
+ interface is code, therefore data.
 this is all great for backend, but what about interfaces?
 An interface is a way for a human to interact with software - always through hardware.
 interface mapped to state! see the data being displayed and the possible transformations.
