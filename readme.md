@@ -24,7 +24,9 @@ A fast-growing minority is tasked with designing, implementing and operating DIS
 
 The purpose of this treatise is to provide a novel and systematic way to understand DIS. Through this novel perspective, based on concepts, it should be much easier to understand existing DIS, as well as designing, implementing and operating new ones.
 
-My hope is that, by making DIS simpler, more humans will be empowered to bring their best to the world.
+My hypothesis, which I'm actively testing as of the time of writing, is that the approach presented here can increase the speed of development of a DIS by an order of magnitude (~10x), while having very significant improvements (50-200%) in quality and the value of its features. The success or failure of these tools should be measured by whether they bring at least a 10x improvement to the speed, quality and value delivered by a team producing a DIS.
+
+My hope is that, by making DIS radically easier to understand and implement, more humans will be empowered to bring their best to the world.
 
 ## Information as data
 
@@ -240,7 +242,90 @@ Now, where does this data "go"? That's what we tackle in the next pillar.
 
 ### Pillar 2: single dataspace
 
- Put all the data in a single dataspace. Unification. (and addressability is there if the data is split). Representation can be existence, whether it is there or not is not that important, as long as it can be understood to be there.
+We just established a single representation of data, so we can see any piece of data in a consistent manner. Our next step is to join all the data of the system into a coherent whole.
+
+A big obstacle to "seeing the entire picture" is that the data of the system is simply never grouped and organized together. By creating a single dataspace where all the data is available, we can overcome this obstacle and start to look at all of the data of any system as a coherent whole.
+
+The [world wide web](https://en.wikipedia.org/wiki/World_Wide_Web) is the best example of an unified dataspace - what makes the web powerful is that it is indeed a single space where all the data is available.
+
+The data "is" in the dataspace only to the extent that it can be accessed and modified through the dataspace. The actual data is in hard drives and memory chips inside networked computers. But that doesn't matter much; what matters is whether we can access them in a consistent way.
+
+In this pillar we will focus on data "at rest" - that is, data that is stored and ready to be accessed, rather than actively flowing between different parts of the system.
+
+Every DIS stores its data in two primary forms: files and databases.
+
+Files are the simplest of the two. They consist of a `path`, a `name` and `contents`. For example:
+
+```
+contents "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
+name hello.c
+path C:\Users\dmr\clang
+```
+
+Normally, files have other things associated with them, such as a creation time, a size, and other characteristics that are necessary for the [file system](https://en.wikipedia.org/wiki/File_system). We can safely ignore these features.
+
+A few things to notice about the above:
+- The `path` starts with `C:`, which means the main [hard disk](https://en.wikipedia.org/wiki/Hard_disk_drive). Then, it has three more parts, subdivided by backslashes (`\`): `Users`, `dmr` and `clang`. All of these are texts.
+- The `name` is also a text.
+- The `contents` are an unreadable sequence of zeroes and ones. With files, we cannot jump to a specific section of its contents, or get a single part. When we get the file, we get the whole thing. The good thing about this is that files are quite close to the "real thing" of an information system: [binary data](https://en.wikipedia.org/wiki/Binary_data).
+
+To simplify things, we could just put the name of the file at the end of the path.
+
+```
+contents "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
+path C:\Users\dmr\clang\hello.c
+```
+
+We can go even one step further and represent the file like this:
+
+```
+C:\Users\dmr\clang\hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
+```
+
+A better way to do it is to split the path into hashes, and add the contents as the last item.
+
+```
+C Users dmr clang hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
+```
+
+Using this structure allows us to group files that are in the same directories in a way that's easy to see. For example, if we have a second file in the same directory, we could represent it like this:
+
+```
+C Users dmr clang hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
+                  indefatigable.c "001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111011010000011110100101000011010010110111001110100"
+```
+
+Now, where *is* this main hard disk? Hard disks must be attached to a computer in order to be accessible. In the context of DIS, these computers are usually called [servers](https://en.wikipedia.org/wiki/Server_(computing)), to distinguish them from computers to which a user has direct physical access. Let's call this server the `Main Server`. Then, we can represent our two files like this:
+
+```
+"Main Server" C Users dmr clang hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
+                                indefatigable.c "001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111011010000011110100101000011010010110111001110100"
+```
+
+You might notice we haven't used a single list yet, we're using hashes for everything. The reason for this is that texts are much better names than numbers can be. While we could name directories, files and even servers using numbers, it would be almost impossible to remember what is what. Whereas names, expressed as text, are much more evocative and memorable.
+
+With the approach above, we can now say that we have a *path* for each of the files in our system. The *path* to the contents `hello.c` is:
+
+```
+"Main Server" C Users dmr clang hello.c
+```
+
+This definition of *path*, which comes from both file system paths (`C:\Users\dmr\clang|hello.c`) or from WWW urls (`https://example.com/clang/examples/hello`), can be generalized to give us the location of any piece of data in our system.
+
+
+
+
+
+
+
+
+Even simple DIS are made of multiple components. A typical example is a DIS that has three parts:
+
+- A database.
+- An API service.
+- An interface.
+
+
 Data cannot be floating. It has to be somewhere. Path is how you reference a value. There's no notion of a value without a path. Everything exists in a space and everything has a handle. There's no "floating" or "dangling" data.
 
 A particular point in the dataspace is a *place*. Places are data.
