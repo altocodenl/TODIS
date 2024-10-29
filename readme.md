@@ -54,6 +54,8 @@ Through their capacity to communicate, store and transform data, DIS can be used
 
 What sets *digital* information systems different apart their non-digital predecessors is their incredible speed, accuracy and low cost of operation. Prior to the advent of [digital electronics](https://en.wikipedia.org/wiki/Digital_electronics), information systems were billions of times slower, less accurate and expensive.
 
+Digital information systems, like their non-digital counterparts, are still physical. Only that instead of representing data with carvings on a stone or ink on paper, they use electrons within electronic devices.
+
 ## Why organization is the key to digital information systems?
 
 Organization of information is a problem of abundance; when you have just a little bit of information, it's not a big deal to organize it. If you only have five shirts, you don't need a great organization system. The problem is when you have a lot of it. We now handle billions (or trillions) the amount of information we did before, but we still have the same brains.
@@ -244,11 +246,11 @@ Now, where does this data "go"? That's what we tackle in the next pillar.
 
 We just established a single representation of data, so we can see any piece of data in a consistent manner. Our next step is to join all the data of the system into a coherent whole.
 
-A big obstacle to "seeing the entire picture" is that the data of the system is simply never grouped and organized together. By creating a single dataspace where all the data is available, we can overcome this obstacle and start to look at all of the data of any system as a coherent whole.
+A big obstacle to "seeing the entire picture" is that the data of the system is simply never grouped and organized together. By creating a single dataspace where all the data is available, we can overcome this obstacle and look at all the data of a system as a coherent whole.
 
 The [world wide web](https://en.wikipedia.org/wiki/World_Wide_Web) is the best example of an unified dataspace - what makes the web powerful is that it is indeed a single space where all the data is available.
 
-The data "is" in the dataspace only to the extent that it can be accessed and modified through the dataspace. The actual data is in hard drives and memory chips inside networked computers. But that doesn't matter much; what matters is whether we can access them in a consistent way.
+The data "is" in the dataspace only to the extent that it can be accessed and modified through the dataspace. You could successfully argue that the actual data really "is" in hard drives and memory chips inside networked computers. But that doesn't matter much from an organizational perspective. What does matter is whether we can access them in a consistent way through an unified dataspace.
 
 In this pillar we will focus on data "at rest" - that is, data that is stored and ready to be accessed, rather than actively flowing between different parts of the system.
 
@@ -262,14 +264,14 @@ name hello.c
 path C:\Users\dmr\clang
 ```
 
-Normally, files have other things associated with them, such as a creation time, a size, and other characteristics that are necessary for the [file system](https://en.wikipedia.org/wiki/File_system). We can safely ignore these features.
+Normally, files have other things associated with them, such as a creation time, a size, and other characteristics that are necessary for the [file system](https://en.wikipedia.org/wiki/File_system). We can safely ignore these features for the purposes of our discussion.
 
-A few things to notice about the above:
+A few things to notice about the file above:
 - The `path` starts with `C:`, which means the main [hard disk](https://en.wikipedia.org/wiki/Hard_disk_drive). Then, it has three more parts, subdivided by backslashes (`\`): `Users`, `dmr` and `clang`. All of these are texts.
 - The `name` is also a text.
-- The `contents` are an unreadable sequence of zeroes and ones. With files, we cannot jump to a specific section of its contents, or get a single part. When we get the file, we get the whole thing. The good thing about this is that files are quite close to the "real thing" of an information system: [binary data](https://en.wikipedia.org/wiki/Binary_data).
+- The `contents` are an unreadable sequence of zeroes and ones. With files, we cannot jump to a specific section of its contents, or get a single part. When we get the file, we get the whole thing. But what's good about files is that they are quite close to the "real matter" of an information system: [binary data](https://en.wikipedia.org/wiki/Binary_data).
 
-To simplify things, we could just put the name of the file at the end of the path.
+To simplify things, we could just put the name of the file at the end of the path and get rid of the `name` key.
 
 ```
 contents "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
@@ -302,20 +304,197 @@ Now, where *is* this main hard disk? Hard disks must be attached to a computer i
                                 indefatigable.c "001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111011010000011110100101000011010010110111001110100"
 ```
 
-You might notice we haven't used a single list yet, we're using hashes for everything. The reason for this is that texts are much better names than numbers can be. While we could name directories, files and even servers using numbers, it would be almost impossible to remember what is what. Whereas names, expressed as text, are much more evocative and memorable.
+You might notice we haven't used a single list yet to represent files. Instead, we're using hashes for everything. The reason is simple: texts are much better names than numbers can be. While we could name directories, files and even servers using numbers, it would be almost impossible to remember what is what. Whereas names, expressed as text, are much more evocative and memorable.
 
-With the approach above, we can now say that we have a *path* for each of the files in our system. The *path* to the contents `hello.c` is:
+With the approach above, we can now say that we have a *path* for each of the files in our system. For example, the *path* to the contents `hello.c` is:
 
 ```
 "Main Server" C Users dmr clang hello.c
 ```
 
-This definition of *path*, which comes from both file system paths (`C:\Users\dmr\clang|hello.c`) or from WWW urls (`https://example.com/clang/examples/hello`), can be generalized to give us the location of any piece of data in our system.
+This definition of *path*, which comes from both file system paths (`C:\Users\dmr\clang|hello.c`) or from web urls (`https://example.com/clang/examples/hello`), can be generalized to give us the location of any piece of data in our system.
+
+The contents of files have to be *interpreted* for them to have any meaning to us. Let's decode now the contents of `hello.c`. We assume this is a text file, therefore we will try to interpret it as such. This file is encoded with [UTF-8](https://en.wikipedia.org/wiki/UTF-8), a way to convert a sequence of zeroes and ones into a list of numbers.
+
+```
+1 35
+2 105
+3 110
+4 99
+5 108
+6 117
+7 100
+8 32
+9 60
+10 115
+11 116
+12 100
+13 105
+14 111
+15 104
+16 62
+17 10
+18 105
+19 110
+20 116
+21 32
+22 109
+23 97
+24 105
+25 110
+26 98
+27 40
+28 41
+29 32
+30 123
+31 10
+32 32
+33 32
+34 112
+35 114
+36 105
+37 110
+38 116
+39 102
+40 40
+41 34
+42 72
+43 101
+44 108
+45 108
+46 111
+47 44
+48 32
+49 87
+50 111
+51 114
+52 108
+53 100
+54 33
+55 34
+56 41
+57 59
+58 10
+59 32
+60 32
+61 114
+62 101
+63 116
+64 117
+65 114
+66 110
+67 32
+68 48
+69 59
+70 10
+71 125
+72 10
+```
+
+Note that the column of numbers in the left only indicates the position of each number. The actual numbers that are in the sequence of zeroes and ones are the ones on the right column.
+
+If we now use [Unicode](https://en.wikipedia.org/wiki/Unicode), we can convert these numbers into characters. Unicde is a way to map numbers into the characters used by the world's writing systems.
+
+```
+1  #
+2  i
+3  n
+4  c
+5  l
+6  u
+7  d
+8
+9  <
+10 s
+11 t
+12 d
+13 i
+14 o
+15 h
+16 >
+17 (newline)
+18 i
+19 n
+20 t
+21
+22 m
+23 a
+24 i
+25 n
+26 b
+27 (
+28 )
+29
+30 {
+31 (newline)
+32
+33
+34 p
+35 r
+36 i
+37 n
+38 t
+39 f
+40 (
+41 "
+42 H
+43 e
+44 l
+45 l
+46 o
+47 ,
+48
+49 W
+50 o
+51 r
+52 l
+53 d
+54 !
+55 "
+56 )
+57 ;
+58 (newline)
+59
+60
+61 r
+62 e
+63 t
+64 u
+65 r
+66 n
+67
+68 0
+69 ;
+70 (newline)
+71 }
+72 (newline)
+```
+
+If we now join these characters into a text, we will get:
+
+```
+"#include <stdio.h>\nint main() {\n  printf(\"Hello, World!\");\n  return 0;\n  }"
+```
+
+That's a [C program](https://en.wikipedia.org/wiki/C_(programming_language))! It looks a bit mangled in a single line: a text editor would show the above as follows:
+
+```
+#include <stdio.h>
+int main() {
+   printf("Hello, World!");
+   return 0;
+}
+```
+
+Before we move on to databases, we can briefly cover the [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) file format. This type of file is usually used to hold tabular data. Let's ??
+
+```
+csv...
+```
 
 
-
-
-
+   - databases: relational and nonrelational
+   - represent more transient things still at rest, like heap, scope or cpu
 
 
 
@@ -363,6 +542,18 @@ main obstacle: fragmentation
 
 pillar 3 is the central pillar. From communication to changes in data.
 calls represent communication, transformation and storage. storage is considered calls to data repositories, like disks or memory? but no, even a register is a data repository. anywhere where you can put data is a repository, even if then you replace it immediately. it doesn't matter. then, why is storage important? Because you need to get it back. The place where you cannot store data is the network. But you can store it in registers, memory and disk and tape.
+
+
+   - @ as place
+   - basic model: call and single response
+   - communication and transformation as one
+   - can pass a hash as path if the function is expecting a hash? or just prepend with @. Then no need for @foo@bar
+   - @ generates more calls
+   - understand how a computer works, this goes on top of the flat next, but a computer still has a notion of calls at the lowest level
+
+calls are time that happen in the dataspace. the data is the space, the calls are the time and therefore transform space itself. data and space make each other.
+
+tcp/ip
 
 problem: express change. we need an unified model for transformations.
 all change happens through communication.
@@ -420,6 +611,8 @@ request model of data transformations:
    - fs: operation + data.
 
 responder or surface?
+
+see turing machine; a cpu; a high level language.
 
 ### Pillar 4: code is data
 
