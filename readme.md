@@ -248,9 +248,9 @@ We just established a single representation of data, so we can see any piece of 
 
 A big obstacle to "seeing the entire picture" is that the data of the system is simply never grouped and organized together. By creating a single dataspace where all the data is available, we can overcome this obstacle and look at all the data of a system as a coherent whole.
 
-The [world wide web](https://en.wikipedia.org/wiki/World_Wide_Web) is the best example of an unified dataspace - what makes the web powerful is that it is indeed a single space where all the data is available.
+The [world wide web](https://en.wikipedia.org/wiki/World_Wide_Web) is the best example of an unified dataspace. What makes an unified information space powerful is that you can address everything from it. This is why the web is powerful, because it is a single dataspace.
 
-The data "is" in the dataspace only to the extent that it can be accessed and modified through the dataspace. You could successfully argue that the actual data really "is" in hard drives and memory chips inside networked computers. But that doesn't matter much from an organizational perspective. What does matter is whether we can access them in a consistent way through an unified dataspace.
+The data "is" in the dataspace only to the extent that it can be accessed and modified through the dataspace. You could successfully argue that the actual data really "is" in hard drives and memory chips inside networked computers. But that doesn't matter much from an organizational perspective. What does matter is whether we can access them in a consistent way through an unified dataspace. And that unified dataspace is interconnected.
 
 In this pillar we will focus on data "at rest" - that is, data that is stored and ready to be accessed, rather than actively flowing between different parts of the system.
 
@@ -313,6 +313,10 @@ With the approach above, we can now say that we have a *path* for each of the fi
 ```
 
 This definition of *path*, which comes from both file system paths (`C:\Users\dmr\clang|hello.c`) or from web urls (`https://example.com/clang/examples/hello`), can be generalized to give us the location of any piece of data in our system.
+
+The core of the notion of an unified dataspace is that every part of the data has a path. There's no data "floating" anywhere. Every part of the data has a path, a place, a location. Rather than using *place* or *location*, we will use the term *path* to indicate where a value is.
+
+A path is, essentially, a sequence of names. Because values can have other values inside, we need multiple names to locate a specific value that is inside another value.
 
 The contents of files have to be *interpreted* for them to have any meaning to us. Let's decode now the contents of `hello.c`. We assume this is a text file, therefore we will try to interpret it as such. This file is encoded with [UTF-8](https://en.wikipedia.org/wiki/UTF-8), a way to convert a sequence of zeroes and ones into a list of numbers.
 
@@ -486,62 +490,117 @@ int main() {
 }
 ```
 
-Before we move on to databases, we can briefly cover the [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) file format. This type of file is usually used to hold tabular data. Let's ??
+Before we move on to databases, we can see the [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) file format. This type of file is usually used to hold tabular data.
+
+Let's say we have a CSV file with the top ten hit songs of [1985](https://en.wikipedia.org/wiki/1985).
 
 ```
-csv...
+"Main Server" C Users dmr clang hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
+                                indefatigable.c "001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111011010000011110100101000011010010110111001110100"
+                          music hits1985.csv "010100100110000101101110011010110010110001010011010000110110000101110010011001010110110001100101011100110010000001010111011010000110100101110011011100000110010101110010001011000010000001010101011011100110000101101101010000011010010100001110100110110100100101011011101000101001"
 ```
 
+If we decode this `hits1985.csv` file in a text editor, we'll see this:
 
-   - databases: relational and nonrelational
-   - represent more transient things still at rest, like heap, scope or cpu
+```csv
+Rank,Title,Artist,Weeks at #1
+1,Careless Whisper,Wham! featuring George Michael,3
+2,Like a Virgin,Madonna,6
+3,Wake Me Up Before You Go-Go,Wham!,3
+4,I Want to Know What Love Is,Foreigner,2
+5,I Feel for You,Chaka Khan,3
+6,Out of Touch,Daryl Hall & John Oates,2
+7,The Power of Love,Huey Lewis and the News,2
+8,Everybody Wants to Rule the World,Tears for Fears,2
+9,Money for Nothing,Dire Straits,3
+10,Crazy for You,Madonna,1
+```
 
+This is much more readable. However, a better way to see this data could be this:
 
+```
+"1985 Hit Songs" 1 Rank 1
+                   Title Careless Whisper
+                   Artist "Wham! featuring George Michael"
+                   "Weeks at #1" 3
+                 2 Rank 2
+                   Title "Like a Virgin"
+                   Artist "Madonna"
+                   "Weeks at #1" 6
+                 3 Rank 3
+                   Title "Wake Me Up Before You Go-Go"
+                   Artist "Wham!"
+                   "Weeks at #1" 3
+                 4 Rank 4
+                   Title "I Want to Know What Love Is"
+                   Artist "Foreigner"
+                   "Weeks at #1" 2
+                 5 Rank 5
+                   Title "I Feel for You"
+                   Artist "Chaka Khan"
+                   "Weeks at #1" 3
+                 6 Rank 6
+                   Title "Out of Touch"
+                   Artist "Daryl Hall & John Oates"
+                   "Weeks at #1" 2
+                 7 Rank 7
+                   Title "The Power of Love"
+                   Artist "Huey Lewis and the News"
+                   "Weeks at #1" 2
+                 8 Rank 8
+                   Title "Everybody Wants to Rule the World"
+                   Artist "Tears for Fears"
+                   "Weeks at #1" 2
+                 9 Rank 9
+                   Title "Money for Nothing"
+                   Artist "Dire Straits"
+                   "Weeks at #1" 3
+                 10 Rank 10
+                    Title "Crazy for You"
+                    Artist "Madonna"
+                    "Weeks at #1" 1
+```
 
-Even simple DIS are made of multiple components. A typical example is a DIS that has three parts:
+To get to the above, we did quite a bit of interpreting of our CSV file:
 
-- A database.
-- An API service.
-- An interface.
+- From binary data to a sequence of numbers.
+- From a sequence of numbers to a sequence of unicode characters.
+- From unicode characters to lines of text divided by commas into columns.
+- From the above into a list of hashes, each with four keys and four values.
 
+CSVs are a very expressive file format. But most structured data, nowadays, is stored in databases. Why is this?
 
-Data cannot be floating. It has to be somewhere. Path is how you reference a value. There's no notion of a value without a path. Everything exists in a space and everything has a handle. There's no "floating" or "dangling" data.
+- efficiency: can access a single value.
+- validations on data
+- locking
+- queryability.
 
-A particular point in the dataspace is a *place*. Places are data.
-
-two servers
-one database
-
-Everything has a path. Address is path.
-
-A space and a name are the same thing.
-
-Let's call them keys. a path is one or more keys, followed by a value.
-
-Component is where we draw the lines.
-State of a component is the data inside the component at a point in time.
-The data stored by the system at any point in time can be called "state". But we'll just call it the data of the component.
-
-
-- Dataspace: access vs control. Open access, use control to determine when to block.
-
-What makes an unified information space powerful is that you can address everything from it. This is why the web is powerful, because it is a single dataspace.
+TODO:
+- databases: relational and nonrelational
+- represent more transient things still at rest, like heap, scope or cpu
 
 Not everything actually "is" in dataspace, but if you can map it, then it is there. For example, a relational database is not using cell, but you can associate its data and operations to the dataspace. That's how you can put it in the dataspace. Representation can stand for existence. But you need a part of your system to actually provide those mappings so that you can do "as if" it was there.
 
-By focusing on the data, we also can just retain the essential details of the hardware and the network. The core concept we will examine is that of a *digital component* (or just *component*), which is both a source and a repository of data.
-Let's first define what is a digital component. A digital component is something that can transmit, transform and store data. Draw the boundaries wherever you want: entire system, program, function.
-
-Can you model a chip, with registers and memory locations as addresses?
-
-main obstacle: fragmentation
-
 ### Pillar 3: call and response
 
-: see the data at every level: coming in, at each transformation, going out. That's why we use logs! That's why layers are helpful!
-
 pillar 3 is the central pillar. From communication to changes in data.
-calls represent communication, transformation and storage. storage is considered calls to data repositories, like disks or memory? but no, even a register is a data repository. anywhere where you can put data is a repository, even if then you replace it immediately. it doesn't matter. then, why is storage important? Because you need to get it back. The place where you cannot store data is the network. But you can store it in registers, memory and disk and tape.
+
+- We need to express change.
+- See communication and transformation as one operation.
+- Storage is just communication onto certain components that decide to keep the information. CPU registers are immediately reused, RAM also quickly deleted.
+- Single model: call and response. Both the call and the response themselves are data. They are 1 to 1, one part makes the call and another one responds.
+
+Things that can be modelled as that:
+- API call.
+- Function call.
+- TCP handshake.
+- CPU call.
+
+- see the data at every level: coming in, at each transformation, going out. That's why we use logs! That's why layers are helpful!
+- the basic call is reference. everything is based on reference. we use a name (or rather, a path) to refer to something: whether data we want to get into another place (path), or where we want a result saved.
+- there are other calls for basic operations.
+- a call is a list of one or more calls.
+- calls access data through reference calls.
 
 
    - @ as place
@@ -550,6 +609,7 @@ calls represent communication, transformation and storage. storage is considered
    - can pass a hash as path if the function is expecting a hash? or just prepend with @. Then no need for @foo@bar
    - @ generates more calls
    - understand how a computer works, this goes on top of the flat next, but a computer still has a notion of calls at the lowest level
+   - State of a component is the data inside the component at a point in time.
 
 calls are time that happen in the dataspace. the data is the space, the calls are the time and therefore transform space itself. data and space make each other.
 
@@ -568,8 +628,6 @@ call represents transformation and communication.
 call goes downstream, response goes upstream.
 
 call changes data in receiver. can be 1 or n. then you have possible wait to acknowledgement. This is return; the acknowledgment is also information that changes something in the sender. Use this mechanism to express all computation. These calls represent change. Draw the line at computer instructions.
-
-bytes: "01234567"
 
 storage is a matter of timescale. while processing a call, data is stored in API. but that doesn't outlive the call.
 side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
@@ -614,6 +672,8 @@ responder or surface?
 
 see turing machine; a cpu; a high level language.
 
+You can see calls as time, and data as both space and matter. Space We don't care about empty memory, so we conflate space and matter. Change can only happen with time; so we can conflate change and time, and say that calls are time.
+
 ### Pillar 4: code is data
 
 code as data that produces data. The call is data, the responder is data, the transformation is data. The result is only part of the transformation. Understand code in terms of sequences: linear, cond, iteration, jump. Program + call = result. Data1 + data2 = data3.
@@ -637,6 +697,8 @@ the problem with statements: they are not data. solved by pillar 4.
    - Conditional.
    - Loop as conditional.
    - Errors: the essence is that they jump up many levels, through a different channel than the return. It can be seen as a conditional return based on value.
+
+- Dataspace: access vs control. Open access, use control to determine when to block.
 
 ### Pillar 5: interface is code
 
