@@ -254,6 +254,13 @@ The data "is" in the dataspace only to the extent that it can be accessed and mo
 
 In this pillar we will focus on data "at rest" - that is, data that is stored and ready to be accessed, rather than actively flowing between different parts of the system.
 
+There's two ways of looking at space. One is by looking at the locations (disks, memory chips, CPU registers), naming them and the machines that hold them, and putting names there.
+There's a second way to look at space, different from the other one: we let our data define space. We still name computers, memories, and whatnot, but we don't care about the memory address exactly; rather, we use fourdata to define data in them. This is the way we'll do it.
+decouple state from place
+space is created by data. no empty spaces, we don't care about that. everything has a name.
+
+to represent the notion of data creating space, take the example of a spreadsheet where there are empty places that get filled with values; whereas in todis/cell, it is nested values that create space. space can only be made through paths to the data. the path is a breadcrumb. also, memory can be seen as memory cells with numbers. but instead we see memory through data.
+
 Every DIS stores its data in two primary forms: files and databases.
 
 Files are the simplest of the two. They consist of a `path`, a `name` and `contents`. For example:
@@ -615,6 +622,13 @@ calls are time that happen in the dataspace. the data is the space, the calls ar
 
 tcp/ip
 
+call waits, then gets a result. could be without waiting, without getting a result, or multiple things getting called. but we're going to go with this one.
+call expands to one or more calls.
+how to have a nested path with @ and then pass more args? what about @ bla bla @, rather than @bla@bla? not sure. @ as an almost parenthesis. convention: always pass a single argument. but calls can access more data through calls. and they access their args also via a call.
+lisp without parenthesis. single argument.
+call happens inside the dataspace!
+communication gives agency, even if it's on the same computer
+
 problem: express change. we need an unified model for transformations.
 all change happens through communication.
 we assume that communication happens.
@@ -706,6 +720,8 @@ the problem with statements: they are not data. solved by pillar 4.
 this is all great for backend, but what about interfaces?
 An interface is a way for a human to interact with software - always through hardware.
 interface mapped to state! see the data being displayed and the possible transformations.
+
+Identity is tackled here, because this is where you can have an entrypoint for humans. Identity as data.
 
 ## How to test the (hypo)thesis of this treatise
 
