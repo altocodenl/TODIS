@@ -609,7 +609,6 @@ Things that can be modelled as that:
 - a call is a list of one or more calls.
 - calls access data through reference calls.
 
-
    - @ as place
    - basic model: call and single response
    - communication and transformation as one
@@ -651,6 +650,9 @@ can see the final result of the call or can see all the intermediate calls.
 call goes beyond csp and actor. more simple. three examples: computer instruction (without even assembler), function call inside a hll and an API call.
 
 When you make a call, you allocate. Or rather, with the response, you call the storage.
+
+the call gets expanded. nested calls also get expanded. but the expansion doesn't overwrite. rather, it creates a double entry of call and value (response as value). inside the call, you see what got called and the nested calls, including references. so the result really is more data, all expanded. there's no overwriting, there is expansion. implicitly, the system is looking for the value of the hash at that location, rather than the whole thing. literals are their own values.
+in a nutshell: the expansion is also data.
 
 the call is the essence of pillar 3: see the effects as 1) expansions; 2) the subcalls as part of the same mechanism.
 the call is data that represents communication and transformation of data. from, to. can have multiple tos. A single to can be a dispatcher too.
