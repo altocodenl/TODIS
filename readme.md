@@ -4,6 +4,8 @@
 
 > "To a great extent the act of coding is one of organization." -- [James Hague](https://prog21.dadgum.com/177.html)
 
+For the impatient, [tl;dr just tell me what to do](#tl;dr just tell me what to do).
+
 ## Purpose
 
 We currently live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age). The revolution of digital technology has made information pervasive and central to human economy, politics, society and culture.
@@ -724,6 +726,13 @@ An interface is a way for a human to interact with software - always through har
 interface mapped to state! see the data being displayed and the possible transformations.
 
 Identity is tackled here, because this is where you can have an entrypoint for humans. Identity as data.
+
+## tl;dr just tell me what to do
+
+- use fourdata/cell
+- put all dbs into the format
+- also list files and perhaps their types
+- then add the calls. see them end to end first, then you can expand details if necessary.
 
 ## How to test the (hypo)thesis of this treatise
 
