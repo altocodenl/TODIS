@@ -4,8 +4,6 @@
 
 > "To a great extent the act of coding is one of organization." -- [James Hague](https://prog21.dadgum.com/177.html)
 
-For the impatient, [tl;dr just tell me what to do](#tl;dr just tell me what to do).
-
 ## Purpose
 
 We currently live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age). The revolution of digital technology has made information pervasive and central to human economy, politics, society and culture.
@@ -178,7 +176,7 @@ firstName Gustavo
 lastName Cerati
 ```
 
-Hashes don't have a particular order to their keys; however, fourdata orders them alphabetically, so that two equivalent hashes are represented with the exact same text.
+Hashes don't have a particular order to their keys; however, fourdata orders them alphabetically, so that two equivalent hashes are represented in the exact same order.
 
 Simple as it is, this data representation can be used to represent any data relevant to an information system. Here are a few examples:
 
@@ -248,22 +246,52 @@ Now, where does this data "go"? That's what we tackle in the next pillar.
 
 We just established a single representation of data, so we can see any piece of data in a consistent manner. Our next step is to join all the data of the system into a coherent whole.
 
-A big obstacle to "seeing the entire picture" is that the data of the system is simply never grouped and organized together. By creating a single dataspace where all the data is available, we can overcome this obstacle and look at all the data of a system as a coherent whole.
+At this point, our main obstacle to "seeing the entire picture" is that the data of the system is not grouped together. So we'll tackle that by creating a single dataspace where all the data is available, we can overcome this obstacle and look at all the data of a system as a coherent whole.
+
+In this pillar we will focus on data "at rest" - that is, data that is stored and ready to be accessed, rather than actively flowing between different parts of the system. Movement of data (communication and transformation) will come in pillar 3.
 
 The [world wide web](https://en.wikipedia.org/wiki/World_Wide_Web) is the best example of an unified dataspace. What makes an unified information space powerful is that you can address everything from it. This is why the web is powerful, because it is a single dataspace.
 
+Like the web, we will organize our data around paths. Let's illustrate with an example by going back to the book data we saw in the last pillar:
+
+```
+books 1 author "Edward Said"
+        created "2024-10-23T20:24:15.936Z"
+        id 1234
+        isbn "978-0-394-42814-7"
+        title Orientalism
+      2 author "Michel Houellebecq"
+        created "2024-10-23T20:25:22.411Z"
+        id 1235
+        isbn "978-2-08-147175-7"
+        title Serotonin
+      3 author "Paul Graham"
+        created "2024-10-23T20:30:44.602Z"
+        id 1237
+        isbn "978-0130305527"
+        title "On Lisp"
+```
+
+How would you get or refer to the book "Orientalism"? We know it is inside `books`, which is a list, and that it is the first book in that list.
+
+- put it in "Main DB"
+- context expands to the left, detail expands to the right
+- where is the book? at path x
+- this path is what takes you to any value.
+- this is what happens in the web. Or REST APIs. The path is the where.
+- the path is also data! you can express it as a sequence of texts, as a hash. or a list.
+- the data creates the space. contrast with a spreadsheet, with A1 A2, or memory.
+- let's look how we apply this to files and databases.
+
 The data "is" in the dataspace only to the extent that it can be accessed and modified through the dataspace. You could successfully argue that the actual data really "is" in hard drives and memory chips inside networked computers. But that doesn't matter much from an organizational perspective. What does matter is whether we can access them in a consistent way through an unified dataspace. And that unified dataspace is interconnected.
 
-In this pillar we will focus on data "at rest" - that is, data that is stored and ready to be accessed, rather than actively flowing between different parts of the system.
-
 There's two ways of looking at space. One is by looking at the locations (disks, memory chips, CPU registers), naming them and the machines that hold them, and putting names there.
-There's a second way to look at space, different from the other one: we let our data define space. We still name computers, memories, and whatnot, but we don't care about the memory address exactly; rather, we use fourdata to define data in them. This is the way we'll do it.
 decouple state from place
 space is created by data. no empty spaces, we don't care about that. everything has a name.
 
 to represent the notion of data creating space, take the example of a spreadsheet where there are empty places that get filled with values; whereas in todis/cell, it is nested values that create space. space can only be made through paths to the data. the path is a breadcrumb. also, memory can be seen as memory cells with numbers. but instead we see memory through data.
 
-Every DIS stores its data in two primary forms: files and databases.
+Every DIS stores its data in two primary forms: files and databases. We'll see how we can put their data into this framework.
 
 Files are the simplest of the two. They consist of a `path`, a `name` and `contents`. For example:
 
@@ -588,7 +616,7 @@ TODO:
 - databases: relational and nonrelational
 - represent more transient things still at rest, like heap, scope or cpu
 
-Not everything actually "is" in dataspace, but if you can map it, then it is there. For example, a relational database is not using cell, but you can associate its data and operations to the dataspace. That's how you can put it in the dataspace. Representation can stand for existence. But you need a part of your system to actually provide those mappings so that you can do "as if" it was there.
+Not everything actually "is" in dataspace, but if you can map it, then it is there. For example, a relational database is not using cell, but you can associate its data and operations to the dataspace. That's how you can put it in the dataspace. Representation can stand for existence. But you need a part of your system to actually provide those mappings so that you can do "as if" it is there.
 
 ### Pillar 3: call and response
 
