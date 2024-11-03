@@ -4,6 +4,10 @@
 
 > "To a great extent the act of coding is one of organization." -- [James Hague](https://prog21.dadgum.com/177.html)
 
+## tl;dr
+
+TODO
+
 ## Purpose
 
 We currently live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age). The revolution of digital technology has made information pervasive and central to human economy, politics, society and culture.
@@ -626,6 +630,7 @@ pillar 3 is the central pillar. From communication to changes in data.
 - See communication and transformation as one operation.
 - Storage is just communication onto certain components that decide to keep the information. CPU registers are immediately reused, RAM also quickly deleted.
 - Single model: call and response. Both the call and the response themselves are data. They are 1 to 1, one part makes the call and another one responds.
+- Actually see it as a hash: call & res
 
 Things that can be modelled as that:
 - API call.
@@ -722,9 +727,11 @@ You can see calls as time, and data as both space and matter. Space We don't car
 
 ### Pillar 4: code is data
 
-code as data that produces data. The call is data, the responder is data, the transformation is data. The result is only part of the transformation. Understand code in terms of sequences: linear, cond, iteration, jump. Program + call = result. Data1 + data2 = data3.
-
-Write code in the same vocabulary that you use for data. It's already parsed. And it forces you to think all in terms of explicit data at every step. Also, it is unified.
+we already have code as data, because of call & res.
+- the essence is sequence, the machine keeping on going. return/done makes it stop. then you have jump, which is cond. loop is repeated jumps. error/recover is a special pattern that's really a conditional. and voila, you have everything to express a procedure!
+- a call is a sequence of calls.
+- The name is sequence. Alternatives: program, function, flow. but it is sequence.
+- sequence also maps perfectly well to what a computer does.
 
 - Higher level languages let you focus on data at a human level.
 - The data from the call changes the sequence into something else.
@@ -737,9 +744,8 @@ the problem with expressions: they are not automatically referenceable from outs
 the problem with statements: they are not data. solved by pillar 4.
 
 - then there's what happens inside the component. only see what happens with regards to the other components. inner data mappings are irrelevant or fold. The essential computing model:
-   - call
+   - Call as sequence of calls.
    - Variable subsitution as call.
-   - Sequence.
    - Conditional.
    - Loop as conditional.
    - Errors: the essence is that they jump up many levels, through a different channel than the return. It can be seen as a conditional return based on value.
@@ -748,19 +754,16 @@ the problem with statements: they are not data. solved by pillar 4.
 
 ### Pillar 5: interface is code
 
- interface is code, therefore data.
+interface is code, therefore data.
 this is all great for backend, but what about interfaces?
 An interface is a way for a human to interact with software - always through hardware.
 interface mapped to state! see the data being displayed and the possible transformations.
 
+reactivity comes here. @ is reactive, when the references change, things are re-run. internally this is implemented as a loop over subscribers.
+
+reactivity is no mere gimmick, there's something deeper: autopoiesis. when our perception changes, everything that that perception is based upon also changes in ourselves.
+
 Identity is tackled here, because this is where you can have an entrypoint for humans. Identity as data.
-
-## tl;dr just tell me what to do
-
-- use fourdata/cell
-- put all dbs into the format
-- also list files and perhaps their types
-- then add the calls. see them end to end first, then you can expand details if necessary.
 
 ## How to test the (hypo)thesis of this treatise
 
