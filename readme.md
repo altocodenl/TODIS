@@ -144,23 +144,31 @@ This is the central thesis of this treatise. We'll explore now how to make this 
 
 To see data, we must find a good way to represent it. The data that goes through our digital systems is binary, consisting of [bits](https://en.wikipedia.org/wiki/Bit). Bits can be represented by zeroes and ones. Working with zeroes and ones, however, is not at all practical or desirable. In programmer parlance, they are too *low-level* for humans to read and write.
 
-Here I will propose a data representation based on *text*. While data representations can also be graphical (though always using text), I've chosen to go with the portability and compactness of text.
+Here I will propose a data representation based on *text*. While data representations can also be graphical (though always using text), I've chosen to go with the portability and compactness of text. Text is also much easier to communicate between computers because it is *linear*, but I'm getting ahead of myself.
 
-Whether you use this data representation or some other representation, it is my contention that without a clear and sufficient data representation, you cannot directly look at the data in a DIS. **Therefore, the first step towards seeing the data is to have a single representation of data** and use it for *everything*.
+Whether you use this data representation or some other representation, it is my contention that without a *determined* and *sufficient* data representation, you cannot directly look at the data in a DIS. **Therefore, the first step towards seeing the data is to have a single representation of data** and use it for *everything*.
 
 A data representation requires us to define two things:
 
 - Ways to set boundaries between one *value* and another value. Values are discrete units of data.
 - Specify basic *types* of data.
 
-[Elsewhere](https://github.com/altocodenl/cell?tab=readme-ov-file#the-data-vocabulary-fourdata), I have presented a data representation, called *fourdata*. This representation is purely based in text and has four types of data:
+Here I'll introduce *fourdata*, a data representation that is purely based in text and has four types of data:
 
 1. Number
 2. Text
 3. List
 4. Hash
 
-Number and text are self explanatory. Those are *single* data types. For example, `1234`, or `Hello!`.
+Because there are only four types of data in this representation, we call this representation *fourdata*. The first two data types, number and text, are the *single* data types. That means that they represent a *single value*. For example:
+
+```
+1234
+```
+
+```
+Hi
+```
 
 Single data types, however, need to be organized into structured wholes. Fourdata also provides two *multiple* data types, where one value can hold multiple values *inside* itself. The first multiple data type is the *list*, which is a sequence of ordered values.
 
@@ -170,7 +178,7 @@ Single data types, however, need to be organized into structured wholes. Fourdat
 3 Lettuce
 ```
 
-In the list above, each item has a number next to it. This is its *key*, which is always a number.
+In the list above, each item has a number next to it. This is its *key*, which is always a number. Note how each value goes in its own line.
 
 The second multiple data type is the *hash*. In a hash, the keys are texts:
 
@@ -180,7 +188,62 @@ firstName Gustavo
 lastName Cerati
 ```
 
-Hashes don't have a particular order to their keys; however, fourdata orders them alphabetically, so that two equivalent hashes are represented in the exact same order.
+Hashes don't have a particular order to their keys; however, fourdata orders them alphabetically, so that two equivalent hashes are represented in the exact same order. This allows us to have the exact same text representing two hashes that we consider to be equal.
+
+In the example above, we see how the values of a hash can be of different types: `born` is number, `firstName` and `lastName` are text.
+
+We can have a hash or a list inside another hash or list. For example:
+
+```
+1 born 1959
+  firstName Gustavo
+  lastName Cerati
+2 born 1962
+  firstName John
+  lastName Squire
+```
+
+The list above has two hashes, each of them representing a (great) musician. We say that those hashes are *nested* into the list.
+
+It's a good moment how we use empty spaces (*whitespace*, in programmer parlance) to convey nestedness. In the list above, item number 1 is
+
+```
+born 1959
+firstName Gustavo
+lastName Cerati
+```
+
+And item number 2 is
+
+```
+born 1962
+firstName John
+lastName Squire
+```
+
+When we want to make a list out of these two, the starting point of each hash is going to be to the *right* of the keys of the list (`1`, `2`). The leftmost part of each hash (its own keys) are going to be aligned one character to the right of the end of the key after which it comes.
+
+```
+1 born 1959
+  firstName Gustavo
+  lastName Cerati
+2 born 1962
+  firstName John
+  lastName Squire
+```
+
+If we want to name this list, we can do this as follows:
+
+```
+musicians 1 born 1959
+            firstName Gustavo
+            lastName Cerati
+          2 born 1962
+            firstName John
+            lastName Squire
+```
+
+Note how we indented `1` and `2` to the right of `musicians`. Now, we have a single hash which contains a list, which in turn contains two hashes, each of them containing three texts.
 
 Simple as it is, this data representation can be used to represent any data relevant to an information system. Here are a few examples:
 
@@ -244,19 +307,17 @@ body 1 h1 "Hello World!"
 
 Now, where does this data "go"? That's what we tackle in the next pillar.
 
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
-
 ### Pillar 2: single dataspace
 
-We just established a single representation of data, so we can see any piece of data in a consistent manner. Our next step is to join all the data of the system into a coherent whole.
+We just established a single representation of data, so we can see any piece of data in a consistent manner. At this point, our main obstacle to "seeing the entire picture" is that the data of the system is not grouped together. So we'll tackle that by creating a single dataspace where all the data is available as a coherent whole.
 
-At this point, our main obstacle to "seeing the entire picture" is that the data of the system is not grouped together. So we'll tackle that by creating a single dataspace where all the data is available, we can overcome this obstacle and look at all the data of a system as a coherent whole.
+In this pillar we will focus on data "at rest" - that is, data that is stored and ready to be accessed, rather than actively flowing between different parts of the system. Changes in data (communication and transformation) will come in pillar 3.
 
-In this pillar we will focus on data "at rest" - that is, data that is stored and ready to be accessed, rather than actively flowing between different parts of the system. Movement of data (communication and transformation) will come in pillar 3.
+The [world wide web](https://en.wikipedia.org/wiki/World_Wide_Web) is the prime example of an unified dataspace. What makes an unified information space powerful is that you can potentially address all the information in the world from it. This is why the web is powerful: because it is a single dataspace.
 
-The [world wide web](https://en.wikipedia.org/wiki/World_Wide_Web) is the best example of an unified dataspace. What makes an unified information space powerful is that you can address everything from it. This is why the web is powerful, because it is a single dataspace.
+In the web's dataspace, every document is represented by a URL (uniform resource locator) that tells you "where" that document is. For example, Wikipedia's page for the world wide web is located at `https://en.wikipedia.org/wiki/World_Wide_Web`. This URL tells you "where" the page is.
 
-Like the web, we will organize our data around paths. Let's illustrate with an example by going back to the book data we saw in the last pillar:
+Our notion of a dataspace will replace URLs with *paths*. A path is a sequence of texts and numbers. Let's illustrate with an example by going back to the book data we saw in pillar 1:
 
 ```
 books 1 author "Edward Said"
@@ -276,26 +337,88 @@ books 1 author "Edward Said"
         title "On Lisp"
 ```
 
-How would you get or refer to the book "Orientalism"? We know it is inside `books`, which is a list, and that it is the first book in that list.
+How would you get or refer to the book "Orientalism"? We know it is inside `books`, which is a list, and that it is the first book in that list. The *path* to that book is `books 1`.
 
-- put it in "Main DB"
-- context expands to the left, detail expands to the right
-- where is the book? at path x
-- this path is what takes you to any value.
-- this is what happens in the web. Or REST APIs. The path is the where.
-- the path is also data! you can express it as a sequence of texts, as a hash. or a list.
-- the data creates the space. contrast with a spreadsheet, with A1 A2, or memory.
-- let's look how we apply this to files and databases.
+Similarly, the path to "On Lisp" is `books 3`. The path to the `isbn` of "On Lisp" is `books 3 isbn`.
 
-The data "is" in the dataspace only to the extent that it can be accessed and modified through the dataspace. You could successfully argue that the actual data really "is" in hard drives and memory chips inside networked computers. But that doesn't matter much from an organizational perspective. What does matter is whether we can access them in a consistent way through an unified dataspace. And that unified dataspace is interconnected.
+Through a path, we can access any value we want. And values need not be just texts or numbers; they can be hashes or lists as well. Every value in the dataspace has a path to it. And, interestingly enough, paths are still data, because they can be represented as either hashes or lists. For example, the path `books 3 isbn` can be represented as either hash:
 
-There's two ways of looking at space. One is by looking at the locations (disks, memory chips, CPU registers), naming them and the machines that hold them, and putting names there.
-decouple state from place
-space is created by data. no empty spaces, we don't care about that. everything has a name.
+```
+books 3 isbn
+```
 
-to represent the notion of data creating space, take the example of a spreadsheet where there are empty places that get filled with values; whereas in todis/cell, it is nested values that create space. space can only be made through paths to the data. the path is a breadcrumb. also, memory can be seen as memory cells with numbers. but instead we see memory through data.
+Or as a list
 
-Every DIS stores its data in two primary forms: files and databases. We'll see how we can put their data into this framework.
+```
+1 books
+2 3
+3 isbn
+```
+
+The first representation fits in a single line, so we will go with that one.
+
+How do we go from a small amount of data, like we saw above, to a larger whole? Let's expand on the previous example, and imagine that our `books` list is within our "Main Database". We can then express our dataspace like this:
+
+```
+"Main Database" books 1 author "Edward Said"
+                        created "2024-10-23T20:24:15.936Z"
+                        id 1234
+                        isbn "978-0-394-42814-7"
+                        title Orientalism
+                      2 author "Michel Houellebecq"
+                        created "2024-10-23T20:25:22.411Z"
+                        id 1235
+                        isbn "978-2-08-147175-7"
+                        title Serotonin
+                      3 author "Paul Graham"
+                        created "2024-10-23T20:30:44.602Z"
+                        id 1237
+                        isbn "978-0130305527"
+                        title "On Lisp"
+```
+
+So now "Main Database" is represented by a hash containing another hash, `books`. Now, the path to "On Lisp"'s `isbn` is `"Main Database" books 3 isbn`.
+
+We can then add other values inside "Main Database", for example `users`, or `purchases`.
+
+After this example, we can notice two things:
+
+1. *Context* makes our dataspace grow towards the *left*, and detail makes our dataspace grow towards the *right*. For example, by going left from `books` to "Main Database", we acquire more context for the data we have; by going further to the right, we detail it further.
+2. We can see the rightmost value of any path also as part of the path! Since a path is a sequence of texts and numbers, and rightmost values must also be texts and numbers (since they don't contain anything else), we can just simply put that value at the end of the path. If we did that, we could see something like this as a path:
+
+```
+"Main Database" books 1 author "Edward Said"
+```
+
+Or also this:
+
+```
+"Main Database" books 3 isbn "978-0130305527"
+```
+
+If this is still not clear, you could interpret it like this:
+
+```
+"Main Database" -> books -> 3 -> isbn -> "978-0130305527"
+```
+
+where each value on the left takes you to the next value.
+
+We can then start to understand a dataspace as a collection of paths. The paths not only take you to the data: they **are** the data. This is highly suggestive of how brains: the interconnections are not just a way to the data, but they actually *are* the data itself. There's no need for [metadata](https://en.wikipedia.org/wiki/Metadata) ("data that provides information about other data"). *All the data is in the data*.
+
+Paths organize the data using only data. This stands in stark contrast with a spreadsheet, where the data is stored in cells named `A1`, `A2`, `B147`, etc. In those cases, you don't know what's in `B147` until you go see what really is in there. But in the dataspace above, when you see `"Main Database" books 3`, you already know you are working with a single book.
+
+This also stands in contrast with the traditional way of organizing memory in computers, which is memory addresses. Memory can be addressed through numbers, using the convention that each number represents a fixed amount of bits in the memory. In Ye Olden Days, each of the `books` would have been placed in a specific memory address.
+
+Both spreadsheets and memory addresses have the same problem: they require data that is not in the dataspace to find values in the dataspace. But a dataspace that uses meaningful paths to organize information is free of that limitation.
+
+While any implementation of a digital dataspace will rely on memory addresses, this can be left to the implementation. The dataspace, however, is our *interface* to data, and that interface - I contend - can be used to model anything, even low level representations that map to memory addresses.
+
+With paths, [places](https://www.youtube.com/watch?v=-6BsiVyC1kM) become memorable and associative.
+
+Perhaps the most curious consequence of this approach is that we have no way of representing empty lists or hashes - no empty boxes! Every line in fourdata has a rightmost value that's either a text or a number. Contrast this with a spreadsheet, or with computer memory, which is full of cells or addresses that contain no value. In contrast, in this representation there are no empty spaces: all the data that is there represents something. Like [breadcrumbs](https://en.wikipedia.org/wiki/Breadcrumb_navigation), paths always point you somewhere.
+
+Every DIS stores its data in two primary forms: files and databases. The rest of this section will show how we can put their data into this framework.
 
 Files are the simplest of the two. They consist of a `path`, a `name` and `contents`. For example:
 
@@ -325,7 +448,7 @@ We can go even one step further and represent the file like this:
 C:\Users\dmr\clang\hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
 ```
 
-A better way to do it is to split the path into hashes, and add the contents as the last item.
+A better way to do it is to split the path into hashes (that is, into a path), and add the contents as the last item.
 
 ```
 C Users dmr clang hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
@@ -609,18 +732,53 @@ To get to the above, we did quite a bit of interpreting of our CSV file:
 - From unicode characters to lines of text divided by commas into columns.
 - From the above into a list of hashes, each with four keys and four values.
 
-CSVs are a very expressive file format. But most structured data, nowadays, is stored in databases. Why is this?
+While CSVs are a very expressive and widely used way of representing structured information, a great deal of structured information nowadays is stored in databases. Databases are *computer programs* that store data using files; but they do it in a more involved way that provides the following features:
 
-- efficiency: can access a single value.
-- validations on data
-- locking
-- queryability.
+- Efficiency: you can access a single value, rather than getting the entire file.
+- Validation: you can check whether incoming data has a certain shape before storing it.
+- Locking: if two users want to save a value at the same path at the same time, the database makes sure to process the requests one at a time.
+- Queries: you can construct specific inquiries about data which will get you the right results efficiently.
+
+For practical purposes, there are two families of databases: [relational databases](https://en.wikipedia.org/wiki/Relational_database) (also called SQL databases) and [non-relational databases](https://en.wikipedia.org/wiki/NoSQL).
+
+Relational databases date from 1970 (!) and are tremendously powerful. Their power stems from their quite rigid structure. Overall, a relational database is composed of tables with rows and columns. This can be directly modeled in fourdata as follows:
+
+- Table: list
+- Row: hash
+
+For example, taking some books from the example at the top:
+
+```
+"Main Database" books 1 author "Edward Said"
+                        created "2024-10-23T20:24:15.936Z"
+                        id 1234
+                        isbn "978-0-394-42814-7"
+                        title Orientalism
+```
+
+We could interpret `books` to be a table of "Main Database". We have here one row with five columns (`author`, `created`, `id`, `isbn` and `title`). Relational databases are called *relational* because they naturally express relationships between different tables. For example:
+
+```
+"Main Database" books 1 author "Edward Said"
+                        created "2024-10-23T20:24:15.936Z"
+                        id 1234
+                        isbn "978-0-394-42814-7"
+                        title Orientalism
+                users 1 id fpereiro
+                purchases 1 book 1234
+                            created "2024-11-04T22:44:10.196Z"
+                            user fpereiro
+```
+
+If we look at `purchases 1`, we can see that the book purchased has `book 1234` and `user fpereiro`. Since we have a book with `id 1234` ("Orientalism") and a user with id `fpereiro`, relational databases can *join* this data to express the fact that this purchase involves both this particular book and this particular user. This can be done quite expressively using [SQL](https://en.wikipedia.org/wiki/SQL), which is a query language.
+
+For now, it is enough to have a direct mapping from relational databases to fourdata: this allows us to put relational data at rest into our dataspace.
+
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 TODO:
-- databases: relational and nonrelational
+- nonrelational databases: mongo & redis.
 - represent more transient things still at rest, like heap, scope or cpu
-
-Not everything actually "is" in dataspace, but if you can map it, then it is there. For example, a relational database is not using cell, but you can associate its data and operations to the dataspace. That's how you can put it in the dataspace. Representation can stand for existence. But you need a part of your system to actually provide those mappings so that you can do "as if" it is there.
 
 ### Pillar 3: call and response
 
@@ -734,8 +892,10 @@ we already have code as data, because of call & res.
 - sequence also maps perfectly well to what a computer does.
 
 - Higher level languages let you focus on data at a human level.
-- The data from the call changes the sequence into something else.
+- The data from the call changes the sequence into more calls.
+- Calls can be self-referential: recursion. Avoid Whitehead and Russell's mistake.
 
+Height of level is determined by looking who calls who. Low level is usually called, high level is usually the caller.
 Levels where you draw lines have sublevels down to a single chip operation.
 
 a flow as a sequence.
