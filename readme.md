@@ -357,6 +357,8 @@ Or as a list
 
 The first representation fits in a single line, so we will go with that one.
 
+The core of an unified dataspace is that every part of the data has a path. There's no data "floating" anywhere. Every part of the data has a path, a place, a location. Rather than using *place* or *location*, we will use the term *path* to indicate where a value is.
+
 How do we go from a small amount of data, like we saw above, to a larger whole? Let's expand on the previous example, and imagine that our `books` list is within our "Main Database". We can then express our dataspace like this:
 
 ```
@@ -404,9 +406,9 @@ If this is still not clear, you could interpret it like this:
 
 where each value on the left takes you to the next value.
 
-We can then start to understand a dataspace as a collection of paths. The paths not only take you to the data: they **are** the data. This is highly suggestive of how brains: the interconnections are not just a way to the data, but they actually *are* the data itself. There's no need for [metadata](https://en.wikipedia.org/wiki/Metadata) ("data that provides information about other data"). *All the data is in the data*.
+We can then start to understand a dataspace as a collection of paths. The paths not only take you to the data: they **are** the data. This is highly suggestive of how brains work: the interconnections are not just a way to the data, but they actually *are* the data itself. There's no need for [metadata](https://en.wikipedia.org/wiki/Metadata) ("data that provides information about other data"). *All the data is in the data*.
 
-Paths organize the data using only data. This stands in stark contrast with a spreadsheet, where the data is stored in cells named `A1`, `A2`, `B147`, etc. In those cases, you don't know what's in `B147` until you go see what really is in there. But in the dataspace above, when you see `"Main Database" books 3`, you already know you are working with a single book.
+Paths organize the data using only data. This stands in stark contrast with a spreadsheet, where the data is stored in cells named `A1`, `A2`, `B147`, etc. In those cases, you don't know what's in `B147` until you go see what really is in there. But in the dataspace above, when you see `"Main Database" books 3`, you already know you probably are looking at a single book.
 
 This also stands in contrast with the traditional way of organizing memory in computers, which is memory addresses. Memory can be addressed through numbers, using the convention that each number represents a fixed amount of bits in the memory. In Ye Olden Days, each of the `books` would have been placed in a specific memory address.
 
@@ -414,7 +416,7 @@ Both spreadsheets and memory addresses have the same problem: they require data 
 
 While any implementation of a digital dataspace will rely on memory addresses, this can be left to the implementation. The dataspace, however, is our *interface* to data, and that interface - I contend - can be used to model anything, even low level representations that map to memory addresses.
 
-With paths, [places](https://www.youtube.com/watch?v=-6BsiVyC1kM) become memorable and associative.
+With paths, [places](https://www.youtube.com/watch?v=-6BsiVyC1kM) become memorable, associative and even permanent.
 
 Perhaps the most curious consequence of this approach is that we have no way of representing empty lists or hashes - no empty boxes! Every line in fourdata has a rightmost value that's either a text or a number. Contrast this with a spreadsheet, or with computer memory, which is full of cells or addresses that contain no value. In contrast, in this representation there are no empty spaces: all the data that is there represents something. Like [breadcrumbs](https://en.wikipedia.org/wiki/Breadcrumb_navigation), paths always point you somewhere.
 
@@ -476,11 +478,7 @@ With the approach above, we can now say that we have a *path* for each of the fi
 "Main Server" C Users dmr clang hello.c
 ```
 
-This definition of *path*, which comes from both file system paths (`C:\Users\dmr\clang|hello.c`) or from web urls (`https://example.com/clang/examples/hello`), can be generalized to give us the location of any piece of data in our system.
-
-The core of the notion of an unified dataspace is that every part of the data has a path. There's no data "floating" anywhere. Every part of the data has a path, a place, a location. Rather than using *place* or *location*, we will use the term *path* to indicate where a value is.
-
-A path is, essentially, a sequence of names. Because values can have other values inside, we need multiple names to locate a specific value that is inside another value.
+So the definition of *path* in a file system paths (`C:\Users\dmr\clang|hello.c`) and that from a web URL (`https://example.com/clang/examples/hello`) melds into one.
 
 The contents of files have to be *interpreted* for them to have any meaning to us. Let's decode now the contents of `hello.c`. We assume this is a text file, therefore we will try to interpret it as such. This file is encoded with [UTF-8](https://en.wikipedia.org/wiki/UTF-8), a way to convert a sequence of zeroes and ones into a list of numbers.
 
