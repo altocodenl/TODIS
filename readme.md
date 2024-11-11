@@ -386,6 +386,14 @@ We can then add other values inside "Main Database", for example `users`, or `pu
 After this example, we can notice two things:
 
 1. *Context* makes our dataspace grow towards the *left*, and detail makes our dataspace grow towards the *right*. For example, by going left from `books` to "Main Database", we acquire more context for the data we have; by going further to the right, we detail it further.
+
+
+```
+              "Main Database" books 1 author "Edward Said"
+
+more context <--------------------------------------------> more detail
+```
+
 2. We can see the rightmost value of any path also as part of the path! Since a path is a sequence of texts and numbers, and rightmost values must also be texts and numbers (since they don't contain anything else), we can just simply put that value at the end of the path. If we did that, we could see something like this as a path:
 
 ```
@@ -478,7 +486,7 @@ With the approach above, we can now say that we have a *path* for each of the fi
 "Main Server" C Users dmr clang hello.c
 ```
 
-So the definition of *path* in a file system paths (`C:\Users\dmr\clang|hello.c`) and that from a web URL (`https://example.com/clang/examples/hello`) melds into one.
+So the definition of *path* in a file system paths (`C:\Users\dmr\clang|hello.c`) and that from a web URL (`https://example.com/clang/examples/hello`) meld into one.
 
 The contents of files have to be *interpreted* for them to have any meaning to us. Let's decode now the contents of `hello.c`. We assume this is a text file, therefore we will try to interpret it as such. This file is encoded with [UTF-8](https://en.wikipedia.org/wiki/UTF-8), a way to convert a sequence of zeroes and ones into a list of numbers.
 
@@ -772,27 +780,94 @@ If we look at `purchases 1`, we can see that the book purchased has `book 1234` 
 
 For now, it is enough to have a direct mapping from relational databases to fourdata: this allows us to put relational data at rest into our dataspace.
 
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+Non-relational databases can also be represented in dataspace. The most common one, [MongoDB](https://en.wikipedia.org/wiki/MongoDB), stores data in collections of JSON objects. To map this to fourdata, we can simply make each collection a list of items.
 
-TODO:
-- nonrelational databases: mongo & redis.
-- represent more transient things still at rest, like heap, scope or cpu
+```
+"Mongo Database" visitors 1 date "2024-11-11T16:42:01.322Z"
+                            ip "140.28.111.224"
+                          2 date "2024-11-11T16:42:02.299Z"
+                            ip "220.49.66.236"
+```
+
+[Redis](https://en.wikipedia.org/wiki/Redis), my favorite database, has many data types available. The most common ones can be readily mapped to fourdata. Lists and hashes map one to one with fourdata.
+
+```
+"redis list" 1 foo
+             2 bar
+"redis hash" id foo
+             password bar
+```
+
+Sets can be represented as a list with no repeated elements or as a hash of which we only care about the keys.
+
+```
+"set as list" 1 foo
+              2 bar
+"set as hash" foo 1
+              bar 1
+```
+
+Sorted sets can be represented with a list of hashes.
+
+```
+"sorted set" 1 score 1000
+               value foo
+             2 score 1001
+               value bar
+```
+
+The above should be enough for almost all possible data that is at rest. In exceptional circumstances, it can be useful to represent lower level data. For example, we could use fourdata to represent the contents of memory addresses, if we're doing low level programming.
+
+```
+"0x1A3F" "0100100001100101011011000110110001101111000000000000000000000000"
+"0x1A5F" "0101011101101111011100100110110001100100000000000000000000000000"
+```
+
+We could also use this representation to outline the [scope](https://en.wikipedia.org/wiki/Scope_(computer_science)) of the variables of a part of our program.
+
+
+```
+outerFunction "own variables" 1 a
+                              2 b
+middleFunction parent outerFunction
+               "free variables" 1 a
+                                2 b
+               "own variables" 1 c
+innerFunction parent middleFunction
+              "free variables" 1 a
+                               2 b
+                               3 c
+              "own variables" 1 b
+                              2 d
+```
+
+Now that we can represent all the data of our system in a consistent and centralized way, we can see that this single dataspace doesn’t just represent data: it also organizes, contextualizes, and connects data. In short, it *is* the data. Now that we have mastered the data at rest, we're ready to tackle data communication and transformation in pillar 3, where the system comes to life.
 
 ### Pillar 3: call and response
+
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 pillar 3 is the central pillar. From communication to changes in data.
 
 - We need to express change.
-- See communication and transformation as one operation.
+- See communication and transformation as one operation. Computing is communication and transformation. And communication and transformation blend into each other.
 - Storage is just communication onto certain components that decide to keep the information. CPU registers are immediately reused, RAM also quickly deleted.
 - Single model: call and response. Both the call and the response themselves are data. They are 1 to 1, one part makes the call and another one responds.
 - Actually see it as a hash: call & res
+
+```
+call @foo
+res bar
+```
+
+We remove a great obstacle to understanding computing: implicitness, being blind to the process of transformation.
 
 Things that can be modelled as that:
 - API call.
 - Function call.
 - TCP handshake.
 - CPU call.
+- OS call.
 
 - see the data at every level: coming in, at each transformation, going out. That's why we use logs! That's why layers are helpful!
 - the basic call is reference. everything is based on reference. we use a name (or rather, a path) to refer to something: whether data we want to get into another place (path), or where we want a result saved.
@@ -813,6 +888,8 @@ calls are time that happen in the dataspace. the data is the space, the calls ar
 tcp/ip
 
 call waits, then gets a result. could be without waiting, without getting a result, or multiple things getting called. but we're going to go with this one.
+- callres is interface, the stuff to the right is impl.
+
 call expands to one or more calls.
 how to have a nested path with @ and then pass more args? what about @ bla bla @, rather than @bla@bla? not sure. @ as an almost parenthesis. convention: always pass a single argument. but calls can access more data through calls. and they access their args also via a call.
 lisp without parenthesis. single argument.
@@ -863,7 +940,6 @@ This is why REST is better than non-REST, why microservices are more tractable t
 
 Calls are the transitions.
 
-- Obstacles: implicitness, being blind at the process
 
 Communication as basis.
 Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
@@ -898,6 +974,7 @@ Levels where you draw lines have sublevels down to a single chip operation.
 
 a flow as a sequence.
 
+quote two problems are two legs:
 the problem with expressions: they are not automatically referenceable from outside of their immediate context. solved by pillar 3.
 the problem with statements: they are not data. solved by pillar 4.
 
