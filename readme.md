@@ -780,7 +780,7 @@ If we look at `purchases 1`, we can see that the book purchased has `book 1234` 
 
 For now, it is enough to have a direct mapping from relational databases to fourdata: this allows us to put relational data at rest into our dataspace.
 
-Non-relational databases can also be represented in dataspace. The most common one, [MongoDB](https://en.wikipedia.org/wiki/MongoDB), stores data in collections of JSON objects. To map this to fourdata, we can simply make each collection a list of items.
+Non-relational databases can also be represented in dataspace. The most common one, [MongoDB](https://en.wikipedia.org/wiki/MongoDB), stores data in collections of [JSON](https://en.wikipedia.org/wiki/JSON) objects. To map this to fourdata, we can simply make each collection a list of items.
 
 ```
 "Mongo Database" visitors 1 date "2024-11-11T16:42:01.322Z"
@@ -845,9 +845,47 @@ Now that we can represent all the data of our system in a consistent and central
 
 ### Pillar 3: call and response
 
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+Earlier, we defined a DIS as something that communicates, transforms and stores digital data. In pillar 3, which is the central pillar, we will find a way to express communication and transformation of data *using data itself*.
 
-pillar 3 is the central pillar. From communication to changes in data.
+Let's start with data communication. We can understand communication as data flowing from one point of the system to another one. For example:
+
+```
+system 1 sends to system 2 a message "hello" -----------> system 2 receives from system 1 a message "hello"
+```
+
+We will name this a *call*. We can say that system 1 is making a call to system 2. The contents of that call are the message, in this case `hello`. Let's express it in fourdata:
+
+```
+call from "system 1"
+     message hello
+     to "system 2"
+```
+
+Two things must happen for us to consider the call as successful: 1) system 2 gets the message that system 1 sent; 2) system 2 must know that system 1 is the one that sent it.
+
+How this is implemented is quite involved. For example, nowadays a typical (though not at all universal) way to send messages between systems is to use the following stack:
+
+1. Create a JSON payload with the data.
+2. Wrap it in a HTTP request.
+3. Send it through [TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol).
+4. Let TCP use [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) to find system 2 and [IP](https://en.wikipedia.org/wiki/Internet_Protocol) to send the pieces of the message.
+
+Despite its apparent complexity, communication between systems is essentially a solved problem. Most of the time, we can rely on system 1 being able to send messages to system 2 and system 2 receiving them.
+
+We now have to deal with data transformation. The core idea is that we can understand a transformation as a sequence of a *call* and a *response*. Let's extend the previous example:
+
+```
+call from "system 1"
+     message hello
+     to "system 2"
+response "how are you?"
+```
+
+Note that the response doesn't contain `from` or `to`, since it's clear that they are the same as those of the call, only reversed. All that comes back is data.
+
+We can see then that data transformation, or computation, can be modelled as two way communication.
+
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 - We need to express change.
 - See communication and transformation as one operation. Computing is communication and transformation. And communication and transformation blend into each other.
@@ -1023,6 +1061,7 @@ For creation of general DIS:
 - go 80/20 rather than all in
 - valuable code is only that that performs nontrivial operations, and can usually be isolated.
 - feed data to an llm to find patterns for you too.
+- to connect systems: see paths as relative.
 
 ### Designing and implementing new systems
 
