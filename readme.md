@@ -883,29 +883,72 @@ response "how are you?"
 
 Note that the response doesn't contain `from` or `to`, since it's clear that they are the same as those of the call, only reversed. All that comes back is data.
 
-We can see then that data transformation, or computation, can be modelled as two way communication.
+The combination of a call and a response can be used to express any data transformation. In the example above, we could consider that the "hello" sent by system 1 gets converted into a "how are you?".
+
+Now, Consider the following example:
+
+```
+call from "math formula"
+     message 1 10
+             2 10
+     to +
+response 20
+```
+
+Imagine that, rather than a system, we had a particular math formula that was in need of summing 10 and 10. The formula itself doesn't have the means to sum two numbers, but there's another part of the system (let's call it `+`) which knows how to sum a list of numbers and return that result.
+
+In the example above, then, the math formula sends a call containing a list with two elements (10 and 10) to `+`; `+` then responds with `20`.
+
+If computation is purposeful communication and transformation of data, we have stumbled on a simple way to represent computation as communication - two-way communication, to be more precise.
+
+Let's simplify the representation of the call a bit more. In general, the "from" is already known, because we have the context of who's the caller. So we can remove that.
+
+```
+call message 1 10
+             2 10
+     to +
+response 20
+```
+
+Let's now simplify it further: we could make the call to be a hash where its only key is the receiver, and its value is the content of the call. We can also shorten `response` to `res`.
+
+```
+call + 1 10
+       2 10
+res 20
+```
+
+Much trimmer. But we have a problem. The above could still be interpreted as just data at rest, not a data transformation. We need a *special character* to indicate communication and transformation. So we are going to choose `@`.
+
+```
+@+ 1 10
+   2 10
+```
+
+The above represents a call to `+` with a list containing two tens. When that call happens, it will get *expanded* into the following:
+
+```
+call + 10
+       10
+res 20
+```
 
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
-- We need to express change.
-- See communication and transformation as one operation. Computing is communication and transformation. And communication and transformation blend into each other.
-- Storage is just communication onto certain components that decide to keep the information. CPU registers are immediately reused, RAM also quickly deleted.
-- Single model: call and response. Both the call and the response themselves are data. They are 1 to 1, one part makes the call and another one responds.
-- Actually see it as a hash: call & res
+Using the call and response model, we can represent any of the following:
 
-```
-call @foo
-res bar
-```
+- An HTTP call.
+- A database query.
+- A function call.
+- An [operative system call](https://en.wikipedia.org/wiki/System_call).
+- A TCP handshake.
+- An [assembler instruction](https://en.wikipedia.org/wiki/Assembly_language).
+- A [microcode instruction](https://en.wikipedia.org/wiki/Microcode).
+- The execution of a single configuration in a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine).
 
-We remove a great obstacle to understanding computing: implicitness, being blind to the process of transformation.
+By using the call and response model, and being able to see the expansions at every level, we remove a major obstacle to understanding DIS: the implicitness of intermediate results. Most communication and transformation happening inside a program is opaque to those who design it: while working with the system, they usually have to place *logs* to indicate them certain values at certain places in the program.
 
-Things that can be modelled as that:
-- API call.
-- Function call.
-- TCP handshake.
-- CPU call.
-- OS call.
+Instead of relying on ad-hoc logging, the call and response paradigm allows to show every call and its consequent response explicitly, so that the entire data flow can be readily seen when necessary. While some hiding of data is necessary if the volume gets overwhelming, in general the benefits of visibility vastly outweight those of opacity. The explicitness of this model gives feedback at every step.
 
 - see the data at every level: coming in, at each transformation, going out. That's why we use logs! That's why layers are helpful!
 - the basic call is reference. everything is based on reference. we use a name (or rather, a path) to refer to something: whether data we want to get into another place (path), or where we want a result saved.
@@ -922,8 +965,6 @@ Things that can be modelled as that:
    - State of a component is the data inside the component at a point in time.
 
 calls are time that happen in the dataspace. the data is the space, the calls are the time and therefore transform space itself. data and space make each other.
-
-tcp/ip
 
 call waits, then gets a result. could be without waiting, without getting a result, or multiple things getting called. but we're going to go with this one.
 - callres is interface, the stuff to the right is impl.
@@ -967,9 +1008,6 @@ if we use it at this level, then we need both wait and return value. control is 
 
 The traditional approach: input, program and result. For now, let's ignore the program and focus on the input and result, which are data. The focus is generally on those two, at best. The intermediate steps are not shown, except in logs or debugger.
 
-- Logs are necessary as long as we're doing "blind manipulation of symbols" (cannot remember the origin of that quote).
-
-explicitness gives feedback at every step.
 
 - REST is great because it is about sending data for changes. Changes represented as data.
 - Microservices give you more rest. Corba also. Vs rpc; rpc can be represented as data, but less contractual.
