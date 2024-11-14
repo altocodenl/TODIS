@@ -433,7 +433,7 @@ Every DIS stores its data in two primary forms: files and databases. The rest of
 Files are the simplest of the two. They consist of a `path`, a `name` and `contents`. For example:
 
 ```
-contents "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
+contents "0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010"
 name hello.c
 path C:\Users\dmr\clang
 ```
@@ -448,34 +448,34 @@ A few things to notice about the file above:
 To simplify things, we could just put the name of the file at the end of the path and get rid of the `name` key.
 
 ```
-contents "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
+contents "0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010"
 path C:\Users\dmr\clang\hello.c
 ```
 
 We can go even one step further and represent the file like this:
 
 ```
-C:\Users\dmr\clang\hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
+C:\Users\dmr\clang\hello.c "0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010"
 ```
 
 A better way to do it is to split the path into hashes (that is, into a path), and add the contents as the last item.
 
 ```
-C Users dmr clang hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
+C Users dmr clang hello.c "0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010"
 ```
 
 Using this structure allows us to group files that are in the same directories in a way that's easy to see. For example, if we have a second file in the same directory, we could represent it like this:
 
 ```
-C Users dmr clang hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
-                  indefatigable.c "001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111011010000011110100101000011010010110111001110100"
+C Users dmr clang hello.c "0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010"
+                  indefatigable.c "001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111001011100110100000111110000010100111011001101111011010010110010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111011101101000011010010110110001100101001000000010100000110001001010010010000001111011011111010111110100001010"
 ```
 
 Now, where *is* this main hard disk? Hard disks must be attached to a computer in order to be accessible. In the context of DIS, these computers are usually called [servers](https://en.wikipedia.org/wiki/Server_(computing)), to distinguish them from computers to which a user has direct physical access. Let's call this server the `Main Server`. Then, we can represent our two files like this:
 
 ```
-"Main Server" C Users dmr clang hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
-                                indefatigable.c "001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111011010000011110100101000011010010110111001110100"
+"Main Server" C Users dmr clang hello.c "0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010"
+                                indefatigable.c "001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111001011100110100000111110000010100111011001101111011010010110010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111011101101000011010010110110001100101001000000010100000110001001010010010000001111011011111010111110100001010"
 ```
 
 You might notice we haven't used a single list yet to represent files. Instead, we're using hashes for everything. The reason is simple: texts are much better names than numbers can be. While we could name directories, files and even servers using numbers, it would be almost impossible to remember what is what. Whereas names, expressed as text, are much more evocative and memorable.
@@ -665,9 +665,9 @@ Before we move on to databases, we can see the [CSV](https://en.wikipedia.org/wi
 Let's say we have a CSV file with the top ten hit songs of [1985](https://en.wikipedia.org/wiki/1985).
 
 ```
-"Main Server" C Users dmr clang hello.c "001000110110100101101110011000110110110001110101011001000010000000111100011100110111010001100100011010010110111101101000001111100000101001101001011011100111010000100000011011010110000101101001011011100110001000101000001010000111101100001010111000011110100010010110110000001011000101100011101101001110110001011000010010000000101000010000101100001001110100010000000"
-                                indefatigable.c "001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111011010000011110100101000011010010110111001110100"
-                          music hits1985.csv "010100100110000101101110011010110010110001010011010000110110000101110010011001010110110001100101011100110010000001010111011010000110100101110011011100000110010101110010001011000010000001010101011011100110000101101101010000011010010100001110100110110100100101011011101000101001"
+"Main Server" C Users dmr clang hello.c "0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010"
+                                indefatigable.c "001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111001011100110100000111110000010100111011001101111011010010110010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111011101101000011010010110110001100101001000000010100000110001001010010010000001111011011111010111110100001010"
+                          music hits1985.csv "01010010011000010110111001101011001011000101010001101001011101000110110001100101001011000100000101110010011101000110100101110011011101000010110001010111011001010110010101101011011100110010000001100001011101000010000000100011001100010000101000110001001011000100001101100001011100100110010101101100011001010111001101110011001000000101011101101000011010010111001101110000011001010111001000101100010101110110100001100001011011010010000100100000011001100110010101100001011101000111010101110010011010010110111001100111001000000100011101100101011011110111001001100111011001010010000001001101011010010110001101101000011000010110010101101100001011000011001100001010001100100010110001001100011010010110101101100101001000000110000100100000010101100110100101110010011001110110100101101110001011000100110101100001011001000110111101101110011011100110000100101100001101100000101000110011001011000101011101100001011010110110010100100000010011010110010100100000010101010111000000100000010000100110010101100110011011110111001001100101001000000101100101101111011101010010000001000111011011110010110101000111011011110010110001010111011010000110000101101101001000010010110000110011000010100000101000110100001011000100100100100000010101110110000101101110011101000010000001110100011011110010000001001011011011100110111101110111001000000101011101101000011000010111010000100000010011000110111101110110011001010010000001001001011100110010110001000110011011110111001001100101011010010110011101101110011001010111001000101100001100100000101000110101001011000100100100100000010001100110010101100101011011000010000001100110011011110111001000100000010110010110111101110101001011000100001101101000011000010110101101100001001000000100101101101000011000010110111000101100001100110000101000110110001011000100111101110101011101000010000001101111011001100010000001010100011011110111010101100011011010000010110001000100011000010111001001111001011011000010000001001000011000010110110001101100001000000010011000100000010010100110111101101000011011100010000001001111011000010111010001100101011100110010110000110010000010100011011100101100010101000110100001100101001000000101000001101111011101110110010101110010001000000110111101100110001000000100110001101111011101100110010100101100010010000111010101100101011110010010000001001100011001010111011101101001011100110010000001100001011011100110010000100000011101000110100001100101001000000100111001100101011101110111001100101100001100100000101000111000001011000100010101110110011001010111001001111001011000100110111101100100011110010010000001010111011000010110111001110100011100110010000001110100011011110010000001010010011101010110110001100101001000000111010001101000011001010010000001010111011011110111001001101100011001000010110001010100011001010110000101110010011100110010000001100110011011110111001000100000010001100110010101100001011100100111001100101100001100100000101000111001001011000100110101101111011011100110010101111001001000000110011001101111011100100010000001001110011011110111010001101000011010010110111001100111001011000100010001101001011100100110010100100000010100110111010001110010011000010110100101110100011100110010110000110011000010100011000100110000001011000100001101110010011000010111101001111001001000000110011001101111011100100010000001011001011011110111010100101100010011010110000101100100011011110110111001101110011000010010110000110001"
 ```
 
 If we decode this `hits1985.csv` file in a text editor, we'll see this:
@@ -899,7 +899,7 @@ Imagine that, rather than a system, we had a particular math formula that was in
 
 In the example above, then, the math formula sends a call containing a list with two elements (10 and 10) to `+`; `+` then responds with `20`.
 
-If computation is purposeful communication and transformation of data, we have stumbled on a simple way to represent computation as communication - two-way communication, to be more precise.
+If computation is purposeful communication and transformation of data, we have stumbled on a simple way to represent computation as communication - two-way communication, to be more precise. From now on, we will use the term *computation* to refer to the combination of communication and transformation.
 
 Let's simplify the representation of the call a bit more. In general, the "from" is already known, because we have the context of who's the caller. So we can remove that.
 
@@ -918,70 +918,154 @@ call + 1 10
 res 20
 ```
 
-Much trimmer. But we have a problem. The above could still be interpreted as just data at rest, not a data transformation. We need a *special character* to indicate communication and transformation. So we are going to choose `@`.
+Much trimmer. But we have a problem. The above could still be interpreted as just data at rest, not as computation. We need a *special character* to indicate communication and transformation -- that is, we need a special character to represent computation. So we are going to choose `@`.
 
 ```
-@+ 1 10
-   2 10
-```
-
-The above represents a call to `+` with a list containing two tens. When that call happens, it will get *expanded* into the following:
-
-```
-call + 10
-       10
+@ + 1 10
+    2 10
 res 20
+```
+
+But we can make this even leaner by replacing `res` with `=`, which has for centuries been associated to a result. The response to the call is equivalent to its *result*, or its *value*. So this is how we will represent the call and its response:
+
+```
+@ + 1 10
+    2 10
+= 20
+```
+
+The structure of a call and a response, generally, is then:
+
+```
+@ destination argument
+= result
+```
+
+An *argument*, also called *parameter* or *input*, is data that is passed along on the call: the message. The result is the message that comes back from the destination to the source.
+
+Most communication and transformation happening inside a program is opaque to those who design it: while working with the system, they usually have to place *logs* to show what the results are at certain places in the program. By using the call and response model, and being able to see the expansions at every level, we remove a major obstacle to understanding DIS: the implicitness of intermediate results. Every call and response is displayed as data, so there's no longer any need to guess (or find out, by putting a log and making the call again).
+
+How does this connect with the previous two pillars? Concerning pillar 1, we're representing communication and transformation of data within fourdata in all of the examples above, always using numbers, texts, lists and hashes. The connection with pillar 2, however, is more subtle. Let's illustrate:
+
+```
+"system 1" "math formula" @ + 1 10
+                              2 10
+                          = 20
+```
+
+The above computation then is in the dataspace, inside `system 1` and `math formula`. In this model, computation does not float around without a context or a place, but rather is always embedded in the dataspace, at a particular location.
+
+Now, what would happen if one of the values we pass to `+` wasn't always `10`, but rather was a reference to another part of the dataspace? We could represent it like this:
+
+```
+"system 1" "math formula" @ + 1 @ widgets
+                                = 100
+                              2 10
+                          = 110
+           widgets 100
+```
+
+Note that `@ widgets` is a reference to the `widgets` variable inside `system 1` - this is a convention. The value of widgets is `100`. We then see that the math formula makes a call to `+` sending both `@ widgets` (which is `100`) and `10`. That produces the result `110`.
+
+Using the call and response model, we can represent any of the following:
+
+1. A reference to a variable:
+
+```
+"system 1" value @ widgets
+                 = 100
+           widgets 100
+```
+
+2. A function call
+
+```
+"system 1" "math formula" @ + 1 10
+                              2 10
+                          = 20
+```
+
+3. A database query:
+
+```
+"system 1" users @ "Main Database" "select * from users"
+                 = 1 id 1
+                     username deadmau5
+                   2 id 2
+                     username faxingberlin
+```
+
+4. An HTTP call:
+
+```
+"system 1" books orientalism @ http headers Accept application/json
+                                            User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                                    host example.com
+                                    method GET
+                                    path /api/books/1234
+                                    type HTTP/1.1
+                             = code "200 OK"
+                               headers Content-Length 83
+                                       Content-Type application/json
+                               body author "Edward Said"
+                                    id 1234
+                                    isbn "978-0-394-42814-7"
+                                    title Orientalism
+```
+
+If we wanted to reference just the `body` of the result, we can do it like this.
+
+```
+"system 1" books orientalism @ body @ http headers Accept application/json
+                                                   User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                                           host example.com
+                                           method GET
+                                           path /api/books/1234
+                                           type HTTP/1.1
+                                    = code "200 OK"
+                                      headers Content-Length 83
+                                              Content-Type application/json
+                                      body author "Edward Said"
+                                           id 1234
+                                           isbn "978-0-394-42814-7"
+                                           title Orientalism
+                            = author "Edward Said"
+                              id 1234
+                              isbn "978-0-394-42814-7"
+                              title Orientalism
+```
+
+Note that we convert calls into values going right to left. The detail is always to the right, while the context is to the left.
+
+- An [operative system call](https://en.wikipedia.org/wiki/System_call).
+
+```
+"system 1" "hello world" @ readFile @ os encoding utf-8
+                                         path C Users dmr clang hello.c
+                         = "0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010"
 ```
 
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
-Using the call and response model, we can represent any of the following:
-
-- An HTTP call.
-- A database query.
-- A function call.
-- An [operative system call](https://en.wikipedia.org/wiki/System_call).
-- A TCP handshake.
 - An [assembler instruction](https://en.wikipedia.org/wiki/Assembly_language).
 - A [microcode instruction](https://en.wikipedia.org/wiki/Microcode).
+
+
+- A TCP handshake.
 - The execution of a single configuration in a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine).
 
-By using the call and response model, and being able to see the expansions at every level, we remove a major obstacle to understanding DIS: the implicitness of intermediate results. Most communication and transformation happening inside a program is opaque to those who design it: while working with the system, they usually have to place *logs* to indicate them certain values at certain places in the program.
 
-Instead of relying on ad-hoc logging, the call and response paradigm allows to show every call and its consequent response explicitly, so that the entire data flow can be readily seen when necessary. While some hiding of data is necessary if the volume gets overwhelming, in general the benefits of visibility vastly outweight those of opacity. The explicitness of this model gives feedback at every step.
-
-- see the data at every level: coming in, at each transformation, going out. That's why we use logs! That's why layers are helpful!
-- the basic call is reference. everything is based on reference. we use a name (or rather, a path) to refer to something: whether data we want to get into another place (path), or where we want a result saved.
-- there are other calls for basic operations.
-- a call is a list of one or more calls.
 - calls access data through reference calls.
 
-   - @ as place
-   - basic model: call and single response
-   - communication and transformation as one
-   - can pass a hash as path if the function is expecting a hash? or just prepend with @. Then no need for @foo@bar
-   - @ generates more calls
    - understand how a computer works, this goes on top of the flat next, but a computer still has a notion of calls at the lowest level
    - State of a component is the data inside the component at a point in time.
 
 calls are time that happen in the dataspace. the data is the space, the calls are the time and therefore transform space itself. data and space make each other.
-
 call waits, then gets a result. could be without waiting, without getting a result, or multiple things getting called. but we're going to go with this one.
 - callres is interface, the stuff to the right is impl.
+the wait means time. communication and transformation, that's time.
 
-call expands to one or more calls.
-how to have a nested path with @ and then pass more args? what about @ bla bla @, rather than @bla@bla? not sure. @ as an almost parenthesis. convention: always pass a single argument. but calls can access more data through calls. and they access their args also via a call.
-lisp without parenthesis. single argument.
-call happens inside the dataspace!
-communication gives agency, even if it's on the same computer
-
-problem: express change. we need an unified model for transformations.
-all change happens through communication.
-we assume that communication happens.
 Communication in the Shannon sense is done one way. call and response model, it can all be understood like that.
-no, not even. call.
-call is data received by
-call can be a function call, a call to the OS, over the network. it's all the same.
 Requests and responses are done through the network; the network belongs to the "outside" of the system.
 
 call represents transformation and communication.
@@ -991,8 +1075,6 @@ call changes data in receiver. can be 1 or n. then you have possible wait to ack
 
 storage is a matter of timescale. while processing a call, data is stored in API. but that doesn't outlive the call.
 side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
-
-can see the final result of the call or can see all the intermediate calls.
 
 call goes beyond csp and actor. more simple. three examples: computer instruction (without even assembler), function call inside a hll and an API call.
 
@@ -1008,7 +1090,6 @@ if we use it at this level, then we need both wait and return value. control is 
 
 The traditional approach: input, program and result. For now, let's ignore the program and focus on the input and result, which are data. The focus is generally on those two, at best. The intermediate steps are not shown, except in logs or debugger.
 
-
 - REST is great because it is about sending data for changes. Changes represented as data.
 - Microservices give you more rest. Corba also. Vs rpc; rpc can be represented as data, but less contractual.
 
@@ -1016,20 +1097,9 @@ This is why REST is better than non-REST, why microservices are more tractable t
 
 Calls are the transitions.
 
-
-Communication as basis.
 Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
 
-request model of data transformations:
-- a component has a set of endpoints. component + endpoint give you an URL (universal resource locator).
-- - there's then the request data itself.
-   - http: request headers, body.
-   - sql: query.
-   - fs: operation + data.
-
 responder or surface?
-
-see turing machine; a cpu; a high level language.
 
 You can see calls as time, and data as both space and matter. Space We don't care about empty memory, so we conflate space and matter. Change can only happen with time; so we can conflate change and time, and say that calls are time.
 
