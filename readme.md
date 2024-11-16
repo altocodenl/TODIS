@@ -738,16 +738,16 @@ To get to the above, we did quite a bit of interpreting of our CSV file:
 - From unicode characters to lines of text divided by commas into columns.
 - From the above into a list of hashes, each with four keys and four values.
 
-While CSVs are a very expressive and widely used way of representing structured information, a great deal of structured information nowadays is stored in databases. Databases are *computer programs* that store data using files; but they do it in a more involved way that provides the following features:
+While CSVs are a very expressive and widely used way of representing structured information, a great deal of structured information is nowadays stored in databases. Databases are *computer programs* that store data using files; but they do it in a more involved way that provides the following features:
 
 - Efficiency: you can access a single value, rather than getting the entire file.
 - Validation: you can check whether incoming data has a certain shape before storing it.
 - Locking: if two users want to save a value at the same path at the same time, the database makes sure to process the requests one at a time.
-- Queries: you can construct specific inquiries about data which will get you the right results efficiently.
+- Queries: you can construct specific enquiries about data which will get you the right results efficiently.
 
 For practical purposes, there are two families of databases: [relational databases](https://en.wikipedia.org/wiki/Relational_database) (also called SQL databases) and [non-relational databases](https://en.wikipedia.org/wiki/NoSQL).
 
-Relational databases date from 1970 (!) and are tremendously powerful. Their power stems from their quite rigid structure. Overall, a relational database is composed of tables with rows and columns. This can be directly modeled in fourdata as follows:
+Relational databases date from 1970 (!) and are tremendously powerful. Their power stems from their quite rigid structure, as well as from the possibility of creating *relations* between records. Overall, a relational database is composed of tables with rows and columns. This can be directly modeled in fourdata as follows:
 
 - Table: list
 - Row: hash
@@ -807,7 +807,7 @@ Sets can be represented as a list with no repeated elements or as a hash of whic
               bar 1
 ```
 
-Sorted sets can be represented with a list of hashes.
+Sorted sets can be represented with a list of hashes, each containing a score and a value.
 
 ```
 "sorted set" 1 score 1000
@@ -845,7 +845,7 @@ Now that we can represent all the data of our system in a consistent and central
 
 ### Pillar 3: call and response
 
-Earlier, we defined a DIS as something that communicates, transforms and stores digital data. In pillar 3, which is the central pillar, we will find a way to express communication and transformation of data *using data itself*.
+Earlier, we defined a DIS as something that communicates, transforms and stores digital data. In this pillar, the central one, we will find a way to express communication and transformation of data *using data itself*.
 
 Let's start with data communication. We can understand communication as data flowing from one point of the system to another one. For example:
 
@@ -863,7 +863,7 @@ call from "system 1"
 
 Two things must happen for us to consider the call as successful: 1) system 2 gets the message that system 1 sent; 2) system 2 must know that system 1 is the one that sent it.
 
-How this is implemented is quite involved. For example, nowadays a typical (though not at all universal) way to send messages between systems is to use the following stack:
+How this happens in a DIS can be quite involved. For example, nowadays a typical (though not at all universal) way to send messages between systems is to use the following stack:
 
 1. Create a JSON payload with the data.
 2. Wrap it in a HTTP request.
@@ -872,7 +872,7 @@ How this is implemented is quite involved. For example, nowadays a typical (thou
 
 Despite its apparent complexity, communication between systems is essentially a solved problem. Most of the time, we can rely on system 1 being able to send messages to system 2 and system 2 receiving them.
 
-We now have to deal with data transformation. The core idea is that we can understand a transformation as a sequence of a *call* and a *response*. Let's extend the previous example:
+We now have to deal with data transformation. The core idea is that we can understand a transformation as a combination of a *call* and a *response*. Let's extend the previous example:
 
 ```
 call from "system 1"
@@ -883,7 +883,7 @@ response "how are you?"
 
 Note that the response doesn't contain `from` or `to`, since it's clear that they are the same as those of the call, only reversed. All that comes back is data.
 
-The combination of a call and a response can be used to express any data transformation. In the example above, we could consider that the "hello" sent by system 1 gets converted into a "how are you?".
+**The combination of a call and a response can be used to express any data transformation**. In the example above, we could consider that the "hello" sent by system 1 gets converted into a "how are you?".
 
 Now, Consider the following example:
 
@@ -895,11 +895,13 @@ call from "math formula"
 response 20
 ```
 
-Imagine that, rather than a system, we had a particular math formula that was in need of summing 10 and 10. The formula itself doesn't have the means to sum two numbers, but there's another part of the system (let's call it `+`) which knows how to sum a list of numbers and return that result.
+Imagine that, rather than a system, we had a particular math formula that was in need of summing 10 and 10. The formula itself doesn't have the means to sum two numbers, but there's another part of the system (let's call it `+`) that knows how to sum a list of numbers and return that result.
 
-In the example above, then, the math formula sends a call containing a list with two elements (10 and 10) to `+`; `+` then responds with `20`.
+In the example above, then, the math formula sends a call containing a list with two elements (10 and 10) to `+`. Then, `+` responds with `20`.
 
-If computation is purposeful communication and transformation of data, we have stumbled on a simple way to represent computation as communication - two-way communication, to be more precise. From now on, we will use the term *computation* to refer to the combination of communication and transformation.
+If computation is purposeful communication and transformation of data, we have stumbled on a simple way to represent computation: two-way communication. From now on, we will use the term *computation* to refer to the combination of communication and transformation.
+
+Communication, as defined by Shannon at the top of this treatise, is one way. It is curious that we actually can express computation by adding communication on the way back. This also requires the response to contain data that is different from that originally sent in the call. The tranasformation happens between the call and before the response, *inside* the receiver of the call.
 
 Let's simplify the representation of the call a bit more. In general, the "from" is already known, because we have the context of who's the caller. So we can remove that.
 
@@ -937,13 +939,13 @@ But we can make this even leaner by replacing `res` with `=`, which has for cent
 The structure of a call and a response, generally, is then:
 
 ```
-@ destination argument
+@ destination message
 = result
 ```
 
-An *argument*, also called *parameter* or *input*, is data that is passed along on the call: the message. The result is the message that comes back from the destination to the source.
+The message, also called *input*, *parameter* or *argument*, is the data that is passed along on the call: the message. The result is the message that comes back from the destination to the source.
 
-Most communication and transformation happening inside a program is opaque to those who design it: while working with the system, they usually have to place *logs* to show what the results are at certain places in the program. By using the call and response model, and being able to see the expansions at every level, we remove a major obstacle to understanding DIS: the implicitness of intermediate results. Every call and response is displayed as data, so there's no longer any need to guess (or find out, by putting a log and making the call again).
+Most computation happening inside a DIS is opaque to those who design it: while working with the system, they usually have to place *logs* to show what the results are at certain places in the program. By using the call and response model, and being able to see the results of every call, we remove a major obstacle to understanding DIS: the implicitness of intermediate results. Every call and response is displayed as data, so there's no longer any need to guess (or find out, by putting a log and making the call again).
 
 How does this connect with the previous two pillars? Concerning pillar 1, we're representing communication and transformation of data within fourdata in all of the examples above, always using numbers, texts, lists and hashes. The connection with pillar 2, however, is more subtle. Let's illustrate:
 
@@ -965,7 +967,7 @@ Now, what would happen if one of the values we pass to `+` wasn't always `10`, b
            widgets 100
 ```
 
-Note that `@ widgets` is a reference to the `widgets` variable inside `system 1` - this is a convention. The value of widgets is `100`. We then see that the math formula makes a call to `+` sending both `@ widgets` (which is `100`) and `10`. That produces the result `110`.
+Note that `@ widgets` is a reference to the `widgets` variable inside `system 1` - this is a useful convention. The value of widgets is `100`. We then see that the math formula makes a call to `+` sending both `@ widgets` (which is `100`) and `10`. That produces the result `110`.
 
 Using the call and response model, we can represent any of the following:
 
@@ -1037,7 +1039,7 @@ If we wanted to reference just the `body` of the result, we can do it like this.
 
 Note that we convert calls into values going right to left. The detail is always to the right, while the context is to the left.
 
-- An [operative system call](https://en.wikipedia.org/wiki/System_call).
+5. An [operative system call](https://en.wikipedia.org/wiki/System_call).
 
 ```
 "system 1" "hello world" @ readFile @ os encoding utf-8
@@ -1045,30 +1047,42 @@ Note that we convert calls into values going right to left. The detail is always
                          = "0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010"
 ```
 
+6. A TCP handshake.
+
+```
+@ SYN client_ip 192.168.1.100
+      client_port 12345
+      server_ip 192.168.1.200
+      server_port 80
+      seq 1000
+= ACK pending
+```
+
+7. An [assembler instruction](https://en.wikipedia.org/wiki/Assembly_language).
+
+```
+@ mov eax "0x1A3F"
+= 00100001
+```
+
+8. A [microcode instruction](https://en.wikipedia.org/wiki/Microcode).
+
+```
+@ store eax ALU_input
+= 00100001
+```
+
+The eight examples above show different levels of a DIS, with each level being increasingly detailed. Note, however, that the concept of call and response, together with fourdata and the unified dataspace, can describe the essence of each of its operations.
+
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
-
-- An [assembler instruction](https://en.wikipedia.org/wiki/Assembly_language).
-- A [microcode instruction](https://en.wikipedia.org/wiki/Microcode).
-
-
-- A TCP handshake.
-- The execution of a single configuration in a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine).
-
-
-- calls access data through reference calls.
-
-   - understand how a computer works, this goes on top of the flat next, but a computer still has a notion of calls at the lowest level
-   - State of a component is the data inside the component at a point in time.
 
 calls are time that happen in the dataspace. the data is the space, the calls are the time and therefore transform space itself. data and space make each other.
 call waits, then gets a result. could be without waiting, without getting a result, or multiple things getting called. but we're going to go with this one.
 - callres is interface, the stuff to the right is impl.
 the wait means time. communication and transformation, that's time.
 
-Communication in the Shannon sense is done one way. call and response model, it can all be understood like that.
 Requests and responses are done through the network; the network belongs to the "outside" of the system.
 
-call represents transformation and communication.
 call goes downstream, response goes upstream.
 
 call changes data in receiver. can be 1 or n. then you have possible wait to acknowledgement. This is return; the acknowledgment is also information that changes something in the sender. Use this mechanism to express all computation. These calls represent change. Draw the line at computer instructions.
