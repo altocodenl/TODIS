@@ -940,12 +940,14 @@ The structure of a call and a response, generally, is then:
 
 ```
 @ destination message
-= result
+= response
 ```
 
-The message, also called *input*, *parameter* or *argument*, is the data that is passed along on the call: the message. The result is the message that comes back from the destination to the source.
+The message, also called *input*, *parameter* or *argument*, is the data that is passed along on the call: the message. The response (also called *result*) is the message that comes back from the destination to the source.
 
-Most computation happening inside a DIS is opaque to those who design it: while working with the system, they usually have to place *logs* to show what the results are at certain places in the program. By using the call and response model, and being able to see the results of every call, we remove a major obstacle to understanding DIS: the implicitness of intermediate results. Every call and response is displayed as data, so there's no longer any need to guess (or find out, by putting a log and making the call again).
+Most computation happening inside a DIS is opaque to those who design it: while working with the system, they usually have to place *logs* to show what the results are at certain places in the program. By using the call and response model, and being able to see the results of every call, we remove a major obstacle to understanding DIS: the implicitness of intermediate results. The traditional approach to computing is to feed an input to a program and then read its output. The intermediate steps are not shown, except in logs or debugger.
+
+In the approach we are prsenting here, every call and response is displayed as data, so there's no longer any need to guess (or find out, by putting a log and making the call again).
 
 How does this connect with the previous two pillars? Concerning pillar 1, we're representing communication and transformation of data within fourdata in all of the examples above, always using numbers, texts, lists and hashes. The connection with pillar 2, however, is more subtle. Let's illustrate:
 
@@ -1015,7 +1017,7 @@ Using the call and response model, we can represent any of the following:
                                     title Orientalism
 ```
 
-If we wanted to reference just the `body` of the result, we can do it like this.
+If we wanted to reference just the `body` of the response, we can do it like this.
 
 ```
 "system 1" books orientalism @ body @ http headers Accept application/json
@@ -1042,12 +1044,12 @@ Note that we convert calls into values going right to left. The detail is always
 5. An [operative system call](https://en.wikipedia.org/wiki/System_call).
 
 ```
-"system 1" "hello world" @ readFile @ os encoding utf-8
+"system 1" "hello world" @ "os readFile" encoding utf-8
                                          path C Users dmr clang hello.c
                          = "0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010"
 ```
 
-6. A TCP handshake.
+6. The beginning of a TCP handshake.
 
 ```
 @ SYN client_ip 192.168.1.100
@@ -1072,50 +1074,64 @@ Note that we convert calls into values going right to left. The detail is always
 = 00100001
 ```
 
-The eight examples above show different levels of a DIS, with each level being increasingly detailed. Note, however, that the concept of call and response, together with fourdata and the unified dataspace, can describe the essence of each of its operations.
+The eight examples above show different levels of a DIS, with each level being increasingly detailed compared to the previous one. Note, however, that the concept of call and response, together with fourdata and the unified dataspace, can describe the essence of each of its operations.
+
+Quite interestingly, the concept of a call and a response requires both space and time. Space is required because there is a distance between the caller and the responder, which separates them.
+
+Time is required for the call to reach the responder, as well as for the responder to transform the call into a response, and then its response to be received by the caller. Call and response traverse both space and time; from a philosophical perspective, we could perhaps intuit that if data creates the space, calls and responses create time. Time, in this framework, is the process of change within the dataspace. Each call initiates a transition from one state to another, and each response finalizes that transition. The dataspace at rest defines a single moment in time, while a sequence of calls and responses reveals the flow of time through successive changes in the data.
+
+More practically, if calls and responses are not instantaneous, then we might have to wait for them. We can then have calls that have not been (yet) responded, and represent them like this:
+
+```
+"system 1" books orientalism @ http headers Accept application/json
+                                            User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                                    host example.com
+                                    method GET
+                                    path /api/books/1234
+                                    type HTTP/1.1
+                             = PENDING...
+```
+
+That intermediate state which expresses an ongoing operation is as much a valid response as what will come afterwards. Interestingly enough, when the response comes back, we can understand that it will overwrite `PENDING...`, since it will replace it completely in the dataspace. This is akin to *forgetting* a previous value that once was in the dataspace.
+
+It is also possible to remember every single change that happened in the dataspace, effectively never forgetting anything. This is a decision to be taken as part of the design of a system. At this stage of the argument, what's important is to know that we can choose to selectively remember and to forget. A system that remembers accretes changes, a system that forgets overwrites them.
+
+It is interesting to think that what we normally call an *interface* is really a call: the start of an interaction. And what we normally call an *implementation* is what happens between the call and the response. The call is to the left, the implementation is to the right. We will also use the terms downstream and upstream to say that calls go *downstream* and responses go back *upstream*.
 
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
-calls are time that happen in the dataspace. the data is the space, the calls are the time and therefore transform space itself. data and space make each other.
-call waits, then gets a result. could be without waiting, without getting a result, or multiple things getting called. but we're going to go with this one.
-- callres is interface, the stuff to the right is impl.
-the wait means time. communication and transformation, that's time.
+Before we close this pillar, let's look at a system that has three parts:
 
-Requests and responses are done through the network; the network belongs to the "outside" of the system.
+- A call to an HTTP endpoint, to get the book orientalism and store it at `books orientalism` in the dataspace.
+- The definition of the HTTP endpoint, stored at `server`.
+- A relational DB.
 
-call goes downstream, response goes upstream.
+```
+system books orientalism @ http headers Accept application/json
+                                         User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                                host example.com
+                                method GET
+                                path /api/books/1234
+                                type HTTP/1.1
+                         = PENDING...
+       DB books 1 author "Edward Said"
+                  id 1234
+                  isbn "978-0-394-42814-7"
+                  title Orientalism
+       server @ listen host example.com
+                method GET
+                path /api/books/<id>
+                query @ db "SELECT * from books where id = <id>"
+              = PENDING...
+```
 
-call changes data in receiver. can be 1 or n. then you have possible wait to acknowledgement. This is return; the acknowledgment is also information that changes something in the sender. Use this mechanism to express all computation. These calls represent change. Draw the line at computer instructions.
-
-storage is a matter of timescale. while processing a call, data is stored in API. but that doesn't outlive the call.
-side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
-
-call goes beyond csp and actor. more simple. three examples: computer instruction (without even assembler), function call inside a hll and an API call.
-
-When you make a call, you allocate. Or rather, with the response, you call the storage.
-
-the call gets expanded. nested calls also get expanded. but the expansion doesn't overwrite. rather, it creates a double entry of call and value (response as value). inside the call, you see what got called and the nested calls, including references. so the result really is more data, all expanded. there's no overwriting, there is expansion. implicitly, the system is looking for the value of the hash at that location, rather than the whole thing. literals are their own values.
-in a nutshell: the expansion is also data.
-
-the call is the essence of pillar 3: see the effects as 1) expansions; 2) the subcalls as part of the same mechanism.
-the call is data that represents communication and transformation of data. from, to. can have multiple tos. A single to can be a dispatcher too.
-
-if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data.
-
-The traditional approach: input, program and result. For now, let's ignore the program and focus on the input and result, which are data. The focus is generally on those two, at best. The intermediate steps are not shown, except in logs or debugger.
-
-- REST is great because it is about sending data for changes. Changes represented as data.
-- Microservices give you more rest. Corba also. Vs rpc; rpc can be represented as data, but less contractual.
-
-This is why REST is better than non-REST, why microservices are more tractable than monoliths.
-
-Calls are the transitions.
+- not separateness, you choose where to draw the boundaries. example: call to another service with a db, see the three calls. show replacement.
 
 Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
 
-responder or surface?
+call goes beyond csp and actor model.
 
-You can see calls as time, and data as both space and matter. Space We don't care about empty memory, so we conflate space and matter. Change can only happen with time; so we can conflate change and time, and say that calls are time.
+the call is the essence of pillar 3: see the effects as 1) expansions; 2) the subcalls as part of the same mechanism.
 
 ### Pillar 4: code is data
 
@@ -1133,6 +1149,11 @@ Height of level is determined by looking who calls who. Low level is usually cal
 Levels where you draw lines have sublevels down to a single chip operation.
 
 a flow as a sequence.
+
+side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
+
+if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data.
+
 
 quote two problems are two legs:
 the problem with expressions: they are not automatically referenceable from outside of their immediate context. solved by pillar 3.
@@ -1163,6 +1184,12 @@ Identity is tackled here, because this is where you can have an entrypoint for h
 ## How to test the (hypo)thesis of this treatise
 
 - inverse relationship between data hiding and system quality and ROI
+
+This is why REST is better than non-REST, why microservices are more tractable than monoliths.
+- Microservices give you more rest. Corba also. Vs rpc; rpc can be represented as data, but less contractual.
+
+
+
 - importance of observability
 - security
 
@@ -1207,6 +1234,8 @@ auth as extra info. zero trust as checking the auth credentials with someone you
 - Distributed and parallel: consistency. Scalability with that assured is trivial (throw more nodes in), except for the "inside api" problem that Hickey points out.
 
 understanding CAP: when distributed surface (distributed as amenable to experiencing partitioning) receives data, it either rejects (rejection as the lack of upating and also reading, indicating that that's not data) and presents/maintains consistency, vs remains available and has either temporary or permanent inconsistency. consistent system, in a partition does not present or update state, only stores it.
+
+Consistency is not about enough resources or not, it is about locking a part of the dataspace until an operation is done.
 
 ### Quality
 
