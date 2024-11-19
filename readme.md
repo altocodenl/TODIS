@@ -1163,6 +1163,22 @@ We're ready now to tackle the building blocks of any logic that we may need to e
 3. Loops as recursive conditionals.
 4. Errors as responses conditionally treated differently.
 
+(It is funny that, as with fourdata, they are also four; this wasn't planned).
+
+The first two are essential, irreducible. Without "keeping on going" (list), our DIS would run out of gas and not complete anything. And without being able to choose one path or the other based on a condition (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. It would be always the same thing, every time.
+
+Think of a Turing Machine, which is one of the mathematical ways to understand computation: current state of mind (dataspac3), current symbol being read (dataspac2). From there, based on the combination of them, potentially write a symbol (change the dataspace), move the head (where in the dataspace) and change your state of mind. So sequence and conditional are the core, without them there can be no general computation device.
+
+The way I prefer to picture it is like a yin yang process, where there's energy that produces change constantly. The change is determined by the current situation of the whole. The change comes in, changes the whole a bit, and based on that change, a new change happens.
+
+```
+reality -> change -> new reality -> new change...
+```
+
+This also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
+
+The other two elements of computations, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition; the essence of errors is conditional jumps.
+
 The essential computing model:
    - Call as sequence of calls.
    - Variable subsitution as call.
