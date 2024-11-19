@@ -137,7 +137,7 @@ This is the central thesis of this treatise. We'll explore now how to make this 
 1. **Single representation of data**
 2. **Single dataspace**
 3. **Call and response**
-4. **Code is data**
+4. **Code is call and response**
 5. **Interface is code**
 
 ### Pillar 1: single representation of data
@@ -1044,8 +1044,8 @@ Note that we convert calls into values going right to left. The detail is always
 5. An [operative system call](https://en.wikipedia.org/wiki/System_call).
 
 ```
-"system 1" "hello world" @ "os readFile" encoding utf-8
-                                         path C Users dmr clang hello.c
+"system 1" "hello world" @ os readFile encoding utf-8
+                                       path C Users dmr clang hello.c
                          = "0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010"
 ```
 
@@ -1074,7 +1074,7 @@ Note that we convert calls into values going right to left. The detail is always
 = 00100001
 ```
 
-The eight examples above show different levels of a DIS, with each level being increasingly detailed compared to the previous one. Note, however, that the concept of call and response, together with fourdata and the unified dataspace, can describe the essence of each of its operations.
+The eight examples above show different levels of a DIS, with each level being increasingly detailed compared to the previous one. Note, however, that the concept of call and response, together with fourdata and the unified dataspace, can describe the essence of each of its operations. Using this model, we can let go of the distinctions between function calls, remote service calls and even user interactions. The same model can describe them all.
 
 Quite interestingly, the concept of a call and a response requires both space and time. Space is required because there is a distance between the caller and the responder, which separates them.
 
@@ -1092,53 +1092,89 @@ More practically, if calls and responses are not instantaneous, then we might ha
                              = PENDING...
 ```
 
-That intermediate state which expresses an ongoing operation is as much a valid response as what will come afterwards. Interestingly enough, when the response comes back, we can understand that it will overwrite `PENDING...`, since it will replace it completely in the dataspace. This is akin to *forgetting* a previous value that once was in the dataspace.
+That intermediate state which expresses an ongoing operation is as much a valid response as what will come afterwards. That intermediate result is placed there by the caller itself. Interestingly enough, when the response comes back, we can understand that it will overwrite `PENDING...`, since it will replace it completely in the dataspace. This is akin to *forgetting* a previous value that once was in the dataspace.
 
-It is also possible to remember every single change that happened in the dataspace, effectively never forgetting anything. This is a decision to be taken as part of the design of a system. At this stage of the argument, what's important is to know that we can choose to selectively remember and to forget. A system that remembers accretes changes, a system that forgets overwrites them.
+It is also possible to remember every single change that happened in the dataspace, effectively never forgetting anything. This is a decision to be taken as part of the design of a system. At this stage of the argument, what's important is to know that we can choose to selectively remember and to forget. A system that remembers accretes changes, while a system that forgets overwrites changes.
 
-It is interesting to think that what we normally call an *interface* is really a call: the start of an interaction. And what we normally call an *implementation* is what happens between the call and the response. The call is to the left, the implementation is to the right. We will also use the terms downstream and upstream to say that calls go *downstream* and responses go back *upstream*.
+At every point in time, however, the dataspace is complete. Even if the system is "between" calls, those intermediate states are also valid. Most digital information systems are in constant flux, so they are always in between calls: by thinking about these states with the same logic that we think about the system at rest (with no calls), we can more clearly understand flux.
+
+It is interesting to think that what we normally call an *interface* is really a call: the start of an interaction. And what we normally call an *implementation* is what happens between the call and the response. The call is to the left, the implementation is to the right. We can also use the terms *downstream* and *upstream* to mean that calls go *downstream* and responses go back *upstream*.
 
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
-Before we close this pillar, let's look at a system that has three parts:
+Let's look at a system that has three parts:
 
 - A call to an HTTP endpoint, to get the book orientalism and store it at `books orientalism` in the dataspace.
 - The definition of the HTTP endpoint, stored at `server`.
 - A relational DB.
 
+Let's start by adding the DB, containing just one book.
+
 ```
-system books orientalism @ http headers Accept application/json
-                                         User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-                                host example.com
-                                method GET
-                                path /api/books/1234
-                                type HTTP/1.1
-                         = PENDING...
-       DB books 1 author "Edward Said"
-                  id 1234
-                  isbn "978-0-394-42814-7"
-                  title Orientalism
-       server @ listen host example.com
-                method GET
-                path /api/books/<id>
-                query @ db "SELECT * from books where id = <id>"
-              = PENDING...
+DB books 1 author "Edward Said"
+           id 1234
+           isbn "978-0-394-42814-7"
+           title Orientalism
 ```
 
-- not separateness, you choose where to draw the boundaries. example: call to another service with a db, see the three calls. show replacement.
+```
+books orientalism @ http headers Accept application/json
+                                 User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                        host example.com
+                        method GET
+                        path /api/books/1234
+                        type HTTP/1.1
+                 = PENDING...
+DB books 1 author "Edward Said"
+           id 1234
+           isbn "978-0-394-42814-7"
+           title Orientalism
+server @ listen host example.com
+         method GET
+         path /api/books/<id>
+         query @ db "SELECT * from books where id = <id>"
+       = PENDING...
+```
+
+
+
+- store the latest query, or not even. the innermost call doesn't have to be shown. the intermediate ones have to. that's where you have to see where the expansion is made. for http, do it in a list.
+
+not separateness, you choose where to draw the boundaries. example: call to another service with a db, see the three calls. show replacement.
+what's in and out depends on where you draw the boundary, and that can be explicit. There's no global binarization of that.
 
 Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
 
+In contrast with other conceptual frameworks to express computations, such as [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) or the [actor model](https://en.wikipedia.org/wiki/Actor_model), our framework doesn't sharply define an "inside" and an "outside" part. A call always sees its response as an external process, even if it happens on the same computer and even within the same program. If you zoom out and look at calls that are upstream of other calls, you are lumping the subcalls as part of one response. This is how you abstract the detail into a single value. In this way, the outside or inside only depends of your point of view. This also allows to go beyond the distinction between an event and a primitive process, treating everything to be a call and a response.
 call goes beyond csp and actor model.
 
-the call is the essence of pillar 3: see the effects as 1) expansions; 2) the subcalls as part of the same mechanism.
+This framework also allows us to go beyond the concept of state as a special type of data. If the "system" is a part of the dataspace, the state of the system (or of a subsystem) is also a part of the dataspace. Everything exists within the same dataspace, so the data in the system is indistinguishable (or rather, integrated) with the rest of the system.
 
-### Pillar 4: code is data
+We have covered a lot of ground in this pillar. In a nutshell: we have found that the combination of a call and a response can express computation at any level; and that calls can be triggered by other calls, establishing a causal chain of computation.
 
-we already have code as data, because of call & res.
+In the next pillar, we will see how we can express any logic as a sequence (list) of calls and responses.
+
+### Pillar 4: code is call and response
+
+We're ready now to tackle the building blocks of any logic that we may need to express in a DIS. This pillar introduces four elements:
+
+1. Calls as sequences (lists) of calls.
+2. Conditionals as forks between sequences.
+3. Loops as recursive conditionals.
+4. Errors as responses conditionally treated differently.
+
+The essential computing model:
+   - Call as sequence of calls.
+   - Variable subsitution as call.
+   - Conditional.
+   - Loop as conditional.
+   - Errors: the essence is that they jump up many levels, through a different channel than the return. It can be seen as a conditional return based on value.
+
+Our starting point is the sequence, which is a list. We define a call to be a list of further calls. This is no sleight of hand. In a DIS, every call is ultimately implemented by other calls. Almost invariably, a single call triggers multiple downstream calls, cascading down to the tiniest operations at the CPU level. At that point, the software people (the author included) shrug, declare “here be dragons,” and leave the rest to the hardware engineers.
+
 - the essence is sequence, the machine keeping on going. return/done makes it stop. then you have jump, which is cond. loop is repeated jumps. error/recover is a special pattern that's really a conditional. and voila, you have everything to express a procedure!
 - a call is a sequence of calls.
-- The name is sequence. Alternatives: program, function, flow. but it is sequence.
+- The name is sequence. Alternatives: program, function, flow, procedure. but it is sequence.
 - sequence also maps perfectly well to what a computer does.
 
 - Higher level languages let you focus on data at a human level.
@@ -1148,23 +1184,15 @@ we already have code as data, because of call & res.
 Height of level is determined by looking who calls who. Low level is usually called, high level is usually the caller.
 Levels where you draw lines have sublevels down to a single chip operation.
 
-a flow as a sequence.
-
 side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
 
 if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data.
 
+the definition is the expansion. the expansion is calls becoming more calls, then being responded, then coming back as a response.
 
-quote two problems are two legs:
-the problem with expressions: they are not automatically referenceable from outside of their immediate context. solved by pillar 3.
-the problem with statements: they are not data. solved by pillar 4.
-
-- then there's what happens inside the component. only see what happens with regards to the other components. inner data mappings are irrelevant or fold. The essential computing model:
-   - Call as sequence of calls.
-   - Variable subsitution as call.
-   - Conditional.
-   - Loop as conditional.
-   - Errors: the essence is that they jump up many levels, through a different channel than the return. It can be seen as a conditional return based on value.
+A wise man once joked that his troubles playing football amounted to two things. The first was his left leg. The second one, his right leg. In the same way, the problems with programming languages can be reduced to two:
+- The problem with expressions: they are not automatically referenceable from outside of their immediate context. Pillar 3 solves this by embedding computation in the dataspace, making every call and response explicit and accessible.
+- The problem with statements: they are not data. Pillar 4 addresses this by turning statements into first-class entities within the dataspace, unifying code and data.
 
 - Dataspace: access vs control. Open access, use control to determine when to block.
 
@@ -1180,6 +1208,8 @@ reactivity comes here. @ is reactive, when the references change, things are re-
 reactivity is no mere gimmick, there's something deeper: autopoiesis. when our perception changes, everything that that perception is based upon also changes in ourselves.
 
 Identity is tackled here, because this is where you can have an entrypoint for humans. Identity as data.
+
+reactivity and the dataspace solve the cache problem. you know what things you want to keep around, and then you keep them updated using the minimum number of operations. problem solved. this is the only good solution to the general problem.
 
 ## How to test the (hypo)thesis of this treatise
 
@@ -1218,6 +1248,13 @@ For creation of general DIS:
 - design data transitions
 - build up surfaces for those data transitions
 
+from an organizational perspective
+
+- stores: at rest
+- internal calls (inside org): change according to rules
+- external calls (connections): uses calls to change own store, and also uses calls on systems of external orgs
+- interfaces to perform internal calls & external calls
+
 ### Running systems
 
 Logs are data. Keep them. Query them with the same mechanisms.
@@ -1236,6 +1273,10 @@ auth as extra info. zero trust as checking the auth credentials with someone you
 understanding CAP: when distributed surface (distributed as amenable to experiencing partitioning) receives data, it either rejects (rejection as the lack of upating and also reading, indicating that that's not data) and presents/maintains consistency, vs remains available and has either temporary or permanent inconsistency. consistent system, in a partition does not present or update state, only stores it.
 
 Consistency is not about enough resources or not, it is about locking a part of the dataspace until an operation is done.
+
+### Tradeoffs
+
+wait, you have the blockchain trilemma (security, scalability, distribution). That to me maps completely to CAP's consistency, availability (especially with the modified CAP theorem about latency). Perhaps the general pattern is perfection, cost (in time, space and energy) and distribution/resilience. PCR. It is interesting, because it breaks the typical dilemma between quality and cost. It's really about three things, not two.
 
 ### Quality
 
