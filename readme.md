@@ -4,10 +4,6 @@
 
 > "To a great extent the act of coding is one of organization." -- [James Hague](https://prog21.dadgum.com/177.html)
 
-## tl;dr
-
-TODO
-
 ## Purpose
 
 We currently live in the [Information Age](https://en.wikipedia.org/wiki/Information_Age). The revolution of digital technology has made information pervasive and central to human economy, politics, society and culture.
@@ -1146,7 +1142,6 @@ what's in and out depends on where you draw the boundary, and that can be explic
 Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
 
 In contrast with other conceptual frameworks to express computations, such as [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) or the [actor model](https://en.wikipedia.org/wiki/Actor_model), our framework doesn't sharply define an "inside" and an "outside" part. A call always sees its response as an external process, even if it happens on the same computer and even within the same program. If you zoom out and look at calls that are upstream of other calls, you are lumping the subcalls as part of one response. This is how you abstract the detail into a single value. In this way, the outside or inside only depends of your point of view. This also allows to go beyond the distinction between an event and a primitive process, treating everything to be a call and a response.
-call goes beyond csp and actor model.
 
 This framework also allows us to go beyond the concept of state as a special type of data. If the "system" is a part of the dataspace, the state of the system (or of a subsystem) is also a part of the dataspace. Everything exists within the same dataspace, so the data in the system is indistinguishable (or rather, integrated) with the rest of the system.
 
@@ -1159,17 +1154,29 @@ In the next pillar, we will see how we can express any logic as a sequence (list
 We're ready now to tackle the building blocks of any logic that we may need to express in a DIS. This pillar introduces four elements:
 
 1. Calls as sequences (lists) of calls.
-2. Conditionals as forks between sequences.
+2. Conditionals as forks that allow choice between sequences.
 3. Loops as recursive conditionals.
-4. Errors as responses conditionally treated differently.
+4. Errors as conditional responses.
 
-(It is funny that, as with fourdata, they are also four; this wasn't planned).
+Funnily enough, if fourdata uses four elements to represent data, here we've unintentionally come up with four building blocks for code.
 
 The first two are essential, irreducible. Without "keeping on going" (list), our DIS would run out of gas and not complete anything. And without being able to choose one path or the other based on a condition (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. It would be always the same thing, every time.
 
-Think of a Turing Machine, which is one of the mathematical ways to understand computation: current state of mind (dataspac3), current symbol being read (dataspac2). From there, based on the combination of them, potentially write a symbol (change the dataspace), move the head (where in the dataspace) and change your state of mind. So sequence and conditional are the core, without them there can be no general computation device.
+Consider a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which is one of the mathematical ways to understand computation. The machine works like this:
+- There's always a current *state of mind*, called the *current configuration*. You could think of this as a call.
+- There's a symbol being read from a tape. You could think of this as an input to a call.
+- Based on the current configuration and the current symbol, the machine does three things:
 
-The way I prefer to picture it is like a yin yang process, where there's energy that produces change constantly. The change is determined by the current situation of the whole. The change comes in, changes the whole a bit, and based on that change, a new change happens.
+1. Write something to the tape (optionally).
+2. Move the tape to the left or right (optionally).
+3. Change to another state of mind (optionally).
+4. Go back to 1.
+
+Now, because what the machine does depends on the current configuration and the current symbol in the tape, the operation of the machine is *conditional* to the state of the system, which is no more and no less than its data. The machine will choose to do X or to do Y depending on the data already there. This *choice* between branches is the essence of conditionals (and in older computer literature, conditionals were called *branching*).
+
+At the same time, the machine needs to go back to 1. to repeat the process endlessly. So there's an unstoppable sequence at work.
+
+The way I prefer to picture computation is like a yin yang process, where there's energy that produces change constantly. The change is determined by the current situation of the whole. The change comes in, changes the whole a bit, and based on that change, a new change happens.
 
 ```
 reality -> change -> new reality -> new change...
@@ -1179,20 +1186,15 @@ This also connects DIS to life forms through the concept of [dissipative structu
 
 The other two elements of computations, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition; the essence of errors is conditional jumps.
 
-The essential computing model:
-   - Call as sequence of calls.
-   - Variable subsitution as call.
-   - Conditional.
-   - Loop as conditional.
-   - Errors: the essence is that they jump up many levels, through a different channel than the return. It can be seen as a conditional return based on value.
+We define a call to be a list of calls. This is no sleight of hand. In a DIS, every call is ultimately implemented by other calls. Almost invariably, a single call triggers multiple downstream calls, cascading down to the tiniest operations at the CPU level. At that point, the software people (the author included) shrug, declare “[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)”, and leave the rest to the hardware engineers.
 
-Our starting point is the sequence, which is a list. We define a call to be a list of further calls. This is no sleight of hand. In a DIS, every call is ultimately implemented by other calls. Almost invariably, a single call triggers multiple downstream calls, cascading down to the tiniest operations at the CPU level. At that point, the software people (the author included) shrug, declare “here be dragons,” and leave the rest to the hardware engineers.
+Alternative names for call are *program*, *function*, *flow*, *procedure* or *sequence*. But they all refer to the same concept.
 
-- the essence is sequence, the machine keeping on going. return/done makes it stop. then you have jump, which is cond. loop is repeated jumps. error/recover is a special pattern that's really a conditional. and voila, you have everything to express a procedure!
-- a call is a sequence of calls.
-- The name is sequence. Alternatives: program, function, flow, procedure. but it is sequence.
-- sequence also maps perfectly well to what a computer does.
+Interestingly enough, we've seen that a variable substitution can be understood as the most basic form of call. If somewhere in our dataspace we say that the key `foo` is `bar`, if we reference foo as `@ foo`, we will get `= bar`. Other calls will actually make more calls.
 
+if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data.
+
+- a list of calls also maps perfectly well to what a computer does.
 - Higher level languages let you focus on data at a human level.
 - The data from the call changes the sequence into more calls.
 - Calls can be self-referential: recursion. Avoid Whitehead and Russell's mistake.
@@ -1201,8 +1203,6 @@ Height of level is determined by looking who calls who. Low level is usually cal
 Levels where you draw lines have sublevels down to a single chip operation.
 
 side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
-
-if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data.
 
 the definition is the expansion. the expansion is calls becoming more calls, then being responded, then coming back as a response.
 
