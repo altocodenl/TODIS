@@ -46,7 +46,7 @@ An information system is any system that is capable of doing three things:
 2. Store data
 3. Transform data
 
-Software systems are DIS. Their usefulness is conducted solely by their capacity to communicate, store and transform data. If a software system was replaced overnight with another software system that communicated, stored and transformed data in the same way as the first one, nobody would notice until the time came to actually modify the system. The code that composes the system is ultimately valuable solely for its capacity to communicate, store and transform data.
+Software systems are DIS. Their usefulness is conducted solely by their capacity to communicate, store and transform data. If a software system was replaced overnight with another software system that communicated, stored and transformed data in the same way as the first one, nobody would notice until the time came to actually modify the system. The logic that composes the system is ultimately valuable solely for its capacity to communicate, store and transform data.
 
 The vast hardware systems - nowadays referred to as "the cloud" - that run a great deal of our software are also chiefly concerned with communicating, storing and transforming data. Like software, they have no other purpose than that. This is what explains their central importance, and what justifies the vast economic resources devoted to them.
 
@@ -120,7 +120,7 @@ This entire treatise is built on toppling these two myths with the following (hy
 1. Once we decide to look at the data directly, there are ways in which we can abridge it without losing descriptive power. And these ways are much simpler than The List. "These ways" is what fills up the rest of this treatise.
 2. Makers of DIS are in dire need of humility. Simple data is powerful, even exciting. The details matter. They can be joined into harmonious wholes. But to eschew details because they are beneath oneself is *exactly* what's keeping us mired in a mess of our own making.
 
-Our contemporary attitude towards software is focused, perhaps naturally, on software itself, and not on the data which flows through it and which justifies the existence of software itself. But it is perfectly possible to see code as the negative impression (just like a picture taken with film has a [negative](https://en.wikipedia.org/wiki/Negative_(photography))) of the data flows it enables.
+Our contemporary attitude towards software is focused, perhaps naturally, on software itself, and not on the data which flows through it and which justifies the existence of software itself. But it is perfectly possible to see logic as the negative impression (just like a picture taken with film has a [negative](https://en.wikipedia.org/wiki/Negative_(photography))) of the data flows it enables.
 
 When the data is not seen, the trivial becomes difficult and the nontrivial impossible.
 
@@ -133,8 +133,8 @@ This is the central thesis of this treatise. We'll explore now how to make this 
 1. **Single representation of data**
 2. **Single dataspace**
 3. **Call and response**
-4. **Code is call and response**
-5. **Interface is code**
+4. **Logic is call and response**
+5. **Interface is logic**
 
 ### Pillar 1: single representation of data
 
@@ -941,9 +941,9 @@ The structure of a call and a response, generally, is then:
 
 The message, also called *input*, *parameter* or *argument*, is the data that is passed along on the call: the message. The response (also called *result*) is the message that comes back from the destination to the source.
 
-Most computation happening inside a DIS is opaque to those who design it: while working with the system, they usually have to place *logs* to show what the results are at certain places in the program. By using the call and response model, and being able to see the results of every call, we remove a major obstacle to understanding DIS: the implicitness of intermediate results. The traditional approach to computing is to feed an input to a program and then read its output. The intermediate steps are not shown, except in logs or debugger.
+Most computation happening inside a DIS is opaque to those who design it: while working with the system, they usually have to place *logs* to show what the results are at certain places in the program. By using the call and response model, and being able to see the results of every call, we remove a major obstacle to understanding DIS: the implicitness of intermediate results. The traditional approach to computing is to feed an input to a program and then read its output. The intermediate steps are not shown, except in logs or a debugger.
 
-In the approach we are prsenting here, every call and response is displayed as data, so there's no longer any need to guess (or find out, by putting a log and making the call again).
+In the approach we are prsenting here, every call and response is displayed as data, so there's no longer any need to guess (or find out, by putting a log and making the call again). The results, at every level, are right there in the dataspace.
 
 How does this connect with the previous two pillars? Concerning pillar 1, we're representing communication and transformation of data within fourdata in all of the examples above, always using numbers, texts, lists and hashes. The connection with pillar 2, however, is more subtle. Let's illustrate:
 
@@ -1092,11 +1092,126 @@ That intermediate state which expresses an ongoing operation is as much a valid 
 
 It is also possible to remember every single change that happened in the dataspace, effectively never forgetting anything. This is a decision to be taken as part of the design of a system. At this stage of the argument, what's important is to know that we can choose to selectively remember and to forget. A system that remembers accretes changes, while a system that forgets overwrites changes.
 
-At every point in time, however, the dataspace is complete. Even if the system is "between" calls, those intermediate states are also valid. Most digital information systems are in constant flux, so they are always in between calls: by thinking about these states with the same logic that we think about the system at rest (with no calls), we can more clearly understand flux.
+It is also possible to represent errors as responses.
+
+```
+"system 1" books orientalism @ http headers Accept application/json
+                                            User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                                    host example.com
+                                    method GET
+                                    path /api/books/1234
+                                    type HTTP/1.1
+                             = error code "404 not found"
+                                     body "No such book"
+```
+
+Errors are valid responses, are also data, and are also part of the dataspace.
+
+At every point in time, however, the dataspace is complete. Even if the system is "between" calls, those intermediate states are also valid. And if some call has encountered an error, those error states are also valid. Most digital information systems are in constant flux, so they are always in between calls: by thinking about these states with the same logic that we think about the system at rest (with no calls), we can more clearly understand flux.
 
 It is interesting to think that what we normally call an *interface* is really a call: the start of an interaction. And what we normally call an *implementation* is what happens between the call and the response. The call is to the left, the implementation is to the right. We can also use the terms *downstream* and *upstream* to mean that calls go *downstream* and responses go back *upstream*.
 
+In contrast with other conceptual frameworks to express computations, such as [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) or the [actor model](https://en.wikipedia.org/wiki/Actor_model), our framework doesn't consider certain operations (calls) as internal vs external from a global perspective. A call always sees its response as an external process, even if it happens on the same computer and even within the same program. If you zoom out and look at calls that are upstream of other calls, you are lumping the subcalls as part of one response. This is how you abstract the detail into a single value. In this way, the outside or inside only depends of your point of view. This also allows to go beyond the distinction between an event and a primitive process, treating everything to be a call and a response. In other words, in this framework, calls and responses are [fractal](https://en.wikipedia.org/wiki/Fractal) or [self-similar](https://en.wikipedia.org/wiki/Self-similarity). A call triggers a response that is itself made of calls. The advantage of this approach is that it is just simpler, requiring very few concepts and always having the same structure.
+
+This framework also allows us to go beyond the concept of state as a special type of data. If the "system" is a part of the dataspace, the state of the system (or of a subsystem) is also a part of the dataspace. Everything exists within the same dataspace, so the data in the system is indistinguishable (or rather, integrated) with the rest of the system.
+
+We have covered a lot of ground in this pillar. In a nutshell: we have found that the combination of a call and a response can express computation at any level; and that calls can be triggered by other calls, establishing a causal chain of computation, since a call can be said to cause a response as well as the calls required by that response to be done.
+
+In the next pillar, we will see how we can express any logic as a sequence (list) of calls and responses.
+
+### Pillar 4: logic is call and response
+
+We're ready now to tackle the building blocks of any logic that we may need to express in a DIS. Logic is also usually called *code*, which comes from [machine code](https://en.wikipedia.org/wiki/Machine_code).
+
+This pillar introduces four elements:
+
+1. Calls as sequences (lists) of calls.
+2. Conditionals as forks that allow choice between sequences.
+3. Loops as recursive conditionals.
+4. Errors as conditional responses.
+
+If fourdata uses four elements to represent data, here we've also found four building blocks to construct any logic.
+
+The first two are essential, irreducible. Without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On), our DIS would run out of gas and not keep on performing operations once it completed one. And without being able to choose one path or the other based on a condition (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time.
+
+Consider a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which is one of the mathematical ways to understand computation. The machine works like this:
+
+- There's always a current *state of mind*, called the *current configuration*. You could think of this as a call.
+- There's a symbol being read from a tape. You could think of this as an input to a call.
+```
+| ə | ə | 0 |   | 0 |
+          ^
+          |
+        current
+         symbol
+```
+- Based on the current configuration and the current symbol, the machine does three things:
+
+1. Write something to the tape (optionally).
+2. Move the tape to the left or right (optionally).
+3. Change to another state of mind (optionally).
+4. Go back to 1.
+
+Now, because what the machine does depends on the current configuration and the current symbol in the tape, the operation of the machine is *conditional* to the state of the system, which is no more and no less than its data. The machine will choose to do X or to do Y depending on the data already there. This *choice* between branches is the essence of conditionals (and in older computer literature, conditionals were called *branching*).
+
+And, equally importantly, the machine needs to go back to step 1, to repeat the process endlessly. So there's an unstoppable sequence at work, operating on conditions.
+
+The way I prefer to picture computation is like a yin yang process, where there's energy that produces change constantly. The change is determined by the current situation of the whole. The change comes in, changes the whole a bit, and based on that change, a new change happens.
+
+```
+reality -> change -> new reality -> new change...
+```
+
+This also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
+
+The other two elements of computation, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition; the essence of errors is conditional jumps.
+
+Let's go back to the first element, the call as sequence, and understand it in more detail. We define **a call to be a list of calls**. This is no sleight of hand. In a DIS, every call is ultimately implemented by other calls. Almost invariably, a single call triggers multiple downstream calls, cascading down to the tiniest operations at the CPU level. At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware engineers.
+
+Alternative names for this *call as list of calls* are *program*, *function*, *flow*, *procedure* or *sequence*. They all refer to the same concept.
+
+Interestingly enough, we've seen that a variable substitution can be understood as the most basic form of call. For example:
+
+```
+"copy of widget count" @ "widget count"
+                       = 32
+"widget count" 32
+```
+
+In the example above, `copy of widget count` references `widget count`. Since `widget count` is 32, the call is a mere lookup. The reference is resolved by going one level to the left and finding `widget count`, which then yields 32.
+
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+
+Now, how do we define a call? The definition of a call is the list of calls that the call will make when it is called.
+
+@ define "name of single argument" 1 ...
+                                   2 ...
+
+everything inside the define is frozen, not expanded. everything is expanded when the call happens. no precooking of things, even static ones.
+
+if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data.
+
+- a list of calls also maps perfectly well to what a computer does.
+- Higher level languages let you focus on data at a human level.
+- Calls can be self-referential: recursion. Avoid Whitehead and Russell's mistake.
+
+on errors: hickey on systems. error values.
+
+Height of level is determined by looking who calls who. Low level is usually called, high level is usually the caller.
+Levels where you draw lines have sublevels down to a single chip operation.
+
+side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
+
+the definition is the expansion. the expansion is calls becoming more calls, then being responded, then coming back as a response.
+
+A wise man once joked that his troubles playing football amounted to two things. The first was his left leg. The second one, his right leg. In the same way, the problems with programming languages can be reduced to two:
+- The problem with expressions: they are not automatically referenceable from outside of their immediate context. Pillar 3 solves this by embedding computation in the dataspace, making every call and response explicit and accessible.
+- The problem with statements: they are not data. Pillar 4 addresses this by turning statements into first-class entities within the dataspace, unifying code and data.
+
+not separateness, you choose where to draw the boundaries. example: call to another service with a db, see the three calls. show replacement.
+Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
+
+- Dataspace: access vs control. Open access, use control to determine when to block.
 
 Let's look at a system that has three parts:
 
@@ -1113,6 +1228,24 @@ DB books 1 author "Edward Said"
            title Orientalism
 ```
 
+Let's then add a server with an HTTP endpoint that will make a call to the DB.
+
+```
+DB books 1 author "Edward Said"
+           id 1234
+           isbn "978-0-394-42814-7"
+           title Orientalism
+server @ listen host example.com
+                method GET
+                path /api/books/<id>
+                call @ db 1 "SELECT * from books where id = "
+                          2 @ id
+                     = ""
+       = ""
+```
+
+Somewhere in our system
+
 ```
 books orientalism @ http headers Accept application/json
                                  User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -1121,96 +1254,9 @@ books orientalism @ http headers Accept application/json
                         path /api/books/1234
                         type HTTP/1.1
                  = PENDING...
-DB books 1 author "Edward Said"
-           id 1234
-           isbn "978-0-394-42814-7"
-           title Orientalism
-server @ listen host example.com
-         method GET
-         path /api/books/<id>
-         query @ db "SELECT * from books where id = <id>"
-       = PENDING...
 ```
-
-
 
 - store the latest query, or not even. the innermost call doesn't have to be shown. the intermediate ones have to. that's where you have to see where the expansion is made. for http, do it in a list.
-
-not separateness, you choose where to draw the boundaries. example: call to another service with a db, see the three calls. show replacement.
-what's in and out depends on where you draw the boundary, and that can be explicit. There's no global binarization of that.
-
-Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
-
-In contrast with other conceptual frameworks to express computations, such as [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) or the [actor model](https://en.wikipedia.org/wiki/Actor_model), our framework doesn't sharply define an "inside" and an "outside" part. A call always sees its response as an external process, even if it happens on the same computer and even within the same program. If you zoom out and look at calls that are upstream of other calls, you are lumping the subcalls as part of one response. This is how you abstract the detail into a single value. In this way, the outside or inside only depends of your point of view. This also allows to go beyond the distinction between an event and a primitive process, treating everything to be a call and a response.
-
-This framework also allows us to go beyond the concept of state as a special type of data. If the "system" is a part of the dataspace, the state of the system (or of a subsystem) is also a part of the dataspace. Everything exists within the same dataspace, so the data in the system is indistinguishable (or rather, integrated) with the rest of the system.
-
-We have covered a lot of ground in this pillar. In a nutshell: we have found that the combination of a call and a response can express computation at any level; and that calls can be triggered by other calls, establishing a causal chain of computation.
-
-In the next pillar, we will see how we can express any logic as a sequence (list) of calls and responses.
-
-### Pillar 4: code is call and response
-
-We're ready now to tackle the building blocks of any logic that we may need to express in a DIS. This pillar introduces four elements:
-
-1. Calls as sequences (lists) of calls.
-2. Conditionals as forks that allow choice between sequences.
-3. Loops as recursive conditionals.
-4. Errors as conditional responses.
-
-Funnily enough, if fourdata uses four elements to represent data, here we've unintentionally come up with four building blocks for code.
-
-The first two are essential, irreducible. Without "keeping on going" (list), our DIS would run out of gas and not complete anything. And without being able to choose one path or the other based on a condition (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. It would be always the same thing, every time.
-
-Consider a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which is one of the mathematical ways to understand computation. The machine works like this:
-- There's always a current *state of mind*, called the *current configuration*. You could think of this as a call.
-- There's a symbol being read from a tape. You could think of this as an input to a call.
-- Based on the current configuration and the current symbol, the machine does three things:
-
-1. Write something to the tape (optionally).
-2. Move the tape to the left or right (optionally).
-3. Change to another state of mind (optionally).
-4. Go back to 1.
-
-Now, because what the machine does depends on the current configuration and the current symbol in the tape, the operation of the machine is *conditional* to the state of the system, which is no more and no less than its data. The machine will choose to do X or to do Y depending on the data already there. This *choice* between branches is the essence of conditionals (and in older computer literature, conditionals were called *branching*).
-
-At the same time, the machine needs to go back to 1. to repeat the process endlessly. So there's an unstoppable sequence at work.
-
-The way I prefer to picture computation is like a yin yang process, where there's energy that produces change constantly. The change is determined by the current situation of the whole. The change comes in, changes the whole a bit, and based on that change, a new change happens.
-
-```
-reality -> change -> new reality -> new change...
-```
-
-This also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
-
-The other two elements of computations, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition; the essence of errors is conditional jumps.
-
-We define a call to be a list of calls. This is no sleight of hand. In a DIS, every call is ultimately implemented by other calls. Almost invariably, a single call triggers multiple downstream calls, cascading down to the tiniest operations at the CPU level. At that point, the software people (the author included) shrug, declare “[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)”, and leave the rest to the hardware engineers.
-
-Alternative names for call are *program*, *function*, *flow*, *procedure* or *sequence*. But they all refer to the same concept.
-
-Interestingly enough, we've seen that a variable substitution can be understood as the most basic form of call. If somewhere in our dataspace we say that the key `foo` is `bar`, if we reference foo as `@ foo`, we will get `= bar`. Other calls will actually make more calls.
-
-if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data.
-
-- a list of calls also maps perfectly well to what a computer does.
-- Higher level languages let you focus on data at a human level.
-- The data from the call changes the sequence into more calls.
-- Calls can be self-referential: recursion. Avoid Whitehead and Russell's mistake.
-
-Height of level is determined by looking who calls who. Low level is usually called, high level is usually the caller.
-Levels where you draw lines have sublevels down to a single chip operation.
-
-side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
-
-the definition is the expansion. the expansion is calls becoming more calls, then being responded, then coming back as a response.
-
-A wise man once joked that his troubles playing football amounted to two things. The first was his left leg. The second one, his right leg. In the same way, the problems with programming languages can be reduced to two:
-- The problem with expressions: they are not automatically referenceable from outside of their immediate context. Pillar 3 solves this by embedding computation in the dataspace, making every call and response explicit and accessible.
-- The problem with statements: they are not data. Pillar 4 addresses this by turning statements into first-class entities within the dataspace, unifying code and data.
-
-- Dataspace: access vs control. Open access, use control to determine when to block.
 
 ### Pillar 5: interface is code
 
