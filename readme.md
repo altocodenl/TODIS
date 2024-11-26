@@ -967,6 +967,8 @@ Now, what would happen if one of the values we pass to `+` wasn't always `10`, b
 
 Note that `@ widgets` is a reference to the `widgets` variable inside `system 1` - this is a useful convention. The value of widgets is `100`. We then see that the math formula makes a call to `+` sending both `@ widgets` (which is `100`) and `10`. That produces the result `110`.
 
+Also note that we convert calls into values going right to left. The detail is always to the right, while the context is to the left.
+
 Using the call and response model, we can represent any of the following:
 
 1. A reference to a variable:
@@ -1012,30 +1014,6 @@ Using the call and response model, we can represent any of the following:
                                     isbn "978-0-394-42814-7"
                                     title Orientalism
 ```
-
-If we wanted to reference just the `body` of the response, we can do it like this.
-
-```
-"system 1" books orientalism @ body @ http headers Accept application/json
-                                                   User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-                                           host example.com
-                                           method GET
-                                           path /api/books/1234
-                                           type HTTP/1.1
-                                    = code "200 OK"
-                                      headers Content-Length 83
-                                              Content-Type application/json
-                                      body author "Edward Said"
-                                           id 1234
-                                           isbn "978-0-394-42814-7"
-                                           title Orientalism
-                            = author "Edward Said"
-                              id 1234
-                              isbn "978-0-394-42814-7"
-                              title Orientalism
-```
-
-Note that we convert calls into values going right to left. The detail is always to the right, while the context is to the left.
 
 5. An [operative system call](https://en.wikipedia.org/wiki/System_call).
 
@@ -1189,7 +1167,7 @@ Now, how do we define a call? The definition of a call is the list of calls that
 
 everything inside the define is frozen, not expanded. everything is expanded when the call happens. no precooking of things, even static ones.
 
-if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data.
+if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data. but it's not control, it's causality. this would also be the case if we had multiple computers.
 
 - a list of calls also maps perfectly well to what a computer does.
 - Higher level languages let you focus on data at a human level.
@@ -1211,7 +1189,13 @@ A wise man once joked that his troubles playing football amounted to two things.
 not separateness, you choose where to draw the boundaries. example: call to another service with a db, see the three calls. show replacement.
 Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
 
+Explain how computation is causal communication, and that causality has intent.
+
 - Dataspace: access vs control. Open access, use control to determine when to block.
+
+instead of imperative vs procedural: causal. with declarative: you're just making a call that specifies more calls, more high level. But even microcode ,the lowest conceivable level of programming, is also declarative, since it's not actually orchestrating the gates and clocks of the CPU to carry out the operations. Focus on at which level you're working, which is, what is the message that you send, and the response that you receive.
+
+if it's not a value, it's a call. and a call eventually returns a value. it is displayed as hashes with @ and =.
 
 Let's look at a system that has three parts:
 
@@ -1336,6 +1320,8 @@ understanding CAP: when distributed surface (distributed as amenable to experien
 
 Consistency is not about enough resources or not, it is about locking a part of the dataspace until an operation is done.
 
+Locks can be implemented as calls on sections of the dataspace.
+
 ### Tradeoffs
 
 wait, you have the blockchain trilemma (security, scalability, distribution). That to me maps completely to CAP's consistency, availability (especially with the modified CAP theorem about latency). Perhaps the general pattern is perfection, cost (in time, space and energy) and distribution/resilience. PCR. It is interesting, because it breaks the typical dilemma between quality and cost. It's really about three things, not two.
@@ -1345,6 +1331,8 @@ wait, you have the blockchain trilemma (security, scalability, distribution). Th
 Implementing the Toyota Production System
 - autoactivation
 - flow backwards, with reactive
+
+muri & mura as redraws that only hurt performance or also as inconsistencies (defects), respectively. muri is performance waste, mura is inconsistency.
 
 testing
 - convergence to mathematical proof
