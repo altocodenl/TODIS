@@ -1099,23 +1099,24 @@ In the next pillar, we will see how we can express any logic as a sequence (list
 
 ### Pillar 4: logic is call and response
 
-We're ready now to tackle the building blocks of any logic that we may need to express in a DIS. Logic is also usually called *code*, which comes from [machine code](https://en.wikipedia.org/wiki/Machine_code).
+We're ready now to tackle the building blocks of any logic that we may need to express in a DIS. Logic is also usually called *code*, a term which comes from [machine code](https://en.wikipedia.org/wiki/Machine_code).
 
-This pillar introduces four elements:
+This pillar introduces four elements for building logic:
 
 1. Calls as sequences (lists) of calls.
 2. Conditionals as forks that allow choice between sequences.
 3. Loops as recursive conditionals.
 4. Errors as conditional responses.
 
-If fourdata uses four elements to represent data, here we've also found four building blocks to construct any logic.
+If fourdata uses four elements to represent data, here we've also found four building blocks to construct all logic. We'll first do a quick overview of all four of them; we'll then go through each of them in more detail.
 
-The first two are essential, irreducible. Without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On), our DIS would run out of gas and not keep on performing operations once it completed one. And without being able to choose one path or the other based on a condition (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time.
+The first two are essential, irreducible. Without a sequence, without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On), our DIS would run out of gas and not keep on performing operations once it completed one. And without being able to choose one path or the other based on a condition (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time.
 
-Consider a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which is one of the mathematical ways to understand computation. The machine works like this:
+Consider a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which is a fundamental way to understand computation. The machine works like this:
 
 - There's always a current *state of mind*, called the *current configuration*. You could think of this as a call.
-- There's a symbol being read from a tape. You could think of this as an input to a call.
+- There's a symbol being read from a tape. You could think of this as a message to a call.
+
 ```
 | ə | ə | 0 |   | 0 |
           ^
@@ -1123,32 +1124,34 @@ Consider a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which
         current
          symbol
 ```
-- Based on the current configuration and the current symbol, the machine does three things:
+- The combination of the call (the current configuration) and the message sent through it (the symbol of the tape) generates a response, which consists of the following:
 
-1. Write something to the tape (optionally).
-2. Move the tape to the left or right (optionally).
-3. Change to another state of mind (optionally).
+1. Write something to the tape.
+2. Move the tape to the left or right.
+3. Change to another state of mind.
 4. Go back to 1.
 
 Now, because what the machine does depends on the current configuration and the current symbol in the tape, the operation of the machine is *conditional* to the state of the system, which is no more and no less than its data. The machine will choose to do X or to do Y depending on the data already there. This *choice* between branches is the essence of conditionals (and in older computer literature, conditionals were called *branching*).
 
-And, equally importantly, the machine needs to go back to step 1, to repeat the process endlessly. So there's an unstoppable sequence at work, operating on conditions.
+And, equally importantly, the machine needs to go back to step 1, to repeat the process endlessly. So there's an unstoppable *sequence* at work.
 
-The way I prefer to picture computation is like a yin yang process, where there's energy that produces change constantly. The change is determined by the current situation of the whole. The change comes in, changes the whole a bit, and based on that change, a new change happens.
+The way I prefer to picture computation is like a yin yang process, where there's a permanent energy flow that constantly produces change. The change is determined by the current situation of the whole. Given the current situation, a new change takes place. That change modifies the situtation into a new one, different but still very related to the previous one. Based on the new situation, a new change comes in. The process keeps on repeating endlessly.
 
 ```
 reality -> change -> new reality -> new change...
 ```
 
-This also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
+This perspective also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
 
-The other two elements of computation, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition; the essence of errors is conditional jumps.
+The other two elements of computation, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition; the essence of errors is conditional jumps through many levels.
 
-Let's go back to the first element, the call as sequence, and understand it in more detail. We define **a call to be a list of calls**. This is no sleight of hand. In a DIS, every call is ultimately implemented by other calls. Almost invariably, a single call triggers multiple downstream calls, cascading down to the tiniest operations at the CPU level. At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware engineers.
+Let's go back to the first element, the call as sequence, and understand it in more detail. We define **a call to be a list of calls**. This is no sleight of hand. In a DIS, every call is ultimately implemented by other calls. Almost invariably, a single call triggers multiple downstream calls, cascading down to the tiniest operations at the CPU level. At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers.
 
-Alternative names for this *call as list of calls* are *program*, *function*, *flow*, *procedure* or *sequence*. They all refer to the same concept.
+Alternative names for *call as list of calls* are *program*, *function*, *flow*, *procedure*, *operation*, *definition* or *sequence*. They all refer to the same concept. We'll go with *sequence*.
 
-Interestingly enough, we've seen that a variable substitution can be understood as the most basic form of call. For example:
+The sequence of a call is then *the list of calls that will be made when the call receives a message*. Since every call must receive a message, the sequence is also concerned with sending the right messages to the right calls. For doing this, the sequence uses both the message received by its call, as well as other calls.
+
+A variable substitution can be understood as the most basic form of call. For example:
 
 ```
 "copy of widget count" @ "widget count"
@@ -1156,14 +1159,46 @@ Interestingly enough, we've seen that a variable substitution can be understood 
 "widget count" 32
 ```
 
-In the example above, `copy of widget count` references `widget count`. Since `widget count` is 32, the call is a mere lookup. The reference is resolved by going one level to the left and finding `widget count`, which then yields 32.
+In the example above, `copy of widget count` is simply a reference `widget count`. Since `widget count` is 32, the call is a mere lookup. The reference is resolved by going one level to the left and finding `widget count`, which then yields 32.
+
+`@` is, in essence, a universal call. We'll expand on this later. For now, we can understand that we can reference other parts of the dataspace with calls, using `@`.
+
+Let's now think how we could sequence (define) a very simple call. This call will receive a number and respond with the same number plus 10. We'll put it in the dataspace at the path `plus10`.
+
+```
+plus10 @ + 1 @ message
+           2 10
+```
+
+Note that `plus10` consists of just one call to `+`, passing the `message` it received, plus 10. The response to that call to `+` is then returned as its own response.
+
+We now have two problems!
+
+1. How do we reference the message received by plus10 when it is called? Where is that `@ message` coming from?
+2. We need to make sure that plus10 is not a call itself, but its sequence. We don't actually want to go fetch `message` right now: only when a call is made to `plus10`.
+
+Let's work on the dataspace until we can solve these problems. First, we can already make a call to `plus10`, to see how we would use it and what we expect from it.
+
+```
+plus10 @ + 1 @ message
+           2 10
+twenty @ plus10 10
+       = 20
+```
+
+`twenty` looks good. Let's try to solve problem #2 first.
+
+```
+plus10 @ define @ + 1 @ message
+                    2 10
+twenty @ plus10 10
+         @ + 1 @ message
+             2 = 10
+         = 20
+       = 20
+```
 
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
-
-Now, how do we define a call? The definition of a call is the list of calls that the call will make when it is called.
-
-@ define "name of single argument" 1 ...
-                                   2 ...
 
 everything inside the define is frozen, not expanded. everything is expanded when the call happens. no precooking of things, even static ones.
 
