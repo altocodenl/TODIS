@@ -1093,7 +1093,7 @@ In contrast with other conceptual frameworks to express computations, such as [C
 
 This framework also allows us to go beyond the concept of state as a special type of data. If the "system" is a part of the dataspace, the state of the system (or of a subsystem) is also a part of the dataspace. Everything exists within the same dataspace, so the data in the system is indistinguishable (or rather, integrated) with the rest of the system.
 
-We have covered a lot of ground in this pillar. In a nutshell: we have found that the combination of a call and a response can express computation at any level; and that calls can be triggered by other calls, establishing a causal chain of computation, since a call can be said to cause a response as well as the calls required by that response to be done.
+We have covered a lot of ground in this pillar. In a nutshell: we have found that the combination of a call and a response can express computation at any level; that calls can be triggered by other calls, establishing a causal chain of computation, since a call can be said to cause a response as well as the calls required by that response to be done. And, most importantly, that a call and a response can be expressed using data. We can now use data itself to express changes to our data.
 
 In the next pillar, we will see how we can express any logic as a sequence (list) of calls and responses.
 
@@ -1147,9 +1147,29 @@ The other two elements of computation, loops and errors, are niceties much in th
 
 Let's go back to the first element, the call as sequence, and understand it in more detail. We define **a call to be a list of calls**. This is no sleight of hand. In a DIS, every call is ultimately implemented by other calls. Almost invariably, a single call triggers multiple downstream calls, cascading down to the tiniest operations at the CPU level. At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers.
 
-Alternative names for *call as list of calls* are *program*, *function*, *flow*, *procedure*, *operation*, *definition* or *sequence*. They all refer to the same concept. We'll go with *sequence*.
+Alternative names for *call as list of calls* are *program*, *function*, *flow*, *procedure*, *operation*, *definition* or *sequence*. They all refer to the same concept. We'll go with *call as sequence*.
 
 The sequence of a call is then *the list of calls that will be made when the call receives a message*. Since every call must receive a message, the sequence is also concerned with sending the right messages to the right calls. For doing this, the sequence uses both the message received by its call, as well as other calls.
+
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+
+
+
+- expanded mode: between = ... and = expansion/response
+- var reference, with stack that goes right to left, then it is resolved left to right.
+
+```
+@ destination message
+= expansion ...
+  response
+
+foo bar 32
+
+@ foo bar
+= 32
+```
+
+
 
 A variable substitution can be understood as the most basic form of call. For example:
 
@@ -1175,7 +1195,7 @@ Note that `plus10` consists of just one call to `+`, passing the `message` it re
 We now have two problems!
 
 1. How do we reference the message received by plus10 when it is called? Where is that `@ message` coming from?
-2. We need to make sure that plus10 is not a call itself, but its sequence. We don't actually want to go fetch `message` right now: only when a call is made to `plus10`.
+2. We need to make sure that `plus10` is not a call itself, but its sequence. We don't actually want to go fetch `message` right now: only when a call is made to `plus10`.
 
 Let's work on the dataspace until we can solve these problems. First, we can already make a call to `plus10`, to see how we would use it and what we expect from it.
 
@@ -1186,7 +1206,7 @@ twenty @ plus10 10
        = 20
 ```
 
-`twenty` looks good. Let's try to solve problem #2 first.
+`twenty` looks good. Let's focus now on plus10, solving problem #2 first.
 
 ```
 plus10 @ define @ + 1 @ message
@@ -1197,8 +1217,6 @@ twenty @ plus10 10
          = 20
        = 20
 ```
-
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 everything inside the define is frozen, not expanded. everything is expanded when the call happens. no precooking of things, even static ones.
 
@@ -1356,6 +1374,10 @@ understanding CAP: when distributed surface (distributed as amenable to experien
 Consistency is not about enough resources or not, it is about locking a part of the dataspace until an operation is done.
 
 Locks can be implemented as calls on sections of the dataspace.
+
+### On forgetting
+
+definition of noise: data that you're better off ignoring.
 
 ### Tradeoffs
 
