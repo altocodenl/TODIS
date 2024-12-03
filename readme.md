@@ -133,7 +133,7 @@ This is the central thesis of this treatise. We'll explore now how to make this 
 1. **Single representation of data**
 2. **Single dataspace**
 3. **Call and response**
-4. **Logic is call and response**
+4. **Logic is a sequence of calls**
 5. **Interface is logic**
 
 ### Pillar 1: single representation of data
@@ -1097,25 +1097,30 @@ We have covered a lot of ground in this pillar. In a nutshell: we have found tha
 
 In the next pillar, we will see how we can express any logic as a sequence (list) of calls and responses.
 
-### Pillar 4: logic is call and response
+### Pillar 4: logic is a sequence of calls
 
 We're ready now to tackle the building blocks of any logic that we may need to express in a DIS. Logic is also usually called *code*, a term which comes from [machine code](https://en.wikipedia.org/wiki/Machine_code).
 
-This pillar introduces four elements for building logic:
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
-1. Calls as sequences (lists) of calls.
+This pillar introduces five elements for building logic:
+
+0. Reference
+1. Logic as sequences of calls.
 2. Conditionals as forks that allow choice between sequences.
 3. Loops as recursive conditionals.
 4. Errors as conditional responses.
 
 If fourdata uses four elements to represent data, here we've also found four building blocks to construct all logic. We'll first do a quick overview of all four of them; we'll then go through each of them in more detail.
 
-The first two are essential, irreducible. Without a sequence, without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On), our DIS would run out of gas and not keep on performing operations once it completed one. And without being able to choose one path or the other based on a condition (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time.
+The first two are essential, irreducible.
+- Without a sequence, without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On), our DIS would run out of gas and not keep on performing operations once it completed one.
+- Without being able to choose one path or the other based on a condition (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time.
 
 Consider a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which is a fundamental way to understand computation. The machine works like this:
 
 - There's always a current *state of mind*, called the *current configuration*. You could think of this as a call.
-- There's a symbol being read from a tape. You could think of this as a message to a call.
+- There's a symbol being read from a tape. You could think of this as the message sent in a call.
 
 ```
 | ə | ə | 0 |   | 0 |
@@ -1143,33 +1148,74 @@ reality -> change -> new reality -> new change...
 
 This perspective also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
 
-The other two elements of computation, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition; the essence of errors is conditional jumps through many levels.
+The other two elements of computation, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition of a sequence over a list or a hash; the essence of errors is conditional jumps through many levels, to avoid the burden of having to check everywhere whether a call was successful or not. Interestingly enough, errors are most useful as stoppers of sequences.
 
-Let's go back to the first element, the call as sequence, and understand it in more detail. We define **a call to be a list of calls**. This is no sleight of hand. In a DIS, every call is ultimately implemented by other calls. Almost invariably, a single call triggers multiple downstream calls, cascading down to the tiniest operations at the CPU level. At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers.
+Before we delve further into loops and errors, let's go back to the first element, logic as a sequence of calls, and understand it in detail. Our understanding of a call, back in pillar 3, is summarized in this structure:
 
-Alternative names for *call as list of calls* are *program*, *function*, *flow*, *procedure*, *operation*, *definition* or *sequence*. They all refer to the same concept. We'll go with *call as sequence*.
+```
+@ destination message
+= response
+```
+
+What we're concerned with in pillar 4 is the *destination* of the call. How do we *define* a certain *destination* (which is no more than a part of the dataspace) to perform a given sequence of calls?
+
+Earlier we saw a destination that didn't require a definition:
+
+```
+"system 1" value @ widgets
+                 = 100
+           widgets 100
+```
+
+As we can see, `value` is set to 100 because it references `widgets`. `widgets` is not a sequence, it just has the value `100`. This form of call actually doesn't even require a message!
+
+```
+@ destination
+= response
+```
+
+In this case, the response will be the value of the destination. Consider this slightly more involved example:
+
+```
+
+"system 1" "copy of value" @ value
+                           = 100
+           value @ widgets
+                 = 100
+           widgets 100
+```
+
+As in the previous example, `value` references `widgets`, and therefore both have the value 100. `copy of value`, also, by referencing `value`, also has the value 100.
+
+This also works for values that are nested:
+
+```
+my hash 100
+value @ my hash
+      = 100
+```
+
+What happens above is that we consider `@ my` to go out one level and find `my`. Once we find `my`, we see that its value is `hash 100`. But we still have `hash` in our destination, so when we find the value of `hash` inside `my`, we get `100`.
+
+These calls from one part of the dataspace to another are usually called *references* or *variables*. I think that it is best to consider them as calls with destination but without message.
+
+References are to logic like [viruses](https://en.wikipedia.org/wiki/Virus) are to life: they are not fully logic but not inert data either. But it is impossible to think of logic without references. Each destination in a call is a reference to another part of the dataspace.
+
+We define **a call to be a list of calls**. This is no sleight of hand. In a DIS, every call is ultimately implemented by other calls. Almost invariably, a single call triggers multiple downstream calls, cascading down to the tiniest operations at the CPU level. At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers.
+
+Alternative names for what is meant by a *sequence of calls* are *program*, *function*, *flow*, *procedure*, *operation*, *definition*. They all refer to the same concept.
 
 The sequence of a call is then *the list of calls that will be made when the call receives a message*. Since every call must receive a message, the sequence is also concerned with sending the right messages to the right calls. For doing this, the sequence uses both the message received by its call, as well as other calls.
 
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
-
-
+see all obstacles. obstacle in logic is syntax and diversity of constructs, that mask the basic forms, which are always the same.
 
 - expanded mode: between = ... and = expansion/response
-- var reference, with stack that goes right to left, then it is resolved left to right.
 
 ```
 @ destination message
 = expansion ...
   response
-
-foo bar 32
-
-@ foo bar
-= 32
 ```
-
-
 
 A variable substitution can be understood as the most basic form of call. For example:
 
