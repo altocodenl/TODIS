@@ -46,7 +46,7 @@ An information system is any system that is capable of doing three things:
 2. Store data
 3. Transform data
 
-Software systems are DIS. Their usefulness is conducted solely by their capacity to communicate, store and transform data. If a software system was replaced overnight with another software system that communicated, stored and transformed data in the same way as the first one, nobody would notice until the time came to actually modify the system. The logic that composes the system is ultimately valuable solely for its capacity to communicate, store and transform data.
+Software systems are DIS. Their usefulness is conducted solely by their capacity to communicate, store and transform data. If a software system was replaced overnight with another software system that communicated, stored and transformed data in the same way as the first one, nobody would notice until the time came to actually modify the system. The actions performed by the system are ultimately valuable solely for their capacity to communicate, store and transform data.
 
 The vast hardware systems - nowadays referred to as "the cloud" - that run a great deal of our software are also chiefly concerned with communicating, storing and transforming data. Like software, they have no other purpose than that. This is what explains their central importance, and what justifies the vast economic resources devoted to them.
 
@@ -130,11 +130,11 @@ This is the central thesis of this treatise. We'll explore now how to make this 
 
 ## The five pillars
 
-1. **Single representation of data**
-2. **Single dataspace**
-3. **Call and response**
-4. **Logic is a sequence of calls**
-5. **Interface is logic**
+1. **Single representation of data** (overcomes not being able to look and describe data in unambiguous terms).
+2. **Single dataspace**. (overcomes having parts of the system floating around instead of being part of one whole picture).
+3. **Call and response** (overcomes the invisibility of how data is transformed inside a DIS).
+4. **Logic is what happens between call and response** (overcomes doubts about the shape of the solution for a clearly specified problem).
+5. **Interface is logic** (overcomes separateness between system and user).
 
 ### Pillar 1: single representation of data
 
@@ -1085,7 +1085,7 @@ It is also possible to represent errors as responses.
 
 Errors are valid responses, are also data, and are also part of the dataspace.
 
-At every point in time, however, the dataspace is complete. Even if the system is "between" calls, those intermediate states are also valid. And if some call has encountered an error, those error states are also valid. Most digital information systems are in constant flux, so they are always in between calls: by thinking about these states with the same logic that we think about the system at rest (with no calls), we can more clearly understand flux.
+At every point in time, however, the dataspace is complete. Even if the system is "between" calls, those intermediate states are also valid. And if some call has encountered an error, those error states are also valid. Most digital information systems are in constant flux, so they are always in between calls: by thinking about these states with the same process with which we think about the system at rest (with no calls), we can more clearly understand flux.
 
 It is interesting to think that what we normally call an *interface* is really a call: the start of an interaction. And what we normally call an *implementation* is what happens between the call and the response. The call is to the left, the implementation is to the right. We can also use the terms *downstream* and *upstream* to mean that calls go *downstream* and responses go back *upstream*.
 
@@ -1093,33 +1093,47 @@ In contrast with other conceptual frameworks to express computations, such as [C
 
 This framework also allows us to go beyond the concept of state as a special type of data. If the "system" is a part of the dataspace, the state of the system (or of a subsystem) is also a part of the dataspace. Everything exists within the same dataspace, so the data in the system is indistinguishable (or rather, integrated) with the rest of the system.
 
-We have covered a lot of ground in this pillar. In a nutshell: we have found that the combination of a call and a response can express computation at any level; that calls can be triggered by other calls, establishing a causal chain of computation, since a call can be said to cause a response as well as the calls required by that response to be done. And, most importantly, that a call and a response can be expressed using data. We can now use data itself to express changes to our data.
+We have covered a lot of ground in this pillar. In a nutshell, we have found that the combination of a call and a response can express change at any level. And that it is possible to express change through data itself.
 
-In the next pillar, we will see how we can express any logic as a sequence (list) of calls and responses.
+In the next pillar, we will understand logic, which is what happens between a call and a response.
 
-### Pillar 4: logic is a sequence of calls
-
-We're ready now to tackle the building blocks of any logic that we may need to express in a DIS. Logic is also usually called *code*, a term which comes from [machine code](https://en.wikipedia.org/wiki/Machine_code).
+### Pillar 4: Logic is what happens between call and response
 
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
+logic is what transforms a call into a response.
+
+@ destination message
+= response
+
+reference is the destination. the reference doesn't refer to itself.
+
+reference without message is the simplest type of reference, normally understood as a variable. a longer path is just accessing deeper in the reference. but the interesting logic is in how the top-level reference is resolved.
+
+sequence: one after the other; the response can be either the last value or all of them.
+
+
+We're ready now to tackle the building blocks of any logic that we may need to express in a DIS. Logic is also usually called *code*, a term which comes from [machine code](https://en.wikipedia.org/wiki/Machine_code).
+
+
 This pillar introduces five elements for building logic:
 
-0. Reference
-1. Logic as sequences of calls.
-2. Conditionals as forks that allow choice between sequences.
-3. Loops as recursive conditionals.
-4. Errors as conditional responses.
+1. Reference as destination of a call.
+2. Sequence as definition of a call.
+2. Conditional as choice between sequences.
+3. Loop as conditional repetition.
+4. Error as conditional response.
 
-If fourdata uses four elements to represent data, here we've also found four building blocks to construct all logic. We'll first do a quick overview of all four of them; we'll then go through each of them in more detail.
+If fourdata uses four elements to represent data, here we've found five building blocks to construct all logic. We'll first do a quick overview of all five of them; we'll then go through each of them in more detail.
 
-The first two are essential, irreducible.
+The first three are essential, irreducible.
+- Without reference, we have no way to represent a destination. If every value in the dataspace refers only to itself, then we cannot establish relationships between parts of the system.
 - Without a sequence, without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On), our DIS would run out of gas and not keep on performing operations once it completed one.
 - Without being able to choose one path or the other based on a condition (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time.
 
 Consider a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which is a fundamental way to understand computation. The machine works like this:
 
-- There's always a current *state of mind*, called the *current configuration*. You could think of this as a call.
+- There's always a current *state of mind*, called the *current configuration*. You could think of this as the destination of our call, which is a *reference*.
 - There's a symbol being read from a tape. You could think of this as the message sent in a call.
 
 ```
@@ -1129,7 +1143,7 @@ Consider a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which
         current
          symbol
 ```
-- The combination of the call (the current configuration) and the message sent through it (the symbol of the tape) generates a response, which consists of the following:
+- The combination of the call (the current configuration) and the message sent through it (the symbol of the tape) generates a response based on a *sequence*:
 
 1. Write something to the tape.
 2. Move the tape to the left or right.
@@ -1150,6 +1164,11 @@ This perspective also connects DIS to life forms through the concept of [dissipa
 
 The other two elements of computation, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition of a sequence over a list or a hash; the essence of errors is conditional jumps through many levels, to avoid the burden of having to check everywhere whether a call was successful or not. Interestingly enough, errors are most useful as stoppers of sequences.
 
+A reference is a call to something that doesn't contain further calls. We bring something.
+
+
+
+
 Before we delve further into loops and errors, let's go back to the first element, logic as a sequence of calls, and understand it in detail. Our understanding of a call, back in pillar 3, is summarized in this structure:
 
 ```
@@ -1168,6 +1187,9 @@ Earlier we saw a destination that didn't require a definition:
 ```
 
 As we can see, `value` is set to 100 because it references `widgets`. `widgets` is not a sequence, it just has the value `100`. This form of call actually doesn't even require a message!
+
+
+first thing after the call is destination! how the system picks that up?
 
 ```
 @ destination
@@ -1341,6 +1363,8 @@ books orientalism @ http headers Accept application/json
 
 - store the latest query, or not even. the innermost call doesn't have to be shown. the intermediate ones have to. that's where you have to see where the expansion is made. for http, do it in a list.
 
+examples with machine code, assembler, c, hll and sql.
+
 ### Pillar 5: interface is code
 
 interface is code, therefore data.
@@ -1351,6 +1375,8 @@ interface mapped to state! see the data being displayed and the possible transfo
 reactivity comes here. @ is reactive, when the references change, things are re-run. internally this is implemented as a loop over subscribers.
 
 reactivity is no mere gimmick, there's something deeper: autopoiesis. when our perception changes, everything that that perception is based upon also changes in ourselves.
+
+no separateness between user and system. shell, unidirectional data flow. there are sources of change, we distinguish them only in the data they bring. and then we express those changes with the constraints we already set up. and those changes can also change the constraints themselves.
 
 Identity is tackled here, because this is where you can have an entrypoint for humans. Identity as data.
 
