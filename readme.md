@@ -1093,66 +1093,66 @@ In contrast with other conceptual frameworks to express computations, such as [C
 
 This framework also allows us to go beyond the concept of state as a special type of data. If the "system" is a part of the dataspace, the state of the system (or of a subsystem) is also a part of the dataspace. Everything exists within the same dataspace, so the data in the system is indistinguishable (or rather, integrated) with the rest of the system.
 
-We have covered a lot of ground in this pillar. In a nutshell, we have found that the combination of a call and a response can express change at any level. And that it is possible to express change through data itself.
+We have covered a lot of ground in this pillar. In a nutshell, we have found that the combination of a call and a response can express data change of any kind, just by using data itself.
 
 In the next pillar, we will understand logic, which is what happens between a call and a response.
 
 ### Pillar 4: Logic is what happens between call and response
 
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+Armed with the pattern of call and response, we can now explore what happens between one and the other. Any call happening in a DIS will have a [deliberate](https://en.wikipedia.org/wiki/Teleology) response. The purpose of a call is to be transformed into a response. Logic is how this transformation happens.
 
-logic is what transforms a call into a response.
+The original definition of [logic](https://en.wikipedia.org/wiki/Logic) is concerned with correct reasoning. In the context of a DIS, our logic is something rather more basic: given a set of requirements for a certain call, we want to be able to express it in terms of a number of simpler calls. Eventually, those simpler calls become tiny operations at the [CPU level](https://en.wikipedia.org/wiki/Central_processing_unit). At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers. But thanks to that translation, if we have written our calls well, we will have a system that implements them.
 
-@ destination message
-= response
+Logic is also usually called *code*, a term which comes from [machine code](https://en.wikipedia.org/wiki/Machine_code), but we'll just call it logic.
 
-reference is the destination. the reference doesn't refer to itself.
+It is my contention that the main elements of logic, in the context of a DIS, are five:
 
-reference without message is the simplest type of reference, normally understood as a variable. a longer path is just accessing deeper in the reference. but the interesting logic is in how the top-level reference is resolved.
+1. Reference: the destination of a call.
+2. Sequence: the definition of a call.
+3. Conditional: the choice between sequences.
+4. Loop: the conditional repetition of a sequence.
+5. Error: a special type of conditional response.
 
-sequence: one after the other; the response can be either the last value or all of them.
+For all of us who are fearful of programming, even those of us who practice it daily, it can be liberating to understand that essentially all logic can be understood with these terms. I will spend the rest of this pillar showing how that is the case.
 
+The first three elements are essential, [irreducible](https://en.wikipedia.org/wiki/Irreducibility_(mathematics)).
+- Without *reference*, we have no way to represent the destination of a call. If every value in the dataspace refers only to itself, then we cannot establish relationships between parts of the system.
+- Without *sequence*, without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On) and allowing a call to make multiple calls (calls which, themselves, will also make further calls) and collecting their responses, our DIS cannot go anywhere.
+- Without being able to choose one path or the other based on a *conditional* (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time.
 
-We're ready now to tackle the building blocks of any logic that we may need to express in a DIS. Logic is also usually called *code*, a term which comes from [machine code](https://en.wikipedia.org/wiki/Machine_code).
+This can be readily seen in the [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which is an universal model of computation.
 
-
-This pillar introduces five elements for building logic:
-
-1. Reference as destination of a call.
-2. Sequence as definition of a call.
-2. Conditional as choice between sequences.
-3. Loop as conditional repetition.
-4. Error as conditional response.
-
-If fourdata uses four elements to represent data, here we've found five building blocks to construct all logic. We'll first do a quick overview of all five of them; we'll then go through each of them in more detail.
-
-The first three are essential, irreducible.
-- Without reference, we have no way to represent a destination. If every value in the dataspace refers only to itself, then we cannot establish relationships between parts of the system.
-- Without a sequence, without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On), our DIS would run out of gas and not keep on performing operations once it completed one.
-- Without being able to choose one path or the other based on a condition (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time.
-
-Consider a [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which is a fundamental way to understand computation. The machine works like this:
-
-- There's always a current *state of mind*, called the *current configuration*. You could think of this as the destination of our call, which is a *reference*.
-- There's a symbol being read from a tape. You could think of this as the message sent in a call.
+The machine has an infinite tape divided in discrete pieces. If the tape is infinite in one way, we can represent it with a list, where each key is a position in the tape, and each value is the actual value written in the tape. For example:
 
 ```
-| ə | ə | 0 |   | 0 |
-          ^
-          |
-        current
-         symbol
+1 ə
+2 ə
+3 0
+4 ""
+5 0
 ```
-- The combination of the call (the current configuration) and the message sent through it (the symbol of the tape) generates a response based on a *sequence*:
 
-1. Write something to the tape.
-2. Move the tape to the left or right.
+The machine is always scanning one particular part of the tape. We can represent this as its *current position*
+
+```
+"current position" 1
+tape 1 ə
+     2 ə
+     3 0
+     4 ""
+     5 0
+```
+
+There's always a current *state of mind*, called the *current configuration*. You could think of this as a *sequence*. Any of these sequences will always do the following:
+
+1. Write something to the tape (or write nothing).
+2. Move the tape to the left or right (or keep it in place).
 3. Change to another state of mind.
 4. Go back to 1.
 
-Now, because what the machine does depends on the current configuration and the current symbol in the tape, the operation of the machine is *conditional* to the state of the system, which is no more and no less than its data. The machine will choose to do X or to do Y depending on the data already there. This *choice* between branches is the essence of conditionals (and in older computer literature, conditionals were called *branching*).
+But what a sequence does depends on the symbol at the current position of the tape. That is, the writing, moving and calling behavior of the current configuration will be *conditional* to the symbol currently being scanned.
 
-And, equally importantly, the machine needs to go back to step 1, to repeat the process endlessly. So there's an unstoppable *sequence* at work.
+If we start with the Turing Machine just as it enters a new configuration, we'll start with a conditional: *what is the symbol on the current position of the tape?* Depending on that, the machine will execute one sequence or perhaps other. And when the sequence is complete, the machine will switch to *another configuration*: this can be seen as a call, where the new configuration is the destination. In a nutshell: conditional, sequence, reference.
 
 The way I prefer to picture computation is like a yin yang process, where there's a permanent energy flow that constantly produces change. The change is determined by the current situation of the whole. Given the current situation, a new change takes place. That change modifies the situtation into a new one, different but still very related to the previous one. Based on the new situation, a new change comes in. The process keeps on repeating endlessly.
 
@@ -1164,10 +1164,23 @@ This perspective also connects DIS to life forms through the concept of [dissipa
 
 The other two elements of computation, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition of a sequence over a list or a hash; the essence of errors is conditional jumps through many levels, to avoid the burden of having to check everywhere whether a call was successful or not. Interestingly enough, errors are most useful as stoppers of sequences.
 
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+
+
+
+
+
 A reference is a call to something that doesn't contain further calls. We bring something.
 
+@ destination message
+= response
 
+reference is the destination. the reference doesn't refer to itself.
 
+reference without message is the simplest type of reference, normally understood as a variable. a longer path is just accessing deeper in the reference. but the interesting logic is in how the top-level reference is resolved.
+
+sequence: one after the other; the response can be either the last value or all of them.
+sequence is needed to gather intermediate calls
 
 Before we delve further into loops and errors, let's go back to the first element, logic as a sequence of calls, and understand it in detail. Our understanding of a call, back in pillar 3, is summarized in this structure:
 
@@ -1223,7 +1236,6 @@ These calls from one part of the dataspace to another are usually called *refere
 
 References are to logic like [viruses](https://en.wikipedia.org/wiki/Virus) are to life: they are not fully logic but not inert data either. But it is impossible to think of logic without references. Each destination in a call is a reference to another part of the dataspace.
 
-We define **a call to be a list of calls**. This is no sleight of hand. In a DIS, every call is ultimately implemented by other calls. Almost invariably, a single call triggers multiple downstream calls, cascading down to the tiniest operations at the CPU level. At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers.
 
 Alternative names for what is meant by a *sequence of calls* are *program*, *function*, *flow*, *procedure*, *operation*, *definition*. They all refer to the same concept.
 
@@ -1238,6 +1250,8 @@ see all obstacles. obstacle in logic is syntax and diversity of constructs, that
 = expansion ...
   response
 ```
+
+Single call is (not is like, is) a sequence of one. no-op is a sequence of zero. it's a damper.
 
 A variable substitution can be understood as the most basic form of call. For example:
 
