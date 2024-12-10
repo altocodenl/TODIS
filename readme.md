@@ -1099,21 +1099,21 @@ In the next pillar, we will understand logic, which is what happens between a ca
 
 ### Pillar 4: Logic is what happens between call and response
 
-Armed with the pattern of call and response, we can now explore what happens between one and the other. Any call happening in a DIS will have a [deliberate](https://en.wikipedia.org/wiki/Teleology) response. The purpose of a call is to be transformed into a response. Logic is how this transformation happens.
+Armed with the pattern of call and response, we can now explore what happens between one and the other. Any call happening in a DIS will have a [deliberate](https://en.wikipedia.org/wiki/Teleology) response. The purpose of a call is to become a response. Logic is how this transformation happens.
 
-The original definition of [logic](https://en.wikipedia.org/wiki/Logic) is concerned with correct reasoning. In the context of a DIS, our logic is something rather more basic: given a set of requirements for a certain call, we want to be able to express it in terms of a number of simpler calls. Eventually, those simpler calls become tiny operations at the [CPU level](https://en.wikipedia.org/wiki/Central_processing_unit). At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers. But thanks to that translation, if we have written our calls well, we will have a system that implements them.
+The original definition of [logic](https://en.wikipedia.org/wiki/Logic) is concerned with correct reasoning. In the context of a DIS, logic is something rather more basic: given a purpose for a certain call, we want to be able to express it in terms of a number of simpler calls. Eventually, those simpler calls become tiny operations at the [CPU level](https://en.wikipedia.org/wiki/Central_processing_unit). At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers.
 
-Logic is also usually called *code*, a term which comes from [machine code](https://en.wikipedia.org/wiki/Machine_code), but we'll just call it logic.
+Logic is also usually called *code*, a term which comes from [machine code](https://en.wikipedia.org/wiki/Machine_code) (which is a set of low-level calls that can be made in a computer). But we'll just call this logic, not code.
 
 It is my contention that the main elements of logic, in the context of a DIS, are five:
 
 1. Reference: the destination of a call.
-2. Sequence: the definition of a call.
+2. Sequence: the calls made by a call.
 3. Conditional: the choice between sequences.
 4. Loop: the conditional repetition of a sequence.
 5. Error: a special type of conditional response.
 
-For all of us who are fearful of programming, even those of us who practice it daily, it can be liberating to understand that essentially all logic can be understood with these terms. I will spend the rest of this pillar showing how that is the case.
+For all of us who are fearful of programming, even those of us who practice it daily, it can be liberating to understand that essentially all logic can be understood through these elements. The diverse and generally abstruse syntax of programming languages hides the fact that most logic is based on very few, intuitively understandable elements. I will spend the rest of this pillar showing how that is the case.
 
 The first three elements are essential, [irreducible](https://en.wikipedia.org/wiki/Irreducibility_(mathematics)).
 - Without *reference*, we have no way to represent the destination of a call. If every value in the dataspace refers only to itself, then we cannot establish relationships between parts of the system.
@@ -1147,8 +1147,8 @@ There's always a current *state of mind*, called the *current configuration*. Yo
 
 1. Write something to the tape (or write nothing).
 2. Move the tape to the left or right (or keep it in place).
-3. Change to another state of mind.
-4. Go back to 1.
+3. Change to another state of mind (or sequence).
+4. Go back to step 1.
 
 But what a sequence does depends on the symbol at the current position of the tape. That is, the writing, moving and calling behavior of the current configuration will be *conditional* to the symbol currently being scanned.
 
@@ -1162,93 +1162,149 @@ reality -> change -> new reality -> new change...
 
 This perspective also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
 
-The other two elements of computation, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition of a sequence over a list or a hash; the essence of errors is conditional jumps through many levels, to avoid the burden of having to check everywhere whether a call was successful or not. Interestingly enough, errors are most useful as stoppers of sequences.
+The other two elements of computation, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition of a sequence over a list or a hash; the essence of errors is conditional jumps through many levels, to avoid the burden of having to check each response to see if it is an error or not. Interestingly enough, errors are most useful as stoppers of sequences.
 
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+We'll now go element by element and explain it in more detail.
 
+#### Reference
 
+The simplest type of reference is that which points to a value that contains no calls. For example:
 
+```
+"copy of widgets" @ widgets
+                  = 20
+widgets 20
+```
 
+`copy of widgets` makes a call to `widgets`. `widgets` itself is no more than the value `20`. This has the effect of setting the value of `copy of widgets` also to 20.
 
-A reference is a call to something that doesn't contain further calls. We bring something.
-
-@ destination message
-= response
-
-reference is the destination. the reference doesn't refer to itself.
-
-reference without message is the simplest type of reference, normally understood as a variable. a longer path is just accessing deeper in the reference. but the interesting logic is in how the top-level reference is resolved.
-
-sequence: one after the other; the response can be either the last value or all of them.
-sequence is needed to gather intermediate calls
-
-Before we delve further into loops and errors, let's go back to the first element, logic as a sequence of calls, and understand it in detail. Our understanding of a call, back in pillar 3, is summarized in this structure:
+Now, this type of reference is so simple that it doesn't require a message! If you remember, back in pillar 3, a call is defined by this structure:
 
 ```
 @ destination message
 = response
 ```
 
-What we're concerned with in pillar 4 is the *destination* of the call. How do we *define* a certain *destination* (which is no more than a part of the dataspace) to perform a given sequence of calls?
-
-Earlier we saw a destination that didn't require a definition:
-
-```
-"system 1" value @ widgets
-                 = 100
-           widgets 100
-```
-
-As we can see, `value` is set to 100 because it references `widgets`. `widgets` is not a sequence, it just has the value `100`. This form of call actually doesn't even require a message!
-
-
-first thing after the call is destination! how the system picks that up?
+But when a reference points to a mere value, no message is necessary. If `widgets` is `20`, nothing we can say to it will make it change its value. This is because `widgets` contains no calls. Therefore, for references to parts of the dataspace that do not contain calls, we can have this type of structure:
 
 ```
 @ destination
 = response
 ```
 
-In this case, the response will be the value of the destination. Consider this slightly more involved example:
+If we want to reference a part of the dataspace that is nested, we do need a message.
 
 ```
-
-"system 1" "copy of value" @ value
-                           = 100
-           value @ widgets
-                 = 100
-           widgets 100
+"copy of widgets" @ data widgets
+                  = 20
+data widgets 20
 ```
 
-As in the previous example, `value` references `widgets`, and therefore both have the value 100. `copy of value`, also, by referencing `value`, also has the value 100.
+In the call above, we first reference `data`. The value of `data` is `widgets 20`. But the call is `data widgets`; the message of that call, `widgets`, is what makes the response `20`.
 
-This also works for values that are nested:
+If we add a reference to `copy of widgets`, we will also get the same value.
 
 ```
-my hash 100
-value @ my hash
-      = 100
+"copy of copy" @ "copy of widgets"
+               = 20
+"copy of widgets" @ data widgets
+                  = 20
+data widgets 20
 ```
 
-What happens above is that we consider `@ my` to go out one level and find `my`. Once we find `my`, we see that its value is `hash 100`. But we still have `hash` in our destination, so when we find the value of `hash` inside `my`, we get `100`.
+Things get more interesting when we reference a part of the dataspace that contains calls that do something more than reference another part of the dataspace. For example:
 
-These calls from one part of the dataspace to another are usually called *references* or *variables*. I think that it is best to consider them as calls with destination but without message.
+```
+@ + 1 10
+    2 10
+= 20
+```
 
-References are to logic like [viruses](https://en.wikipedia.org/wiki/Virus) are to life: they are not fully logic but not inert data either. But it is impossible to think of logic without references. Each destination in a call is a reference to another part of the dataspace.
+In the example above, the destination is `+`. Like with `widgets` above, `+` is not just the actual character `+`. Rather, `+` is a reference to another part of the dataspace.
 
+```
++ ...
+twenty @ + 1 10
+           2 10
+       = 20
+```
 
-Alternative names for what is meant by a *sequence of calls* are *program*, *function*, *flow*, *procedure*, *operation*, *definition*. They all refer to the same concept.
+We'll get to the value of `+` (currently represented as `...`) when we explain *sequence*.
 
-The sequence of a call is then *the list of calls that will be made when the call receives a message*. Since every call must receive a message, the sequence is also concerned with sending the right messages to the right calls. For doing this, the sequence uses both the message received by its call, as well as other calls.
+In our framework, what in common parlance usually called *variable reference* and *function invocation* share the same mechanism: a call. It is `@` what transforms the value to its right into a reference.
 
-see all obstacles. obstacle in logic is syntax and diversity of constructs, that mask the basic forms, which are always the same.
+How that reference is *resolved* is a matter of taste. "Resolving a reference" means "how to find its location". For now, we can use the following logic:
+- From the place where the call is made, we go one level up to find that key until we find it.
+- If we can't find it, we respond with an empty string
+
+Here, the reference to `widgets` will go up one level until it finds `widgets`:
+
+```
+hello @ widgets
+      = 20
+widgets 20
+```
+
+Here, the reference to `widgets` will go up three levels until it finds `widgets`:
+
+```
+hello there handsome @ widgets
+                     = 20
+widgets 20
+```
+
+If there are multiple `widgets`, we will reference the closest one:
+
+```
+hello there handsome @ widgets
+                     = 20
+      widgets 20
+widgets 30
+```
+
+Note that the outermost `widgets` wasn't reached!
+
+Similarly, if `widgets` is not reachable by going outside from the call, it is unreachable.
+
+```
+hello @ widgets
+      = ""
+nested widgets 30
+```
+
+#### Sequence
+
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+
+Going back to our formula:
+
+```
+@ destination message
+= response
+```
+
+We have now dealt with *references*, which allow us to find a destination; we have also seen how, in simple cases, references can be turned into values. But what happens when we are referring to a more involved transformation, where other calls happen as a result of the call we are making? Enter sequences.
+
+A sequence is a list of calls. This sequence makes one or more calls, usually employing the message it received as a message for one of the internal calls it makes. The sequence will then respond the value of the last call it made.
+
+Alternative names for what is meant by a *sequence of calls* are *function*, *flow*, *procedure*, *operation*, *definition*. They all refer to the same concept. The mathematical concept of a *function* is mostly concerned with establishing a relationship between a set of messages (inputs) and responses (outputs). Here we'll do the exact opposite and understand what goes inside the metaphorical box.
+
+A good analogy for a sequence is a [recipe], *a set of instructions that describes how to prepare or make something*. That something that we are making is the response, and it is based on the message that the recipe (the call) receives.
+
+```
+cake ...
+"today's cake" @ cake persons 8
+```
+
+- sequence is needed to gather intermediate responses
+
 
 - expanded mode: between = ... and = expansion/response
 
 ```
 @ destination message
-= expansion ...
-  response
+: expansion
+= response
 ```
 
 Single call is (not is like, is) a sequence of one. no-op is a sequence of zero. it's a damper.
