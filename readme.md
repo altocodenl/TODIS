@@ -1113,7 +1113,7 @@ It is my contention that the main elements of logic, in the context of a DIS, ar
 4. Loop: the conditional repetition of a sequence.
 5. Error: a special type of conditional response.
 
-For all of us who are fearful of programming, even those of us who practice it daily, it can be liberating to understand that essentially all logic can be understood through these elements. The diverse and generally abstruse syntax of programming languages hides the fact that most logic is based on very few, intuitively understandable elements. I will spend the rest of this pillar showing how that is the case.
+For all of us who are fearful of programming, even those of us who practice it daily, it can be liberating to discover that essentially all logic can be understood through these elements. The diverse and generally abstruse syntax of programming languages hides the fact that most logic is based on very few, intuitively understandable elements. I will spend the rest of this pillar showing how that is the case.
 
 The first three elements are essential, [irreducible](https://en.wikipedia.org/wiki/Irreducibility_(mathematics)).
 - Without *reference*, we have no way to represent the destination of a call. If every value in the dataspace refers only to itself, then we cannot establish relationships between parts of the system.
@@ -1154,19 +1154,13 @@ But what a sequence does depends on the symbol at the current position of the ta
 
 If we start with the Turing Machine just as it enters a new configuration, we'll start with a conditional: *what is the symbol on the current position of the tape?* Depending on that, the machine will execute one sequence or perhaps other. And when the sequence is complete, the machine will switch to *another configuration*: this can be seen as a call, where the new configuration is the destination. In a nutshell: conditional, sequence, reference.
 
-The way I prefer to picture computation is like a yin yang process, where there's a permanent energy flow that constantly produces change. The change is determined by the current situation of the whole. Given the current situation, a new change takes place. That change modifies the situtation into a new one, different but still very related to the previous one. Based on the new situation, a new change comes in. The process keeps on repeating endlessly.
-
-```
-reality -> change -> new reality -> new change...
-```
-
-This perspective also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
-
 The other two elements of computation, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition of a sequence over a list or a hash; the essence of errors is conditional jumps through many levels, to avoid the burden of having to check each response to see if it is an error or not. Interestingly enough, errors are most useful as stoppers of sequences.
 
 We'll now go element by element and explain it in more detail.
 
 #### Reference
+
+A reference is the destination of a call.
 
 The simplest type of reference is that which points to a value that contains no calls. For example:
 
@@ -1185,7 +1179,7 @@ Now, this type of reference is so simple that it doesn't require a message! If y
 = response
 ```
 
-But when a reference points to a mere value, no message is necessary. If `widgets` is `20`, nothing we can say to it will make it change its value. This is because `widgets` contains no calls. Therefore, for references to parts of the dataspace that do not contain calls, we can have this type of structure:
+But when a reference points to a mere value, no message is necessary. If `widgets` is `20`, nothing we can say to it will make it change its value. This is because `widgets` itself contains no calls, just `20`. Therefore, for references to parts of the dataspace that do not contain calls, we can have this type of structure:
 
 ```
 @ destination
@@ -1212,7 +1206,7 @@ If we add a reference to `copy of widgets`, we will also get the same value.
 data widgets 20
 ```
 
-Things get more interesting when we reference a part of the dataspace that contains calls that do something more than reference another part of the dataspace. For example:
+Things get more interesting when we reference a part of the dataspace that also contains a call.
 
 ```
 @ + 1 10
@@ -1234,8 +1228,8 @@ We'll get to the value of `+` (currently represented as `...`) when we explain *
 In our framework, what in common parlance usually called *variable reference* and *function invocation* share the same mechanism: a call. It is `@` what transforms the value to its right into a reference.
 
 How that reference is *resolved* is a matter of taste. "Resolving a reference" means "how to find its location". For now, we can use the following logic:
-- From the place where the call is made, we go one level up to find that key until we find it.
-- If we can't find it, we respond with an empty string
+- From the place where the call is made, we go one level up (left) and try to find it. If it's not there, we repeat the process of going one more level up to find it.
+- If we have gone all the way to the left and we can't find it, we obtain an empty string.
 
 Here, the reference to `widgets` will go up one level until it finds `widgets`:
 
@@ -1272,91 +1266,85 @@ hello @ widgets
 nested widgets 30
 ```
 
+We have now dealt with *references*, which allow us to find a destination; we have also seen how, in simple cases, references can be turned into values. But what happens when we are referring to a more involved transformation, where other calls happen as a result of the call we are making? Enter sequence.
+
 #### Sequence
+
+A sequence is a *list of calls*. This list of calls is what happens between a call and a response.
+
+Alternative names for a *sequence of calls* are *function*, *flow*, *procedure*, *operation*, *definition*. They all refer to the same concept. The mathematical concept of a *function* is mostly concerned with establishing a relationship between a set of messages (inputs) and responses (outputs). Here we are interested in the calls that happen as a result of a call receiving a certain message.
+
+A faithful analogy can best explain this. Think of a sequence as a recipe. A recipe of the cake is not a cake. Rather, it tells you how you can make a cake. A DIS will give you even more: not only the instructions on how to make the cake, but also the ingredients.
+
+```
+"make cake" 1 @ mix 1 @ chocolate 100
+                    2 @ flour 500
+                    3 @ butter 300
+            2 @ bake degrees 200
+                     what @ 1
+```
+
+In the example above, you can notice that making a cake consists of two steps: mixing ingredients and baking them at 200 degrees (you can also notice that I've never baked a cake). There's two calls made here: `mix` and `bake`. Additionally, there are calls made to `chocolate`, `flour` and `butter` within the `mix` call, presumably to get the ingredients.
+
+We now have a problem, because we don't want those calls to happen when we are writing the sequence. Instead, we want them to happen when another parts of the space calls this sequence. So we need to create a new operator which will "freeze" these calls and only let them happen when the sequence is called. We will use `:`, since it is normally associated with defining something.
+
+```
+"make cake" @ : 1 @ mix 1 @ chocolate 100
+                        2 @ flour 500
+                        3 @ butter 300
+                2 @ bake degrees 200
+                         what @ 1
+```
+
+So `make cake` is not a cake, not even a frozen cake. It is a part of the dataspace that, when called, will respond with a cake.
+
+Now, how do we get a cake when we call `make cake`? We can understand that whatever is responded by `bake`, we will get!
+
+```
+"make cake" @ : 1 @ mix 1 @ chocolate 100
+                        2 @ flour 500
+                        3 @ butter 300
+                2 @ bake degrees 200
+                         what @ 1
+"today's cake" @ "make cake"
+               = "delicious chocolate cake"
+```
+
+More generally: the response of the last call of a sequence will be used as the response of the entire sequence.
+
+A subtle detail: the call to `bake` references `@ 1`. This references to the first element of whatever list can be found outside of the place where that call is. By going a couple of levels to the left, `@ 1` finds whatever is responded by the call to `mix`. So it is perfectly possible (and actually, generally essential) that a call within a sequence can reference responses from previous calls of the sequence.
+
+Another detail: `make cake` doesn't receive a message! It will always return the same cake. What if we wanted to send a message to it, perhaps specifying the amount of people that will eat it?
+
+```
+"make cake" @ : people 1 @ mix 1 @ chocolate @ * 1 @ people
+                                                 2 25
+                               2 @ flour @ * 1 @ people
+                                             2 125
+                               3 @ butter @ * 1 @ people
+                                              2 75
+                       2 @ bake degrees 200
+                                what @ 1
+"today's cake for 8" @ "make cake" 8
+                     = "delicious chocolate cake for eight!"
+```
+
+We just snuck in the name of the message in between `:` and the list. It's a bit terse, but feels better than creating something more longwinded.
+
+We're now ready to see the expansion of the sequence, which is what happens between the call and the response. We'll omit the definition of `make cake` (since we've just provided it) and focus on how `today's cake for 8` comes into existence.
+
+
+
 
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
-Going back to our formula:
+Expansion and computation are the same process.
 
-```
-@ destination message
-= response
-```
+#### Conditional
 
-We have now dealt with *references*, which allow us to find a destination; we have also seen how, in simple cases, references can be turned into values. But what happens when we are referring to a more involved transformation, where other calls happen as a result of the call we are making? Enter sequences.
+A conditional is just a call. But a call that is special because it will not expand all of its contents.
 
-A sequence is a list of calls. This sequence makes one or more calls, usually employing the message it received as a message for one of the internal calls it makes. The sequence will then respond the value of the last call it made.
-
-Alternative names for what is meant by a *sequence of calls* are *function*, *flow*, *procedure*, *operation*, *definition*. They all refer to the same concept. The mathematical concept of a *function* is mostly concerned with establishing a relationship between a set of messages (inputs) and responses (outputs). Here we'll do the exact opposite and understand what goes inside the metaphorical box.
-
-A good analogy for a sequence is a [recipe], *a set of instructions that describes how to prepare or make something*. That something that we are making is the response, and it is based on the message that the recipe (the call) receives.
-
-```
-cake ...
-"today's cake" @ cake persons 8
-```
-
-- sequence is needed to gather intermediate responses
-
-
-- expanded mode: between = ... and = expansion/response
-
-```
-@ destination message
-: expansion
-= response
-```
-
-Single call is (not is like, is) a sequence of one. no-op is a sequence of zero. it's a damper.
-
-A variable substitution can be understood as the most basic form of call. For example:
-
-```
-"copy of widget count" @ "widget count"
-                       = 32
-"widget count" 32
-```
-
-In the example above, `copy of widget count` is simply a reference `widget count`. Since `widget count` is 32, the call is a mere lookup. The reference is resolved by going one level to the left and finding `widget count`, which then yields 32.
-
-`@` is, in essence, a universal call. We'll expand on this later. For now, we can understand that we can reference other parts of the dataspace with calls, using `@`.
-
-Let's now think how we could sequence (define) a very simple call. This call will receive a number and respond with the same number plus 10. We'll put it in the dataspace at the path `plus10`.
-
-```
-plus10 @ + 1 @ message
-           2 10
-```
-
-Note that `plus10` consists of just one call to `+`, passing the `message` it received, plus 10. The response to that call to `+` is then returned as its own response.
-
-We now have two problems!
-
-1. How do we reference the message received by plus10 when it is called? Where is that `@ message` coming from?
-2. We need to make sure that `plus10` is not a call itself, but its sequence. We don't actually want to go fetch `message` right now: only when a call is made to `plus10`.
-
-Let's work on the dataspace until we can solve these problems. First, we can already make a call to `plus10`, to see how we would use it and what we expect from it.
-
-```
-plus10 @ + 1 @ message
-           2 10
-twenty @ plus10 10
-       = 20
-```
-
-`twenty` looks good. Let's focus now on plus10, solving problem #2 first.
-
-```
-plus10 @ define @ + 1 @ message
-                    2 10
-twenty @ plus10 10
-         @ + 1 @ message
-             2 = 10
-         = 20
-       = 20
-```
-
-everything inside the define is frozen, not expanded. everything is expanded when the call happens. no precooking of things, even static ones.
+Returns are necessary only with conditionals! With sequences without conditionals, all the steps are necessary and already in the right order, so all needs to be expanded.
 
 if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data. but it's not control, it's causality. this would also be the case if we had multiple computers.
 
@@ -1370,8 +1358,6 @@ Height of level is determined by looking who calls who. Low level is usually cal
 Levels where you draw lines have sublevels down to a single chip operation.
 
 side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
-
-the definition is the expansion. the expansion is calls becoming more calls, then being responded, then coming back as a response.
 
 A wise man once joked that his troubles playing football amounted to two things. The first was his left leg. The second one, his right leg. In the same way, the problems with programming languages can be reduced to two:
 - The problem with expressions: they are not automatically referenceable from outside of their immediate context. Pillar 3 solves this by embedding computation in the dataspace, making every call and response explicit and accessible.
