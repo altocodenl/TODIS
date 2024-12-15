@@ -924,7 +924,7 @@ Much trimmer. But we have a problem. The above could still be interpreted as jus
 res 20
 ```
 
-But we can make this even leaner by replacing `res` with `=`, which has for centuries been associated to a result. The response to the call is equivalent to its *result*, or its *value*. So this is how we will represent the call and its response:
+But we can make this even leaner by replacing `res` with `=`, which has [for centuries been associated to a result](https://en.wikipedia.org/wiki/Equals_sign). The response to the call is equivalent to its *result*, or its *value*. So this is how we will represent the call and its response:
 
 ```
 @ + 1 10
@@ -1099,7 +1099,7 @@ In the next pillar, we will understand logic, which is what happens between a ca
 
 ### Pillar 4: Logic is what happens between call and response
 
-Armed with the pattern of call and response, we can now explore what happens between one and the other. Any call happening in a DIS will have a [deliberate](https://en.wikipedia.org/wiki/Teleology) response. The purpose of a call is to become a response. Logic is how this transformation happens.
+Armed with the pattern of call and response, we can now explore what happens between one and the other. Any call happening in a DIS will have a [deliberate](https://en.wikipedia.org/wiki/Teleology) response. The purpose of a call is to become a response. Logic is how this transformation happens. In other words, logic is intentional transformation of data.
 
 The original definition of [logic](https://en.wikipedia.org/wiki/Logic) is concerned with correct reasoning. In the context of a DIS, logic is something rather more basic: given a purpose for a certain call, we want to be able to express it in terms of a number of simpler calls. Eventually, those simpler calls become tiny operations at the [CPU level](https://en.wikipedia.org/wiki/Central_processing_unit). At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers.
 
@@ -1160,7 +1160,7 @@ We'll now go element by element and explain it in more detail.
 
 #### Reference
 
-A reference is the destination of a call.
+A reference is the destination of a call. We could think of destinations as [links](https://en.wikipedia.org/wiki/Hyperlink).
 
 The simplest type of reference is that which points to a value that contains no calls. For example:
 
@@ -1185,6 +1185,8 @@ But when a reference points to a mere value, no message is necessary. If `widget
 @ destination
 = response
 ```
+
+Calls without a message are also considered calls.
 
 If we want to reference a part of the dataspace that is nested, we do need a message.
 
@@ -1270,18 +1272,18 @@ We have now dealt with *references*, which allow us to find a destination; we ha
 
 #### Sequence
 
-A sequence is a *list of calls*. This list of calls is what happens between a call and a response.
+A sequence is a *list of calls*. When a sequence is called, this list of calls takes place in order to create the response.
 
-Alternative names for a *sequence of calls* are *function*, *flow*, *procedure*, *operation*, *definition*. They all refer to the same concept. The mathematical concept of a *function* is mostly concerned with establishing a relationship between a set of messages (inputs) and responses (outputs). Here we are interested in the calls that happen as a result of a call receiving a certain message.
+Alternative names for a *sequence of calls* are *function*, *flow*, *procedure*, *operation*, *definition*. They all refer to the same concept. The mathematical concept of a *function* is mostly concerned with establishing a relationship between a set of messages (inputs) and responses (outputs). Here we are interested in the calls inside the sequence that make it possible to respond with a certain value when another value (the message) is received by the call.
 
-A faithful analogy can best explain this. Think of a sequence as a recipe. A recipe of the cake is not a cake. Rather, it tells you how you can make a cake. A DIS will give you even more: not only the instructions on how to make the cake, but also the ingredients.
+A good analogy to illustrate the concept of sequence is a recipe. A recipe of the cake is not a cake. Rather, it tells you how you can make a cake. A DIS will give you even more: not only the instructions on how to make the cake, but also the ingredients.
 
 ```
 "make cake" 1 @ mix 1 @ chocolate 100
                     2 @ flour 500
                     3 @ butter 300
             2 @ bake degrees 200
-                     what @ 1
+                     ingredients @ 1
 ```
 
 In the example above, you can notice that making a cake consists of two steps: mixing ingredients and baking them at 200 degrees (you can also notice that I've never baked a cake). There's two calls made here: `mix` and `bake`. Additionally, there are calls made to `chocolate`, `flour` and `butter` within the `mix` call, presumably to get the ingredients.
@@ -1293,7 +1295,7 @@ We now have a problem, because we don't want those calls to happen when we are w
                         2 @ flour 500
                         3 @ butter 300
                 2 @ bake degrees 200
-                         what @ 1
+                         ingredients @ 1
 ```
 
 So `make cake` is not a cake, not even a frozen cake. It is a part of the dataspace that, when called, will respond with a cake.
@@ -1305,7 +1307,7 @@ Now, how do we get a cake when we call `make cake`? We can understand that whate
                         2 @ flour 500
                         3 @ butter 300
                 2 @ bake degrees 200
-                         what @ 1
+                         ingredients @ 1
 "today's cake" @ "make cake"
                = "delicious chocolate cake"
 ```
@@ -1324,7 +1326,7 @@ Another detail: `make cake` doesn't receive a message! It will always return the
                                3 @ butter @ * 1 @ people
                                               2 75
                        2 @ bake degrees 200
-                                what @ 1
+                                ingredients @ 1
 "today's cake for 8" @ "make cake" 8
                      = "delicious chocolate cake for eight!"
 ```
@@ -1333,16 +1335,57 @@ We just snuck in the name of the message in between `:` and the list. It's a bit
 
 We're now ready to see the expansion of the sequence, which is what happens between the call and the response. We'll omit the definition of `make cake` (since we've just provided it) and focus on how `today's cake for 8` comes into existence.
 
+```
+"make cake" @ : people 1 @ mix 1 @ chocolate @ * 1 @ people
+                                                 2 25
+                               2 @ flour @ * 1 @ people
+                                             2 125
+                               3 @ butter @ * 1 @ people
+                                              2 75
+                       2 @ bake degrees 200
+                                ingredients @ 1
+"today's cake for 8" @ "make cake" 8
+                     : 1 @ mix 1 @ chocolate @ * 1 @ people
+                                                   = 8
+                                                 2 25
+                                             = 200
+                                 = "200 grams of chocolate!"
+                               2 @ flour @ * 1 @ people
+                                               = 8
+                                             2 125
+                                         = 1000
+                                 = "A kilo of flour!"
+                               3 @ butter @ * 1 @ people
+                                                = 8
+                                              2 75
+                                          = 600
+                                 = "600 grams of butter!"
+                         = "A mix of 200g of chocolate, a kilo of flour and 600g of butter!"
+                       2 @ bake degrees 200
+                                ingredients @ 1
+                     = "delicious chocolate cake for eight!"
+```
 
+In the example above, the expansion is the value of `"today's cake for 8" :` (notice the colon at the end). We use the colon for two things: for specifying what a sequence is; and also for showing the expansion of a sequence when it gets called. We use the same symbol because definition and expansion are both sides of the same coin. Definition makes expansion possible, and expansion is what makes definition useful.
 
+No doubt the above is not immediately readable, but consider what it shows:
+- The entire sequence of `make cake` when making the cake for 8 people.
+- The intermediate responses obtained from each of the internal calls.
 
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+Note also what it doesn't show: the expansion of the calls to, say, `chocolate`, `mix` or `bake` (or even `+`). These could be shown if they were deemed relevant to what the user is looking at. There are two things that prevent us from showing the expansion to every single call:
 
-expansions you see until a certain point.
+- Some calls happen on a different system that doesn't share an expansion, but just returns a response. This can happen for either performance reasons or security reasons.
+- The user doesn't care about expanding every call, but rather only those that they want to inspect.
 
-Expansion and computation are the same process.
+A small trick that can help make expansions more readable is to interpret `@ foo` as if `foo` was a link: blue and underlined. A programming environment can provide this facility; when working in a blackboard, the references of calls can be underlined, to avoid writing so many `@`s.
+
+Before we move to conditional, it is a good idea to realize that the expansion of a sequence is equivalent to computation. The nature of computation is sequential, doing one call, minding its response and then making another call.
+
+We now turn to the last essential element of logic, conditional.
 
 #### Conditional
+
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 A conditional is just a call. But a call that is special because it will not expand all of its contents.
 
@@ -1354,27 +1397,29 @@ if we use it at this level, then we need both wait and return value. control is 
 - Higher level languages let you focus on data at a human level.
 - Calls can be self-referential: recursion. Avoid Whitehead and Russell's mistake.
 
+#### Loop
+
+#### Error
+
 on errors: hickey on systems. error values.
-
-Height of level is determined by looking who calls who. Low level is usually called, high level is usually the caller.
-Levels where you draw lines have sublevels down to a single chip operation.
-
-side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
-
-A wise man once joked that his troubles playing football amounted to two things. The first was his left leg. The second one, his right leg. In the same way, the problems with programming languages can be reduced to two:
-- The problem with expressions: they are not automatically referenceable from outside of their immediate context. Pillar 3 solves this by embedding computation in the dataspace, making every call and response explicit and accessible.
-- The problem with statements: they are not data. Pillar 4 addresses this by turning statements into first-class entities within the dataspace, unifying code and data.
-
-not separateness, you choose where to draw the boundaries. example: call to another service with a db, see the three calls. show replacement.
-Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
-
-Explain how computation is causal communication, and that causality has intent.
 
 - Dataspace: access vs control. Open access, use control to determine when to block.
 
-instead of imperative vs procedural: causal. with declarative: you're just making a call that specifies more calls, more high level. But even microcode ,the lowest conceivable level of programming, is also declarative, since it's not actually orchestrating the gates and clocks of the CPU to carry out the operations. Focus on at which level you're working, which is, what is the message that you send, and the response that you receive.
+#### Putting the five elements together
 
-if it's not a value, it's a call. and a call eventually returns a value. it is displayed as hashes with @ and =.
+A wise man once joked that his troubles playing football amounted to two things. The first was his left leg. The second one, his right leg. In the same way, the problems with programming languages could be reduced to two:
+- The problem with [expressions](https://en.wikipedia.org/wiki/Expression_(computer_science)): they are not automatically referenceable from outside of their immediate context. Pillar 3 solves this by embedding computation in the dataspace, making every call and response explicit and accessible.
+- The problem with [statements](https://en.wikipedia.org/wiki/Statement_(computer_science)): they are not data. Pillar 4 addresses this by turning statements into first-class entities within the dataspace, unifying code and data.
+
+The approach we present here also eliminates any distinction between expressions and statements. Both are considered calls, and therefore both have responses.
+
+not separateness, you choose where to draw the boundaries. example: call to another service with a db, see the three calls. show replacement.
+Height of level is determined by looking who calls who. Low level is usually called, high level is usually the caller.
+
+Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
+side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
+
+instead of imperative vs procedural: causal. with declarative: you're just making a call that specifies more calls, more high level. But even microcode ,the lowest conceivable level of programming, is also declarative, since it's not actually orchestrating the gates and clocks of the CPU to carry out the operations. Focus on at which level you're working, which is, what is the message that you send, and the response that you receive.
 
 Let's look at a system that has three parts:
 
@@ -1439,6 +1484,14 @@ no separateness between user and system. shell, unidirectional data flow. there 
 Identity is tackled here, because this is where you can have an entrypoint for humans. Identity as data.
 
 reactivity and the dataspace solve the cache problem. you know what things you want to keep around, and then you keep them updated using the minimum number of operations. problem solved. this is the only good solution to the general problem.
+
+The way I prefer to picture computation is like a yin yang process, where there's a permanent energy flow that constantly produces change. The change is determined by the current situation of the whole. Given the current situation, a new change takes place. That change modifies the situtation into a new one, different but still very related to the previous one. Based on the new situation, a new change comes in. The process keeps on repeating endlessly.
+
+```
+reality -> change -> new reality -> new change...
+```
+
+This perspective also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
 
 ## How to test the (hypo)thesis of this treatise
 
