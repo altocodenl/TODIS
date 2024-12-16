@@ -1231,7 +1231,7 @@ In our framework, what in common parlance usually called *variable reference* an
 
 How that reference is *resolved* is a matter of convention. "Resolving a reference" means "how to find its location". For now, we can use the following logic:
 - From the place where the call is made, we go one level up (left) and try to find it. If it's not there, we repeat the process of going one more level up to find it.
-- If we have gone all the way to the left and we can't find it, we obtain an empty string.
+- If we have gone all the way to the left and we can't find it, we obtain an empty text.
 
 Here, the reference to `widgets` will go up one level until it finds `widgets`:
 
@@ -1273,6 +1273,8 @@ We have now dealt with *references*, which allow us to find a destination; we ha
 #### Sequence
 
 A sequence is a *list of calls*. When a sequence is called, this list of calls takes place in order to create the response.
+
+The concept of sequence, quite wonderfully, works at any level of abstraction. It can describe a large operation in terms of a list of steps that can intuitively be understood sequentially. And it can also describe what a computer does at its lower level: execute one instruction (call) after the other.
 
 Alternative names for a *sequence of calls* are *function*, *flow*, *procedure*, *operation*, *definition*. They all refer to the same concept. The mathematical concept of a *function* is mostly concerned with establishing a relationship between a set of messages (inputs) and responses (outputs). Here we are interested in the calls inside the sequence that make it possible to respond with a certain value when another value (the message) is received by the call.
 
@@ -1381,23 +1383,89 @@ A small trick that can help make expansions more readable is to interpret `@ foo
 
 Before we move to conditional, it is a good idea to realize that the expansion of a sequence is equivalent to computation. The nature of computation is sequential, doing one call, minding its response and then making another call.
 
-We now turn to the last essential element of logic, conditional.
+We now turn to the third and last essential element of logic, conditional.
 
 #### Conditional
 
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+A conditional is just a call. However, it is a special call because, depending on a condition, it will *choose* to expand a sequence depending on a condition.
 
-A conditional is just a call. But a call that is special because it will not expand all of its contents.
+A condition is something essentially binary: it is either yes or no. In traditional programming environments, these values are called `true` and `false`; but we have no room (nor need) for them. We can simply use `1` for yes and `0` for no.
+
+The simplest conditional is one that has both a condition and a sequence. If the condition is true, then the sequence is called.
+
+```
+greeting @ if cond 1
+              do @ "make cake" 8
+                 = "delicious chocolate cake for eight!"
+         = "delicious chocolate cake for eight!"
+```
+
+Note a few things:
+- We use the call `if` to do the conditional.
+- We pass a hash with `cond` (the condition) and `do` (the sequence to call if the condition is true).
+
+Now, the conditional above is a bit silly, because its condition is always set to `1`. This is a bit less silly, particularly if you realize that `party` could change:
+
+```
+greeting @ if cond @ party
+                   = 1
+              do @ "make cake" 8
+         = "delicious chocolate cake for eight!"
+party 1
+```
+
+If `party` was set to `0`, no cake would be made!
+
+```
+greeting @ if cond @ party
+                   = 0
+              do @ "make cake" 8
+         = ""
+party 0
+```
+
+Note that `make cake` was not called! This is precisely why conditionals are essential: they allow us to *not* call a certain sequence.
+
+A second sequence can be passed to `if`, to be called if the condition is *not* met.
+
+```
+greeting @ if cond @ party
+                   = 0
+              do @ "make cake" 8
+              else @ "make random healthy dish" 2
+                   = "A fresh batch of beetroot soup!"
+         = "A fresh batch of beetroot soup!"
+party 0
+```
+
+Conditionals can be nested:
+
+```
+greeting @ if cond @ party
+                   = 0
+              do @ if @ > 1 @ people
+                            = 8
+                          2 4
+                      = 1
+                   do @ "make cake" @ people
+                                    = 8
+                      = "delicious chocolate cake for eight!"
+                   else @ "get more people"
+              else @ "make random healthy dish" 2
+         = "delicious chocolate cake for eight!"
+party 0
+people 8
+```
+
+Notice that we introduced another call, `>`, which compares two values, and responds with either `0` or `1` depending on whether the comparison was successful or not. In the case above, since we have more than four people, we can go ahead and make cake, instead of getting more people to join the party.
+
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 Returns are necessary only with conditionals! With sequences without conditionals, all the steps are necessary and already in the right order, so all needs to be expanded.
 
-if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data. but it's not control, it's causality. this would also be the case if we had multiple computers.
-
-- a list of calls also maps perfectly well to what a computer does.
-- Higher level languages let you focus on data at a human level.
-- Calls can be self-referential: recursion. Avoid Whitehead and Russell's mistake.
-
 #### Loop
+
+- Calls can be self-referential: recursion. Avoid Whitehead and Russell's mistake.
 
 #### Error
 
@@ -1549,6 +1617,8 @@ Control is still key.
 auth as extra info. zero trust as checking the auth credentials with someone you trust. yet, how do you know that someone you trust is there? if https, it's not zero trust. it'd have to be through a key exchange, but what about getting the keys in the first place? you need to trust. if you're in the same place and then you separate, then you had a trust network that then got partitioned.
 
 ### On scaling, consistency and parallelism
+
+if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data. but it's not control, it's causality. this would also be the case if we had multiple computers.
 
 - Distributed and parallel: consistency. Scalability with that assured is trivial (throw more nodes in), except for the "inside api" problem that Hickey points out.
 
