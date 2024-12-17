@@ -1091,7 +1091,7 @@ It is interesting to think that what we normally call an *interface* is really a
 
 In contrast with other conceptual frameworks to express computations, such as [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) or the [actor model](https://en.wikipedia.org/wiki/Actor_model), our framework doesn't consider certain operations (calls) as internal vs external from a global perspective. A call always sees its response as an external process, even if it happens on the same computer and even within the same program. If you zoom out and look at calls that are upstream of other calls, you are lumping the subcalls as part of one response. This is how you abstract the detail into a single value. In this way, the outside or inside only depends of your point of view. This also allows to go beyond the distinction between an event and a primitive process, treating everything to be a call and a response. In other words, in this framework, calls and responses are [fractal](https://en.wikipedia.org/wiki/Fractal) or [self-similar](https://en.wikipedia.org/wiki/Self-similarity). A call triggers a response that is itself made of calls. The advantage of this approach is that it is just simpler, requiring very few concepts and always having the same structure.
 
-This framework also allows us to go beyond the concept of state as a special type of data. If the "system" is a part of the dataspace, the state of the system (or of a subsystem) is also a part of the dataspace. Everything exists within the same dataspace, so the data in the system is indistinguishable (or rather, integrated) with the rest of the system.
+This framework also allows us to go beyond the concept of state as a special type of data. If the "system" is a part of the dataspace, the state of the system (or of a subsystem) is also a part of the dataspace. Everything exists within the same dataspace, so the data in the system is indistinguishable (or rather, integrated) with the rest of the system. Put in another way, the state of our system is [first class](https://en.wikipedia.org/wiki/First-class_citizen) and can therefore be considered to have an identity of its own.
 
 We have covered a lot of ground in this pillar. In a nutshell, we have found that the combination of a call and a response can express data change of any kind, just by using data itself.
 
@@ -1461,7 +1461,18 @@ Notice that we introduced another call, `>`, which compares two values, and resp
 
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
+```
+greeting @ if cond @ "there is cake already"
+                   = 1
+              do @ res ""
+              else @ "make cake" 8
+         = ""
+"there is cake already" 1
+```
+
 Returns are necessary only with conditionals! With sequences without conditionals, all the steps are necessary and already in the right order, so all needs to be expanded.
+
+- early return is to avoid nesting conditionals
 
 #### Loop
 
@@ -1535,6 +1546,9 @@ books orientalism @ http headers Accept application/json
 - store the latest query, or not even. the innermost call doesn't have to be shown. the intermediate ones have to. that's where you have to see where the expansion is made. for http, do it in a list.
 
 examples with machine code, assembler, c, hll and sql.
+
+
+expansion is negative impression
 
 ### Pillar 5: interface is code
 
@@ -1614,7 +1628,13 @@ Logs are data. Keep them. Query them with the same mechanisms.
 It is about data, not about perimeter; it's zero trust but naturally. And kerchoffs principle: no unnecessary layers.
 Control is still key.
 
+- access control through a sequence. certain parts of the dataspace need to have a lock that can only be opened by a certain sequence.
+
 auth as extra info. zero trust as checking the auth credentials with someone you trust. yet, how do you know that someone you trust is there? if https, it's not zero trust. it'd have to be through a key exchange, but what about getting the keys in the first place? you need to trust. if you're in the same place and then you separate, then you had a trust network that then got partitioned.
+
+self protecting structures, first come first serve, gets key that opens it. or projects that only share through apis. these are the two ways of doing it, either blocking some things (internal approach) or allowing some things (external approach).
+
+the difference between internal and external is that in internal you explicitly block, in external you explicitly allow. that's it. because access needs to be there, otherwise nothing could work (if no access is needed, it's a nonproblem, but almost always, access is needed). whether access is a direct memory addressing, inter process communication, http, digitalized smoke signals, it doesn't matter. the core difference is between whitelisting and blacklisting.
 
 ### On scaling, consistency and parallelism
 
@@ -1627,6 +1647,8 @@ understanding CAP: when distributed surface (distributed as amenable to experien
 Consistency is not about enough resources or not, it is about locking a part of the dataspace until an operation is done.
 
 Locks can be implemented as calls on sections of the dataspace.
+
+the problem of parallelism and consistency is making writes ordered, by either waiting or giving an error.
 
 ### On forgetting
 
