@@ -1,5 +1,7 @@
 # The Organization of Digital Information Systems
 
+## [Click here for a Visual Summary](http://altocode.nl/todis/visual)
+
 > "The fundamental problem of communication is that of reproducing at one point either exactly or approximately a message selected at another point." -- [Claude Shannon](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf)
 
 > "To a great extent the act of coding is one of organization." -- [James Hague](https://prog21.dadgum.com/177.html)
@@ -84,7 +86,7 @@ This is quite interesting, because in pre-information economies, it was energy, 
 
 The main contention of this treatise is that *the* way to design simple DIS is to focus on the data that they communicate, transform and store. It is as simple as that.
 
-Designing DIS is already a complex task. However, it becomes exponentially harder when those responsible for building or understanding a system are distracted by everything except the data it handles.
+Designing DIS is already a complex task. However, it becomes exponentially harder when those responsible for building or understanding a system are focused on everything *except* the data it handles.
 
 What is this everything else that holds the attention of makers of DIS? Here are a few examples:
 
@@ -115,7 +117,7 @@ Why not look at data and focus on The List? Normally, nobody asks this question.
 1. There's too much data, so we cannot look directly at it. That's why we have programming languages, programming paradigms, libraries, etc. (The List).
 2. Data is just a detail. We should be focused on bigger, deeper things, not on low-level things.
 
-This entire treatise is built on toppling these two myths with the following (hypo)theses:
+This entire treatise topples these two myths with the following (hypo)theses:
 
 1. Once we decide to look at the data directly, there are ways in which we can abridge it without losing descriptive power. And these ways are much simpler than The List. "These ways" is what fills up the rest of this treatise.
 2. Makers of DIS are in dire need of humility. Simple data is powerful, even exciting. The details matter. They can be joined into harmonious wholes. But to eschew details because they are beneath oneself is *exactly* what's keeping us mired in a mess of our own making.
@@ -300,6 +302,8 @@ body 1 h1 "Hello World!"
      2 p 1 class text
          2 "This is my site"
 ```
+
+Fourdata then is a way to look and describe data in unambiguous terms. With text and a few rules, we are able to describe a very broad range of data. With it, we can directly and unambigously look at a piece of data.
 
 Now, where does this data "go"? That's what we tackle in the next pillar.
 
@@ -1550,7 +1554,7 @@ examples with machine code, assembler, c, hll and sql.
 
 expansion is negative impression
 
-### Pillar 5: interface is code
+### Pillar 5: interface is logic
 
 interface is code, therefore data.
 this is all great for backend, but what about interfaces?
