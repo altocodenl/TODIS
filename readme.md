@@ -254,13 +254,13 @@ request headers Accept application/json
         method GET
         path /api/books/1234
         type HTTP/1.1
-response code "200 OK"
-         headers Content-Length 83
-                 Content-Type application/json
-         body author "Edward Said"
+response body author "Edward Said"
               id 1234
               isbn 978-0-394-42814-7
               title Orientalism
+         code "200 OK"
+         headers Content-Length 83
+                 Content-Type application/json
 ```
 
 **A table in a [relational database](https://en.wikipedia.org/wiki/Relational_database)**
@@ -287,11 +287,11 @@ books 1 author "Edward Said"
 
 ```
 Accumulator 00110100
+ProgramCounter 1100001010101011
+StackPointer 11110111
+StatusRegister 00100101
 X 01100001
 Y 11001010
-StackPointer 11110111
-ProgramCounter 1100001010101011
-StatusRegister 00100101
 ```
 
 **The [HTML](https://en.wikipedia.org/wiki/HTML) of a small page**
@@ -1010,13 +1010,13 @@ Using the call and response model, we can represent any of the following:
                                     method GET
                                     path /api/books/1234
                                     type HTTP/1.1
-                             = code "200 OK"
-                               headers Content-Length 83
-                                       Content-Type application/json
-                               body author "Edward Said"
+                             = body author "Edward Said"
                                     id 1234
                                     isbn 978-0-394-42814-7
                                     title Orientalism
+                               code "200 OK"
+                               headers Content-Length 83
+                                       Content-Type application/json
 ```
 
 5. An [operative system call](https://en.wikipedia.org/wiki/System_call).
@@ -1105,7 +1105,7 @@ In the next pillar, we will understand logic, which is what happens between a ca
 
 Armed with the pattern of call and response, we can now explore what happens between one and the other. Any call happening in a DIS will have a [deliberate](https://en.wikipedia.org/wiki/Teleology) response. The purpose of a call is to become a response. Logic is how this transformation happens. In other words, logic is intentional transformation of data.
 
-The original definition of [logic](https://en.wikipedia.org/wiki/Logic) is concerned with correct reasoning. In the context of a DIS, logic is something rather more basic: given a purpose for a certain call, we want to be able to express it in terms of a number of simpler calls. Eventually, those simpler calls become tiny operations at the [CPU level](https://en.wikipedia.org/wiki/Central_processing_unit). At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers.
+The original definition of [logic](https://en.wikipedia.org/wiki/Logic) is concerned with correct reasoning. In the context of a DIS, logic is something rather more basic: given a purpose for a certain call, we want to be able to express it as a sequence of simpler calls. Eventually, those simpler calls become tiny operations at the [CPU level](https://en.wikipedia.org/wiki/Central_processing_unit). At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers.
 
 Logic is also usually called *code*, a term which comes from [machine code](https://en.wikipedia.org/wiki/Machine_code) (which is a set of low-level calls that can be made in a computer). But we'll just call this logic, not code.
 
@@ -1121,7 +1121,7 @@ For all of us who are fearful of programming, even those of us who practice it d
 
 The first three elements are essential, [irreducible](https://en.wikipedia.org/wiki/Irreducibility_(mathematics)).
 - Without *reference*, we have no way to represent the destination of a call. If every value in the dataspace refers only to itself, then we cannot establish relationships between parts of the system.
-- Without *sequence*, without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On) and allowing a call to make multiple calls (calls which, themselves, will also make further calls) and collecting their responses, our DIS cannot go anywhere.
+- Without *sequence*, without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On) and allowing a call to make multiple calls (calls which, themselves, will also make further calls) and collecting their responses, our DIS cannot produce responses to the calls it receives.
 - Without being able to choose one path or the other based on a *conditional* (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time.
 
 This can be readily seen in the [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which is an universal model of computation.
@@ -1129,11 +1129,11 @@ This can be readily seen in the [Turing Machine](https://en.wikipedia.org/wiki/T
 The machine has an infinite tape divided in discrete pieces. If the tape is infinite in one way, we can represent it with a list, where each key is a position in the tape, and each value is the actual value written in the tape. For example:
 
 ```
-1 ə
-2 ə
-3 0
-4 ""
-5 0
+tape 1 ə
+     2 ə
+     3 0
+     4 ""
+     5 0
 ```
 
 The machine is always scanning one particular part of the tape. We can represent this as its *current position*
@@ -1147,7 +1147,19 @@ tape 1 ə
      5 0
 ```
 
-There's always a current *state of mind*, called the *current configuration*. You could think of this as a *sequence*. Any of these sequences will always do the following:
+There's always a current *state of mind*, called the *current configuration*. You could think of this as a *sequence*.
+
+```
+"current position" 1
+"current state of mind" 𝖇
+tape 1 ə
+     2 ə
+     3 0
+     4 ""
+     5 0
+```
+
+Any of these sequences will always do the following:
 
 1. Write something to the tape (or write nothing).
 2. Move the tape to the left or right (or keep it in place).
@@ -1160,11 +1172,11 @@ If we start with the Turing Machine just as it enters a new configuration, we'll
 
 The other two elements of computation, loops and errors, are niceties much in the same way as a roof and electricity are nice. Not absolutely essential for human life, but making it much easier and extending its capabilities. The essence of loops is conditional repetition of a sequence over a list or a hash; the essence of errors is conditional jumps through many levels, to avoid the burden of having to check each response to see if it is an error or not. Interestingly enough, errors are most useful as stoppers of sequences.
 
-We'll now go element by element and explain it in more detail.
+We'll now go element by element and explain each of them in detail.
 
 #### Reference
 
-A reference is the destination of a call. We could think of destinations as [links](https://en.wikipedia.org/wiki/Hyperlink).
+A reference is the *destination* of a call. We could think of destinations as [links](https://en.wikipedia.org/wiki/Hyperlink).
 
 The simplest type of reference is that which points to a value that contains no calls. For example:
 
@@ -1174,7 +1186,7 @@ The simplest type of reference is that which points to a value that contains no 
 widgets 20
 ```
 
-`copy of widgets` makes a call to `widgets`. `widgets` itself is no more than the value `20`. This has the effect of setting the value of `copy of widgets` also to 20.
+`copy of widgets` makes a call to `widgets`. `widgets` itself is the value `20`. This has the effect of setting the value of `copy of widgets` also to 20.
 
 Now, this type of reference is so simple that it doesn't require a message! If you remember, back in pillar 3, a call is defined by this structure:
 
@@ -1191,6 +1203,14 @@ But when a reference points to a mere value, no message is necessary. If `widget
 ```
 
 Calls without a message are also considered calls.
+
+This would also be the case if we wanted to reference a list or hash.
+
+```
+"copy of hash" @ hash
+               = username deadmau5
+hash username deadmau5
+```
 
 If we want to reference a part of the dataspace that is nested, we do need a message.
 
@@ -1318,7 +1338,7 @@ Now, how do we get a cake when we call `make cake`? We can understand that whate
                = "delicious chocolate cake"
 ```
 
-More generally: the response of the last call of a sequence will be used as the response of the entire sequence.
+More generally: the response to the last call of a sequence will be used as the response of the *entire* sequence.
 
 A subtle detail: the call to `bake` references `@ 1`. This references to the first element of whatever list can be found outside of the place where that call is. By going a couple of levels to the left, `@ 1` finds whatever is responded by the call to `mix`. So it is perfectly possible (and actually, generally essential) that a call within a sequence can reference responses from previous calls of the sequence.
 
@@ -1337,7 +1357,9 @@ Another detail: `make cake` doesn't receive a message! It will always return the
                      = "delicious chocolate cake for eight!"
 ```
 
-We just snuck in the name of the message in between `:` and the list. It's a bit terse, but feels better than creating something more longwinded.
+We just snuck in the name of the message in between `:` and the list. It's a bit terse, but feels better than creating something more longwinded. Having a name allows us to refer to the message received by the outer call from within the sequence.
+
+By the way, the *outer call* is the call that defines the sequence; the *inner call(s)* are those that happen when the sequence is taking place.
 
 We're now ready to see the expansion of the sequence, which is what happens between the call and the response. We'll omit the definition of `make cake` (since we've just provided it) and focus on how `today's cake for 8` comes into existence.
 
@@ -1380,12 +1402,12 @@ No doubt the above is not immediately readable, but consider what it shows:
 
 Note also what it doesn't show: the expansion of the calls to, say, `chocolate`, `mix` or `bake` (or even `+`). These could be shown if they were deemed relevant to what the user is looking at. There are two things that prevent us from showing the expansion to every single call:
 
-- Some calls happen on a different system that doesn't share an expansion, but just returns a response. This can happen for either performance reasons or security reasons.
+- Some calls happen on a different system that doesn't share an expansion, but just return a response. This can happen for either performance reasons or security reasons.
 - The user doesn't care about expanding every call, but rather only those that they want to inspect.
 
 A small trick that can help make expansions more readable is to interpret `@ foo` as if `foo` was a link: blue and underlined. A programming environment can provide this facility; when working in a blackboard, the references of calls can be underlined, to avoid writing so many `@`s.
 
-Before we move to conditional, it is a good idea to realize that the expansion of a sequence is equivalent to computation. The nature of computation is sequential, doing one call, minding its response and then making another call.
+Before we move to conditional, it is a good idea to realize that *the expansion of a sequence is equivalent to computation*. The nature of computation is sequential: making one call, waiting for a response, then making another call.
 
 We now turn to the third and last essential element of logic, conditional.
 
@@ -1393,7 +1415,7 @@ We now turn to the third and last essential element of logic, conditional.
 
 A conditional is just a call. However, it is a special call because, depending on a condition, it will *choose* to expand a sequence depending on a condition.
 
-A condition is something essentially binary: it is either yes or no. In traditional programming environments, these values are called `true` and `false`; but we have no room (nor need) for them. We can simply use `1` for yes and `0` for no.
+A condition is something essentially binary: it is either yes or no. In traditional programming environments, these values are called `true` and `false`; but we have no room (nor need) for them. We can simply use `1` for `true` and `0` for `false`.
 
 The simplest conditional is one that has both a condition and a sequence. If the condition is true, then the sequence is called.
 
@@ -1408,12 +1430,13 @@ Note a few things:
 - We use the call `if` to do the conditional.
 - We pass a hash with `cond` (the condition) and `do` (the sequence to call if the condition is true).
 
-Now, the conditional above is a bit silly, because its condition is always set to `1`. This is a bit less silly, particularly if you realize that `party` could change:
+Now, the conditional above is a bit silly, because its condition is always set to `1`. The following is a bit less silly, particularly if you realize that `party` could change:
 
 ```
 greeting @ if cond @ party
                    = 1
               do @ "make cake" 8
+                 = "delicious chocolate cake for eight!"
          = "delicious chocolate cake for eight!"
 party 1
 ```
@@ -1428,9 +1451,9 @@ greeting @ if cond @ party
 party 0
 ```
 
-Note that `make cake` was not called! This is precisely why conditionals are essential: they allow us to *not* call a certain sequence.
+In the example above, `make cake` was not called! This is precisely why conditionals are essential: they allow us to *not* call a certain sequence.
 
-A second sequence can be passed to `if`, to be called if the condition is *not* met.
+A second sequence can be passed to `if` within the `else` key, to be called if the condition is *not* met.
 
 ```
 greeting @ if cond @ party
@@ -1455,6 +1478,7 @@ greeting @ if cond @ party
                                     = 8
                       = "delicious chocolate cake for eight!"
                    else @ "get more people"
+                 = "delicious chocolate cake for eight!"
               else @ "make random healthy dish" 2
          = "delicious chocolate cake for eight!"
 party 0
@@ -1463,26 +1487,184 @@ people 8
 
 Notice that we introduced another call, `>`, which compares two values, and responds with either `0` or `1` depending on whether the comparison was successful or not. In the case above, since we have more than four people, we can go ahead and make cake, instead of getting more people to join the party.
 
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+A significant problem with the sequence above is that nested conditionals can be hard to read, even by experienced programmers. A way to mitigate this problem is to use the `res` call (short for *respond*), so that we can break out from a sequence without having to wait until the end.
 
 ```
-greeting @ if cond @ "there is cake already"
-                   = 1
-              do @ res ""
-              else @ "make cake" 8
+greeting @ "greeting sequence"
+         : 1 @ if cond @ "there is cake already"
+                       = 1
+                  do @ res ""
+                     = ""
+             = ""
          = ""
+"greeting sequence" @ : 1 @ if cond @ "there is cake already"
+                               do @ res ""
+                        2 @ "make cake" 8
 "there is cake already" 1
 ```
 
-Returns are necessary only with conditionals! With sequences without conditionals, all the steps are necessary and already in the right order, so all needs to be expanded.
+Note what happened above: if the condition is fulfilled (which in this case, it is), we will make the call `res ""`. This makes the entire `greeting` get a response of `""`. The critical bit to note is that the second step of the sequence, `make cake` is not at all expanded! This is what `res` does: it breaks out of the current sequence by responding with a given value.
 
-- early return is to avoid nesting conditionals
+This pattern is most useful to do away with branches that are either shorter or less likely (usually both). In traditional programming, the `res` call is described as a [*return*](https://en.wikipedia.org/wiki/Return_statement), because both data (in this case, empty text) and control (that is, the availability of the system to proceed with the expansion of the next call) are returned to whoever called the sequence. In this treatise, however, we will call this a *response*, because that's simply what it is: we explicitly respond with a value without having to expand the rest of the current sequence.
+
+For those versed in programming, it is interesting to realize that returns are only necessary with conditionals! Neither reference nor sequence require them. Returns make sense only to conditionally break out of a sequence. If a sequence had no conditionals, why would we want to break out early? We could simply delete the calls that we don't need and always have the same definition.
+
+Note that, in our last example, we had to specify the sequence to greeting in another place, "greeting sequence". The reason for this is that we want "greting" to get the response of the *last* call of the sequence; if we had merely put the sequence inside of it, it would have ended up with a list of two empty texts.
+
+Now that we have set the third and last essential logic element, we can go to our first non-essential (yet incredibly useful) element: loops.
 
 #### Loop
 
-- Calls can be self-referential: recursion. Avoid Whitehead and Russell's mistake.
+A loop is a way to conditionally repeat sequences. Loops put together everything we've seen so far: they reference data; they repeat a sequence; and they choose to stop or continue based on a conditional.
+
+The most common kind of loop goes through the elements of a list, performs an operation to each of them, and returns a new list with the responses of each of the calls it did to each of the elements of the list.
+
+```
+@ loop data 1 1
+            2 2
+            3 4
+       do @ "plus ten"
+= 1 11
+  2 12
+  3 14
+```
+
+This type of loop is usually called a [*for loop*](https://en.wikipedia.org/wiki/For_loop), but we'll just call it `loop` since they are the most prevalent type of loop. The meaning of *for* is: *for each* of these elements, do something (that's why others call these *do* loops ).
+
+Now, let's fathom the work that this "non-essential" construct (`loop`) is doing for us:
+- Set a part of the dataspace to keep the count of how many elements of the list we have processed.
+- Set a part of the dataspace to become the list where we accumulate the results of each call to `plus ten`.
+- Start calling `plus ten` for each of the elements in the list.
+- Respond with the result list when the length of the received list equals the length of the list with results.
+
+This simple type of loop will very likely be more than half of the loops you write in your logic. That is worth pondering.
+
+If we add a conditional to the loop, we can make the loop stop before it runs out of data.
+
+```
+count 12
+@ loop cond @ < 1 10
+                2 @ count
+       data 1 9
+            2 3
+            3 6
+       do @ : value @ set count @ + 1 @ count
+                                      @ value
+= 1 9
+  2 3
+```
+
+In the example above, we take a list with three numbers (`9`, `3` and `6`) and start adding them one by one to `count` (which, you must believe me, is `0` when we started):
+- We first check whether count is less than 10; it is, therefore the loop adds first 9 to `count`, making it `9`.
+- We check again that count is less than 10, which it still is. Then the loop adds `3`, making it `12`.
+- At this point, we check again that count is less than 10; but since it is `12`, we're done!
+
+Now, what does the *expansion* of a loop looks like? Let's find out.
+
+```
+count 12
+@ loop cond @ < 1 10
+                2 @ count
+       data 1 9
+            2 3
+            3 6
+       do @ : value @ set count @ + 1 @ count
+                                    2 @ value
+: 1 cond @ < 1 10
+             2 @ count
+               = 0
+    do @ set count @ + 1 @ count
+                         = 0
+                       2 @ value
+                         = 9
+                   = 9
+       = 9
+    value 9
+  2 cond @ < 1 10
+             2 @ count
+               = 9
+    do @ set count @ + 1 @ count
+                         = 9
+                       2 @ value
+                         = 3
+                   = 12
+       = 12
+    value 3
+3 cond @ < 1 10
+           2 @ count
+             = 12
+       = 0
+= 1 9
+  2 3
+```
+
+That's a non-trivial expansion and it is quite long. Note however that it captures all of what happens during the execution of the loop: the first two checks with their corresponding calls to `set`, and the third check which stops the loop.
+
+The second type of loop is usually called a *while loop*. It is less common than the *for* variant, but still pervasive. In essence, what distinguishes the first type of loop from the second is that when we are going through an entire list, we know upfront how many times we will call what's inside `do`, whereas in the second type, we don't and don't particularly care: we'll keep on going until a condition is met.
+
+Other mechanisms can be introduced into `loop`:
+
+1. Filter: returning a list only with values that match a certain condition.
+
+```
+"only evens" @ loop data 1 1
+                         2 2
+                         3 3
+                         4 4
+                    filter @ : value "is even" @ value
+             = 1 2
+               2 4
+```
+
+2. Times: repeat a call a specified amount of times, without even passing in a list.
+
+```
+count 10
+"make it ten" @ loop do @ set count + 1 @ count
+                                      2 1
+                times 10
+```
+
+3. Accumulator: a type of loop that processes a list and combines its elements into a single result by repeatedly applying a call. This call operates on the current accumulated value and the next element in the list.
+
+```
+"gimme ten" @ loop acc @ +
+                   data 1 1
+                        2 2
+                        3 3
+                        4 4
+             = 10
+```
+
+The power of loops, it is worth remembering, stems only from the use of references, sequences and conditionals.
+
+Before we leave loops, it is good to explain *recursive calls*. A [recursive call](https://en.wikipedia.org/wiki/Recursion_(computer_science)) is a call that calls itself. While that sounds paradoxical (and can even be so), most of the time it is a practical and elegant solution.
+
+Take the following humble problem: we have a list with lists inside (some very nested); eventually, the internal values of each list are all numbers; we want to get all of these numbers into a flat list. This can be elegantly accomplished through recursion.
+
+```
+"flat list"
+flatten : value @ if cond @ type type list
+                                 value @ value
+                     do loop data @ value
+                             do @ flatten
+                     else @ add to "flat list"
+                                value @ value
+```
+
+The recursive bit is `do @ flatten`: when `value` is a list, we will loop over its contents, calling `flatten` for each of them. If one of them happens to not be a list, we will add it to "flat list". Otherwise, the recursive (nested) call will deal with the nested list.
+
+This is not an easy concept to master, but once you do, it will repay your efforts in spades. I recommend you work out the logic for yourself.
+
+Recursive calls are like loops in that they combine the repetition of a sequence based on the result of a conditional. However, what recursive calls give us is the ability to express *loops with depth*. The loops we saw before recursion are quite *flat*: they go over a list, or repeat things a number of times, but have no depth. When there are loops within loops, and the level of nestedness is not known beforehand, it is usually best to tackle the problem with recursive calls.
+
+How do recursive calls avoid going on forever? Quite simply, they have to be written in a way that will make them recurse conditionally; and that condition cannot always be true - if it is always true, then we will have an infinite loop. Although two great mathematicians were so concerned with recursion (self-reference) that they forbid it from [their logical system](https://en.wikipedia.org/wiki/Principia_Mathematica), over a century of experience with computing has taught us that recursion is not only possible, but essential.
+
+We'll now tackle the fifth and last logical element: error.
 
 #### Error
+
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 on errors: hickey on systems. error values.
 
@@ -1579,6 +1761,12 @@ reality -> change -> new reality -> new change...
 
 This perspective also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
 
+Go beyond 1:1.
+
+A system is that's who is listening and therefore can respond. Computers are responders, they are waiting on interrupts. This is a general pattern. The idea is to extend it all the way, make it fine grained, rather than batch (batch is responding to a call to start the whole thing).
+
+System is always running. No need to keep it running on a while loop.
+
 ## How to test the (hypo)thesis of this treatise
 
 - inverse relationship between data hiding and system quality and ROI
@@ -1629,6 +1817,8 @@ Logs are data. Keep them. Query them with the same mechanisms.
 
 ### Security
 
+Security is about data in the context of DIS (and perhaps generally).
+
 It is about data, not about perimeter; it's zero trust but naturally. And kerchoffs principle: no unnecessary layers.
 Control is still key.
 
@@ -1643,6 +1833,8 @@ the difference between internal and external is that in internal you explicitly 
 ### On scaling, consistency and parallelism
 
 if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data. but it's not control, it's causality. this would also be the case if we had multiple computers.
+
+inconsistencies are also data and thus can be analyzed from the system, but if you want to be sure, then your queries on that data need to be consistent!
 
 - Distributed and parallel: consistency. Scalability with that assured is trivial (throw more nodes in), except for the "inside api" problem that Hickey points out.
 
