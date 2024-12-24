@@ -1391,6 +1391,7 @@ We're now ready to see the expansion of the sequence, which is what happens betw
                          = "A mix of 200g of chocolate, a kilo of flour and 600g of butter!"
                        2 @ bake degrees 200
                                 ingredients @ 1
+                         = "delicious chocolate cake for eight!"
                      = "delicious chocolate cake for eight!"
 ```
 
@@ -1664,81 +1665,264 @@ We'll now tackle the fifth and last logical element: error.
 
 #### Error
 
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+Errors are data that signal that something has gone wrong. They merit their own (non-essential) logic element because, almost always, when an error occurs we want to stop the sequence that produced it and deal with the error.
 
-on errors: hickey on systems. error values.
+If we go back to the previous example about the cake, what would happen if you couldn't get the butter? If the butter was missing then it doesn't make sense to keep on baking the cake. Possible corrective actions are:
 
-- Dataspace: access vs control. Open access, use control to determine when to block.
+- Replace butter with another ingredient.
+- Stop all cake making until you figure out why no butter is available.
+- Replace the cake with something else entirely.
+
+Now, all of these can be expressed with conditionals. But let's just try to do it and see what happens:
+
+```
+"today's cake for 8" @ "make cake" 8
+                     : 1 @ mix 1 @ chocolate @ * 1 @ people
+                                                   = 8
+                                                 2 25
+                                             = 200
+                                 = "200 grams of chocolate!"
+                               2 @ flour @ * 1 @ people
+                                               = 8
+                                             2 125
+                                         = 1000
+                                 = "A kilo of flour!"
+                               3 @ butter @ * 1 @ people
+                                                = 8
+                                              2 75
+                                          = 600
+                                 = error "No butter available!
+                         = error "An ingredient is missing!"
+                       2 @ bake degrees 200
+                                ingredients @ 1
+                         = error "No ingredients found"
+                     = error "No ingredients found"
+```
+
+Looking at the expansion above, we see that we couldn't get any butter. The shape of the error is a hash with key `error` and value `No butter available!`. This made `mix` fail, which in turn made `bake` fail.
+
+Because we have the expansion available, we can trace back the error back to a lack of butter (if we didn't have the expansion, we'd have to put some logs and try to get cake once again). Still, not only we have to trace the error back, but we also have to write `mix` and `bake` in a way that perform error checking on their inputs. Imagine if `mix` and `bake` didn't do this:
+
+```
+"today's cake for 8" @ "make cake" 8
+                     : 1 @ mix 1 @ chocolate @ * 1 @ people
+                                                   = 8
+                                                 2 25
+                                             = 200
+                                 = "200 grams of chocolate!"
+                               2 @ flour @ * 1 @ people
+                                               = 8
+                                             2 125
+                                         = 1000
+                                 = "A kilo of flour!"
+                               3 @ butter @ * 1 @ people
+                                                = 8
+                                              2 75
+                                          = 600
+                                 = error "No butter available!
+                         = error "The spoon got stuck in the mix!"
+                       2 @ bake degrees 200
+                                ingredients @ 1
+                         = error "The oven caught fire!"
+                     = error "The oven caught fire!"
+```
+
+Not very safe! Now we have an oven on fire, which is a remarkably distinct outcome from the expected one (chocolate cake for eight people).
+
+All of this highlights **the importance of catching errors as soon as possible**.
+
+What if, instead, we did something like this?
+
+```
+"today's cake for 8" stop do @ "make cake" 8
+                             : 1 @ mix 1 @ chocolate @ * 1 @ people
+                                                           = 8
+                                                       2 25
+                                                     = 200
+                                         = "200 grams of chocolate!"
+                                       2 @ flour @ * 1 @ people
+                                                       = 8
+                                                     2 125
+                                                 = 1000
+                                         = "A kilo of flour!"
+                                       3 @ butter @ * 1 @ people
+                                                        = 8
+                                                      2 75
+                                                  = 600
+                                         = error "No butter available!
+                                 = error "No butter available!
+                             = error "No butter available!"
+```
+
+What `stop` does is make the sequence inside `do` stop at the first error. Note that this call affects what happens inside `mix`, which is nested inside `make cake`. When `butter` responds with an error, `mix` stops and responds with that error, and `make cake` does the same thing. This yields the following benefits:
+
+- We get the actual error that generated the problem.
+- No spoons stuck on the mix or ovens on fire.
+
+`stop` is analogous to a supervisor: when things go wrong, they're ready to step up, take responsibility and deal with the problem. Most of the time, however, there's no need for the supervisor to intervene.
+
+We can also pass a `then` sequence to do something with the error.
+
+```
+"today's cake for 8" stop do @ "make cake" 8
+                             : 1 @ mix 1 @ chocolate @ * 1 @ people
+                                                           = 8
+                                                       2 25
+                                                     = 200
+                                         = "200 grams of chocolate!"
+                                       2 @ flour @ * 1 @ people
+                                                       = 8
+                                                     2 125
+                                                 = 1000
+                                         = "A kilo of flour!"
+                                       3 @ butter @ * 1 @ people
+                                                        = 8
+                                                      2 75
+                                                  = 600
+                                         = error "No butter available!
+                                 = error "No butter available!
+                             = error "No butter available!"
+                           then @ : error @ report @ error
+```
+
+We can then call `report` with the actual error received. If for some reason the supervisor interprets that it cannot deal with the error properly and must invoke any supervisor up the chain (to the left of the dataspace) it can do so by simply responding with an error, perhaps the same error it itself received.
+
+The error element saves us a **lot** of conditional logic. In the example above, it saves us from writing every call to check every value to see if it is an error or not, and if it is, to call `report`. If we wanted to make that dynamic, we would have to pass a call to handle the error (`report`) into each of the calls, starting with `make cake`, then `mix` and `bake`, even `chocolate`, `flour` and `butter`! That will quickly turn a beautiful sequence into a brittle eyesore.
+
+You might be thinking: if computesr are so fast and so precise, why do they have errors at all? That's a great question. I believe that we should have an asymptotic attitude towards error (which means that we're working to make them exponentially less likely as time goes by -- more on this in the Quality section below). However, errors are still a reality of DIS, particularly when you interact with less reliable DIS (which will happen a lot of the time).
+
+Rich Hickey [takes it further](https://www.youtube.com/watch?v=ROor6_NGIWU&ab_channel=ClojureTV) and argues that what distinguishes a language from a system is that, in systems, errors are an unavoidable part of the landscape. Probably anyone with any practical experience writing systems will agree with that statement.
+
+And we're done with logic! We have seen the five elements of logic that are present in DIS. These five elements will cover an overwhelming amount of the logic of any DIS you may encounter or write yourself.
 
 #### Putting the five elements together
 
 A wise man once joked that his troubles playing football amounted to two things. The first was his left leg. The second one, his right leg. In the same way, the problems with programming languages could be reduced to two:
-- The problem with [expressions](https://en.wikipedia.org/wiki/Expression_(computer_science)): they are not automatically referenceable from outside of their immediate context. Pillar 3 solves this by embedding computation in the dataspace, making every call and response explicit and accessible.
-- The problem with [statements](https://en.wikipedia.org/wiki/Statement_(computer_science)): they are not data. Pillar 4 addresses this by turning statements into first-class entities within the dataspace, unifying code and data.
+
+1. The problem with [expressions](https://en.wikipedia.org/wiki/Expression_(computer_science)): they are not automatically referenceable from outside of their immediate context. Pillar 3 solves this by embedding computation in the dataspace, making every call and response explicit and accessible. We've seen an example of this with `bake` referring to `1`, which was the response to the previous call to `mix`.
+2. The problem with [statements](https://en.wikipedia.org/wiki/Statement_(computer_science)): they are not data. Pillar 4 addresses this by turning statements into first-class entities within the dataspace, unifying code and data.
 
 The approach we present here also eliminates any distinction between expressions and statements. Both are considered calls, and therefore both have responses.
 
-not separateness, you choose where to draw the boundaries. example: call to another service with a db, see the three calls. show replacement.
-Height of level is determined by looking who calls who. Low level is usually called, high level is usually the caller.
+Let's see how all the elements fit together in the following design:
 
-Read is write. get is a call. consider the data at rest as a queryable surface. there's no data in itself, only data that you can query. a read is a write on the readers end. a transformation that is symmetric in the read and write perhaps.
-side effect as a call that changes what you consider durable data that is somewhere else in the space where the response is written on the caller.
-
-instead of imperative vs procedural: causal. with declarative: you're just making a call that specifies more calls, more high level. But even microcode ,the lowest conceivable level of programming, is also declarative, since it's not actually orchestrating the gates and clocks of the CPU to carry out the operations. Focus on at which level you're working, which is, what is the message that you send, and the response that you receive.
-
-Let's look at a system that has three parts:
-
-- A call to an HTTP endpoint, to get the book orientalism and store it at `books orientalism` in the dataspace.
-- The definition of the HTTP endpoint, stored at `server`.
-- A relational DB.
-
-Let's start by adding the DB, containing just one book.
+- We will make a call to an HTTP endpoint, to get the book orientalism and store it at `books orientalism` in the dataspace.
+- We will define an HTTP endpoint to serve this request by calling a database server.
+- We will also have a database server that can allow us to get data.
 
 ```
-DB books 1 author "Edward Said"
-           id 1234
-           isbn 978-0-394-42814-7
-           title Orientalism
+"copy of orientalism" @ http call method get
+                             path /api/books/1234
+                      = body author "Edward Said"
+                             id 1234
+                             isbn 978-0-394-42814-7
+                             title Orientalism
+                        code 200
+database books 1 author "Edward Said"
+                 id 1234
+                 isbn 978-0-394-42814-7
+                 title Orientalism
+         "get book" @ : id @ loop data @ books
+                                  filter @ : value @ = 1 @ value id
+                                                       2 id
+server @ http listen do @ : request 1 @ database "get book" @ request path 3
+                                    2 @ if cond @ = 1 @ 1
+                                                    2 ""
+                                           do 404 "Book not found"
+                                           else 200 @ 1
+                     method get
+                     path /api/books/*
 ```
 
-Let's then add a server with an HTTP endpoint that will make a call to the DB.
+In the example above, we have:
+
+- `database`, which has both the data and a call to get it.
+- `server`, which defines an HTTP server with one endpoint, `get /api/books/*`. The `*` is a wildcard, which means that anything except a slash (`/`) will be matched.
+- `copy of orientalism` makes an HTTP call to `server` and gets the book. Because it used the right id (`1234`), it will succeed in getting the book. Note it also gets a `200` status code, to indicate that the request was successful (this is a standard part of the HTTP protocol).
+
+An interesting point happens with the expansion. Technically, we could see the expansion to the call to the HTTP server:
 
 ```
-DB books 1 author "Edward Said"
-           id 1234
-           isbn 978-0-394-42814-7
-           title Orientalism
-server @ listen host example.com
-                method GET
-                path /api/books/<id>
-                call @ db 1 "SELECT * from books where id = "
-                          2 @ id
-                     = ""
-       = ""
+"copy of orientalism" @ http call method get
+                             path /api/books/1234
+                      : 1 @ database "get book" @ request path 3
+                                                1234
+                          = author "Edward Said"
+                            id 1234
+                            isbn 978-0-394-42814-7
+                            title Orientalism
+                        2 @ if cond @ = 1 @ 1
+                                          = author "Edward Said"
+                                            id 1234
+                                            isbn 978-0-394-42814-7
+                                            title Orientalism
+                                        2 ""
+                                    = 0
+                               else 200 @ 1
+                                        = author "Edward Said"
+                                          id 1234
+                                          isbn 978-0-394-42814-7
+                                          title Orientalism
+                      = body author "Edward Said"
+                             id 1234
+                             isbn 978-0-394-42814-7
+                             title Orientalism
+                        code 200
 ```
 
-Somewhere in our system
+But that might be too revealing. From a security standpoint, servers shouldn't expose too much of their internals, particularly if those internals carry secrets. For example, if the call from `server` to `database` contained a secret to prove to `database` that `server` is calling, that secret would be revealed in the expansion of the call to `server` to anyone that made a call to it. That would open up the database to anyone!
+
+For that reason, it is best for servers (and databases) to not disclose their expansions, but instead put them in a part of their own dataspace where they store incoming requests and their expansions.
 
 ```
-books orientalism @ http headers Accept application/json
-                                 User-Agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-                        host example.com
-                        method GET
-                        path /api/books/1234
-                        type HTTP/1.1
-                 = PENDING...
+database expansions 2024-12-24T14:15:34.889Z @ "get book" @ loop data @ books
+                                                                 filter @ : value @ = 1 @ value id
+                                                                                        = 1234
+                                                          = author "Edward Said"
+                                                              id 1234
+                                                              isbn 978-0-394-42814-7
+                                                              title Orientalism
+server expansions 2024-12-24T14:15:34.887Z 1 @ database "get book" @ request path 3
+                                                                   1234
+                                             = author "Edward Said"
+                                               id 1234
+                                               isbn 978-0-394-42814-7
+                                               title Orientalism
+                                             2 @ if cond @ = 1 @ 1
+                                                               = author "Edward Said"
+                                                                 id 1234
+                                                                 isbn 978-0-394-42814-7
+                                                                 title Orientalism
+                                                             2 ""
+                                                         = 0
+                                                    else 200 @ 1
+                                                             = author "Edward Said"
+                                                               id 1234
+                                                               isbn 978-0-394-42814-7
+                                                               title Orientalism
 ```
 
-- store the latest query, or not even. the innermost call doesn't have to be shown. the intermediate ones have to. that's where you have to see where the expansion is made. for http, do it in a list.
+Note that each expansion is a hash where each key is a timestamp. This can be invaluable for tracking issues by the maintainers of the database and the server.
 
-examples with machine code, assembler, c, hll and sql.
+If we consider what happened above, the call produces a response in each of the caller (`copy of orientalism` and `server`). It also produces data inside of `server` and `database` (the expansions, that we choose to record).
 
+These expansions are sometimes called [side effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)), because they are considered to be not part of the "main" part of the information flow (which is the book in question, flowing from `database` back to `copy orientalism`). However, I propose that we let go of this distinction: expansions are also data and also happen through calls. What's the "main flow" vs a "side effect" really is in the eye of the beholder. Better to consider it all as calls and responses.
 
-expansion is negative impression
+We can consider these expansions as the [negative](https://en.wikipedia.org/wiki/Negative_(photography)) of the calls through which data flows. They are every bit as important as the final results.
+
+One more heresy before we move to our fifth and final pillar: there is an established practice of distinguishing between [imperative/procedural logic](https://en.wikipedia.org/wiki/Imperative_programming) (which "tells the computer what to do") and [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) (which "tells the computer what you want, leaving the details to the computer"). But where do we draw the distinction between micromanaging and managing the computer? To me, this distinction is fully in the eye of the beholder. Microcode could be seen as a declarative interface to a CPU ("I tell the CPU what operation I want and let the CPU actually manage its own logic gates"). Similarly, a line of a very high level program might be seen as imperative ("make sure that this condition matches"). I propose that we eliminate this distinction and instead focus on tools to create good abstractions: whether they specify the "what" or the "how" is a matter of how you see it. There will always be a "how" always underpining the "what". In other words, the "what" is the interface, the "how" is the implementation. And because they are layered, it makes no sense to call some of them "whats" and some of them "hows".
+
+We're ready to move to our fifth and final pillar: interfaces as logic.
 
 ### Pillar 5: interface is logic
 
-interface is code, therefore data.
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+
+An interface is two things:
+- Something "more" than just text.
+- Something that responds to changes.
+
+interface is logic, therefore data.
 this is all great for backend, but what about interfaces?
 An interface is a way for a human to interact with software - always through hardware.
 interface mapped to state! see the data being displayed and the possible transformations.
@@ -1752,6 +1936,8 @@ no separateness between user and system. shell, unidirectional data flow. there 
 Identity is tackled here, because this is where you can have an entrypoint for humans. Identity as data.
 
 reactivity and the dataspace solve the cache problem. you know what things you want to keep around, and then you keep them updated using the minimum number of operations. problem solved. this is the only good solution to the general problem.
+
+messages! in console: send command, see stdout. in ui: clicking or writing are also messages.
 
 The way I prefer to picture computation is like a yin yang process, where there's a permanent energy flow that constantly produces change. The change is determined by the current situation of the whole. Given the current situation, a new change takes place. That change modifies the situtation into a new one, different but still very related to the previous one. Based on the new situation, a new change comes in. The process keeps on repeating endlessly.
 
