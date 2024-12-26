@@ -136,7 +136,7 @@ This is the central thesis of this treatise. We'll explore now how to make this 
 2. **Single dataspace**. (overcomes having parts of the system floating around instead of being part of one whole picture).
 3. **Call and response** (overcomes the invisibility of how data is transformed inside a DIS).
 4. **Logic is what happens between call and response** (overcomes doubts about the shape of the solution for a clearly specified problem).
-5. **Interface is logic** (overcomes separateness between system and user).
+5. **Interface is a response that makes calls** (overcomes separateness between system and user).
 
 ### Pillar 1: single representation of data
 
@@ -1910,17 +1910,48 @@ These expansions are sometimes called [side effects](https://en.wikipedia.org/wi
 
 We can consider these expansions as the [negative](https://en.wikipedia.org/wiki/Negative_(photography)) of the calls through which data flows. They are every bit as important as the final results.
 
-One more heresy before we move to our fifth and final pillar: there is an established practice of distinguishing between [imperative/procedural logic](https://en.wikipedia.org/wiki/Imperative_programming) (which "tells the computer what to do") and [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) (which "tells the computer what you want, leaving the details to the computer"). But where do we draw the distinction between micromanaging and managing the computer? To me, this distinction is fully in the eye of the beholder. Microcode could be seen as a declarative interface to a CPU ("I tell the CPU what operation I want and let the CPU actually manage its own logic gates"). Similarly, a line of a very high level program might be seen as imperative ("make sure that this condition matches"). I propose that we eliminate this distinction and instead focus on tools to create good abstractions: whether they specify the "what" or the "how" is a matter of how you see it. There will always be a "how" always underpining the "what". In other words, the "what" is the interface, the "how" is the implementation. And because they are layered, it makes no sense to call some of them "whats" and some of them "hows".
+One more heresy before we move to our fifth and final pillar: there is an established practice of distinguishing between [imperative/procedural logic](https://en.wikipedia.org/wiki/Imperative_programming) (which "tells the computer what to do") and [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) (which "tells the computer what you want, leaving the details to the computer"). But where do we draw the distinction between micromanaging the computer and managing the computer? To me, this distinction is squarely in the eye of the beholder. Microcode could be seen as a declarative interface to a CPU ("I tell the CPU what operation I want and let the CPU actually manage its own logic gates"). Similarly, a line of a very high level program might be seen as imperative ("give me all the rows from this database where the creation time is less than three seconds ago"). I propose that we eliminate this distinction and instead focus on tools to create good abstractions: whether they specify the "what" or the "how" is a matter of how you see it. There will always be a "how" always underpining any "what". In other words, the "what" is the interface, the "how" is its implementation. And because they are layered, it makes no sense to call some of them "whats" and some of them "hows".
 
-We're ready to move to our fifth and final pillar: interfaces as logic.
+We're ready to move to our fifth and final pillar: interface as a response that makes calls.
 
-### Pillar 5: interface is logic
+### Pillar 5: interface is a response that makes calls
+
+An [interface](https://en.wikipedia.org/wiki/Interface_(computing)) is generally considered *a boundary between a DIS and a human*, over which they exchange information.
+
+A more general definition of interface considers an interface to be a boundary between any two distinct components of a system. But if a user is considered to be a distinct component of a DIS, then both definitions tell us the same thing.
+
+In very practical terms, what most people refer to with *interface* has two hard requirements:
+
+1. It's more than just plain text (there's tables, colors, images, buttons, menus).
+2. Through them, humans can interact with a DIS.
+
+The nature of this interaction is to both read/receive data and to write/send some data back -- even if that data is sent by clicking once on a button.
+
+How do we fit this view of an interface with our model for DIS?
+
+Our starting point is to understand that what makes that interface is no more and no less than data. Tables, colors, images, buttons and menus are also data. Therefore, an interface can be understood **as a response to a call** that generates an interface.
+
+```
+@ "draw interface"
+= "the interface goes here!"
+```
+
+In the web, for example, every single page that loads in your browser loads up some HTML. Through this HTML (plus a bunch of other things based on it) you can see text, images, tables and buttons in your screen.
 
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
-An interface is two things:
+An interface is three things:
+- what is call, how is sequence underlying it.
 - Something "more" than just text.
 - Something that responds to changes.
+
+No need to distinguish user interfaces from others, we drop #1. But we add #3, reactivity. And this works at every level.
+
+Each call is an interface to its underlying implementation.
+
+Reactivity requires time. We go beyond one moment.
+
+reactivity is going beyond immediate mode in computing.
 
 interface is logic, therefore data.
 this is all great for backend, but what about interfaces?
