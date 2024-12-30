@@ -136,7 +136,7 @@ This is the central thesis of this treatise. We'll explore now how to make this 
 2. **Single dataspace**. (overcomes having parts of the system floating around instead of being part of one whole picture).
 3. **Call and response** (overcomes the invisibility of how data is transformed inside a DIS).
 4. **Logic is what happens between call and response** (overcomes doubts about the shape of the solution for a clearly specified problem).
-5. **Interface is a response that makes calls** (overcomes separateness between system and user).
+5. **Interface is call and response** (overcomes separateness between system and user and between data and time).
 
 ### Pillar 1: single representation of data
 
@@ -1095,6 +1095,8 @@ It is interesting to think that what we normally call an *interface* is really a
 
 In contrast with other conceptual frameworks to express computations, such as [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) or the [actor model](https://en.wikipedia.org/wiki/Actor_model), our framework doesn't consider certain operations (calls) as internal vs external from a global perspective. A call always sees its response as an external process, even if it happens on the same computer and even within the same program. If you zoom out and look at calls that are upstream of other calls, you are lumping the subcalls as part of one response. This is how you abstract the detail into a single value. In this way, the outside or inside only depends of your point of view. This also allows to go beyond the distinction between an event and a primitive process, treating everything to be a call and a response. In other words, in this framework, calls and responses are [fractal](https://en.wikipedia.org/wiki/Fractal) or [self-similar](https://en.wikipedia.org/wiki/Self-similarity). A call triggers a response that is itself made of calls. The advantage of this approach is that it is just simpler, requiring very few concepts and always having the same structure.
 
+In this framework, actors or process can be described in terms of calls. This allows us to have a view of them that is both more flexible and more precise. More flexible because we can choose to draw the boundaries around different calls to define what an actor or process is; and more precise because the actual functioning of actors and processes relies on calls.
+
 This framework also allows us to go beyond the concept of state as a special type of data. If the "system" is a part of the dataspace, the state of the system (or of a subsystem) is also a part of the dataspace. Everything exists within the same dataspace, so the data in the system is indistinguishable (or rather, integrated) with the rest of the system. Put in another way, the state of our system is [first class](https://en.wikipedia.org/wiki/First-class_citizen) and can therefore be considered to have an identity of its own.
 
 We have covered a lot of ground in this pillar. In a nutshell, we have found that the combination of a call and a response can express data change of any kind, just by using data itself.
@@ -1914,55 +1916,80 @@ One more heresy before we move to our fifth and final pillar: there is an establ
 
 We're ready to move to our fifth and final pillar: interface as a response that makes calls.
 
-### Pillar 5: interface is a response that makes calls
+### Pillar 5: interface is call and response
 
-An [interface](https://en.wikipedia.org/wiki/Interface_(computing)) is generally considered *a boundary between a DIS and a human*, over which they exchange information.
+When most people (including DIS experts) are talking about an interface, what they really mean is a *graphical user interface*. This is a good starting point to understand interfaces in general. Colloquially, then, an interface then has two distinguishing features:
 
-A more general definition of interface considers an interface to be a boundary between any two distinct components of a system. But if a user is considered to be a distinct component of a DIS, then both definitions tell us the same thing.
+1. It is meant for human users, not computers.
+2. It displays something *graphical*, which means *not just plain text*: in a graphical interface there are boxes, tables, images, colors, buttons and menus.
 
-In very practical terms, what most people refer to with *interface* has two hard requirements:
+By being graphical in nature, interfaces do two things:
+- Reduce the mental overwhelm induced by glancing at a wall of text.
+- Complement the power of text with the power of other graphical means.
 
-1. It's more than just plain text (there's tables, colors, images, buttons, menus).
-2. Through them, humans can interact with a DIS.
+The last point is best summarized by [Jack Rusher](https://jackrusher.com/strange-loop-2022/), when he reminds us that *the visual cortex exists*. This point is worth remembering: just using text to represent data is not always the best to represent that data; other graphical elements are **not** just handholding. And even some proper handholding can make a great difference.
 
-The nature of this interaction is to both read/receive data and to write/send some data back -- even if that data is sent by clicking once on a button.
+Despite interfaces being made of graphical elements besides text, they can still be represented with text or with zeroes and ones. For example, in modern web applications, all of the interface (with the exception of images) is made with text that represents graphics. Even icons can be written using [SVG](https://en.wikipedia.org/wiki/SVG), which is a textual format.
 
-How do we fit this view of an interface with our model for DIS?
+Now, what can users do with interfaces? If we go back to our original definition of a DIS, we remember it is a system that can do three things: communicate, store and transform data. Interfaces are not suitable for storing data, but indeed they are how users can both **see** data and **send** data.
 
-Our starting point is to understand that what makes that interface is no more and no less than data. Tables, colors, images, buttons and menus are also data. Therefore, an interface can be understood **as a response to a call** that generates an interface.
+Understanding it in terms of call and response, we can see the interface itself as a response. This response allows a user to *see* part of the data of the system. For non-interactive interfaces, that's all there is. But most interfaces also allow users to interact (that is, send data back) to the system. Therefore, these interfaces provide a way for users to *send calls* to the system.
 
 ```
 @ "draw interface"
 = "the interface goes here!"
 ```
 
-In the web, for example, every single page that loads in your browser loads up some HTML. Through this HTML (plus a bunch of other things based on it) you can see text, images, tables and buttons in your screen.
+A very concrete example is an interface that displays a table and has a couple of buttons. The entire interface can be considered as a response to a call, just data that allows the user to see a part of the dataspace. When the user clicks on those buttons, the user is making further calls to the system.
+
+```
+@ click "left button" : @ show "next page"
+```
+
+In more abstract terms, an [interface](https://en.wikipedia.org/wiki/Interface_(computing)) is generally considered *a boundary between a DIS and a human*, over which they exchange information. In our framework, every call is a boundary between two parts of the system. If we consider a user to be part of the system it interacts with, then we lose no precision when we see every interaction as a call.
+
+What is then an interface? We could say that the interface is the combination of a call and its response; whereas the sequence of calls that make the call possible are considered the implementation.
+
+```
+implementation 1 "what transforms a call into a response"
+interface 1 call
+          2 response
+```
+
+In other words: an interface is the call and its message, plus what comes back. What is **not** the interface is the logic behind a call, which transforms the call itself into a response. Each call is an interface to its underlying implementation. And this is the entire point of building calls with calls: they allow us to organize ever larger and more meaningful units of communication and transformation of data.
+
+What is an interface is in the eye of the beholder: a mere ordered list, retrieved from a specific location in the dataspace, can be considered an interface.
+
+If you agree with the above, it's good to pause a minute to understand our departures from tradition:
+
+1. We are doing away with any intrinsic boundary between user and system, considering them both as one. This means that calls vary in their behaviors and in what they respond with, but not in their intrinsic nature. There's no crucial difference between a call to increment a register in a CPU or a call to retrieve an HTML interface. **System calls and user calls are the same**.
+2. There's no distinct general internal or external area. Every call exposes an interface and has its own internal implementation; but that internal representation is also made of calls. Rather than a few blockish components exchanging rays over the network, we have a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with calls being made of calls.
 
 **DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
-An interface is three things:
-- what is call, how is sequence underlying it.
-- Something "more" than just text.
+Despite the break in tradition, many of the best system design decisions of the last fifty years stem from these ideas:
+- Unix not distinguishing between user and system calls.
+- Shells being userland programs.
+- Unidirectional data flow in UIs.
+
+Most of the time, users are the originators of many calls in a system. From the perspective of the computer, when a user initiates an action (like loading up an interface), the initiative (call) belongs to the user. However, this is usually reversed: imagine that the app delivered a notification to the user, which prompted them to then open the app: in that case, the initiative belongs to the computer, and the user's call is just a consequence (do we dare say *implementation*?) of the notification sent by the app.
+
+As of this writing, we have come to expect interfaces not just to be graphical, but also to reflect the current state of the dataspace. If we are staring at an interface for a few seconds, we've come to request that, if that portion of the dataspace we're looking at is updated, our interface *should be updated too*. A concrete example is a table with real-time stock prices.
+
+
+@ is reactive. reactivity comes here. @ is reactive, when the references change, things are re-run. internally this is implemented as a loop over subscribers.
+
 - Something that responds to changes.
 
-No need to distinguish user interfaces from others, we drop #1. But we add #3, reactivity. And this works at every level.
-
-Each call is an interface to its underlying implementation.
-
-Reactivity requires time. We go beyond one moment.
+- Reactivity requires time. We go beyond one moment.
 
 reactivity is going beyond immediate mode in computing.
 
-interface is logic, therefore data.
-this is all great for backend, but what about interfaces?
-An interface is a way for a human to interact with software - always through hardware.
+state is just part of the dataspace.
+
 interface mapped to state! see the data being displayed and the possible transformations.
 
-reactivity comes here. @ is reactive, when the references change, things are re-run. internally this is implemented as a loop over subscribers.
-
-reactivity is no mere gimmick, there's something deeper: autopoiesis. when our perception changes, everything that that perception is based upon also changes in ourselves.
-
-no separateness between user and system. shell, unidirectional data flow. there are sources of change, we distinguish them only in the data they bring. and then we express those changes with the constraints we already set up. and those changes can also change the constraints themselves.
+reactivity is no mere gimmick or superficial convenience, there's something deeper: autopoiesis. when our perception changes, everything that that perception is based upon also changes in ourselves.
 
 Identity is tackled here, because this is where you can have an entrypoint for humans. Identity as data.
 
@@ -1978,7 +2005,7 @@ reality -> change -> new reality -> new change...
 
 This perspective also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
 
-Go beyond 1:1.
+Go beyond 1:1. a call that generates multiple responses.
 
 A system is that's who is listening and therefore can respond. Computers are responders, they are waiting on interrupts. This is a general pattern. The idea is to extend it all the way, make it fine grained, rather than batch (batch is responding to a call to start the whole thing).
 
@@ -2063,7 +2090,7 @@ Locks can be implemented as calls on sections of the dataspace.
 
 the problem of parallelism and consistency is making writes ordered, by either waiting or giving an error.
 
-### On forgetting
+### Forgetting
 
 definition of noise: data that you're better off ignoring.
 
