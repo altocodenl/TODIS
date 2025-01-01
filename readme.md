@@ -1918,7 +1918,7 @@ We're ready to move to our fifth and final pillar: interface as a response that 
 
 ### Pillar 5: interface is call and response
 
-When most people (including DIS experts) are talking about an interface, what they really mean is a *graphical user interface*. This is a good starting point to understand interfaces in general. Colloquially, then, an interface then has two distinguishing features:
+What is an interface? When most people (including DIS experts) talk about an interface, what they really mean is a *graphical user interface*. This is a good starting point to understand interfaces in general. Colloquially, then, an interface then has two distinguishing features:
 
 1. It is meant for human users, not computers.
 2. It displays something *graphical*, which means *not just plain text*: in a graphical interface there are boxes, tables, images, colors, buttons and menus.
@@ -1929,26 +1929,26 @@ By being graphical in nature, interfaces do two things:
 
 The last point is best summarized by [Jack Rusher](https://jackrusher.com/strange-loop-2022/), when he reminds us that *the visual cortex exists*. This point is worth remembering: just using text to represent data is not always the best to represent that data; other graphical elements are **not** just handholding. And even some proper handholding can make a great difference.
 
-Despite interfaces being made of graphical elements besides text, they can still be represented with text or with zeroes and ones. For example, in modern web applications, all of the interface (with the exception of images) is made with text that represents graphics. Even icons can be written using [SVG](https://en.wikipedia.org/wiki/SVG), which is a textual format.
+Despite interfaces being made of graphical elements besides text, they can still be represented with text or with zeroes and ones. For example, in modern web applications, all of the interface (with the exception of images) is created with text that represents graphical elements. Even icons are usually written using [SVG](https://en.wikipedia.org/wiki/SVG), which is a textual format.
 
-Now, what can users do with interfaces? If we go back to our original definition of a DIS, we remember it is a system that can do three things: communicate, store and transform data. Interfaces are not suitable for storing data, but indeed they are how users can both **see** data and **send** data.
+Now, what can users do with interfaces? If we go back to our original definition of a DIS, we remember it is a system that can do three things: communicate, store and transform data. Interfaces are not suitable for storing data, but indeed they are how users can both **see** data and **send** data back to the system.
 
-Understanding it in terms of call and response, we can see the interface itself as a response. This response allows a user to *see* part of the data of the system. For non-interactive interfaces, that's all there is. But most interfaces also allow users to interact (that is, send data back) to the system. Therefore, these interfaces provide a way for users to *send calls* to the system.
+Understanding it in terms of call and response, we can see the interface itself as a response. This response allows a user to *see* part of the data of the system. For non-interactive interfaces, that's all there is. However, most interfaces also allow users to interact (that is, send data back) to the rest of the system. Therefore, these interfaces provide a way for users to *make calls* to the system.
 
 ```
 @ "draw interface"
 = "the interface goes here!"
 ```
 
-A very concrete example is an interface that displays a table and has a couple of buttons. The entire interface can be considered as a response to a call, just data that allows the user to see a part of the dataspace. When the user clicks on those buttons, the user is making further calls to the system.
+A very concrete example is an interface that displays a table and has a couple of buttons. The entire interface can be considered as a response to a call, just data that allows the user to see a part of the dataspace. When the user clicks on one of the buttons, they are making further calls to the system.
 
 ```
 @ click "left button" : @ show "next page"
 ```
 
-In more abstract terms, an [interface](https://en.wikipedia.org/wiki/Interface_(computing)) is generally considered *a boundary between a DIS and a human*, over which they exchange information. In our framework, every call is a boundary between two parts of the system. If we consider a user to be part of the system it interacts with, then we lose no precision when we see every interaction as a call.
+In more abstract terms, an [interface](https://en.wikipedia.org/wiki/Interface_(computing)) is generally considered *a boundary between a DIS and a human*, over which they exchange information. In our framework, every call is a boundary between two parts of the system. If we consider a user to be part of the system it interacts with, we can then say that every interaction between the user and the rest of the system is a call.
 
-What is then an interface? We could say that the interface is the combination of a call and its response; whereas the sequence of calls that make the call possible are considered the implementation.
+What is then an interface? We could say that the interface is the combination of a call and its response; whereas the sequence of calls that make the call possible are considered the *implementation*.
 
 ```
 implementation 1 "what transforms a call into a response"
@@ -1963,101 +1963,140 @@ What is an interface is in the eye of the beholder: a mere ordered list, retriev
 If you agree with the above, it's good to pause a minute to understand our departures from tradition:
 
 1. We are doing away with any intrinsic boundary between user and system, considering them both as one. This means that calls vary in their behaviors and in what they respond with, but not in their intrinsic nature. There's no crucial difference between a call to increment a register in a CPU or a call to retrieve an HTML interface. **System calls and user calls are the same**.
-2. There's no distinct general internal or external area. Every call exposes an interface and has its own internal implementation; but that internal representation is also made of calls. Rather than a few blockish components exchanging rays over the network, we have a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with calls being made of calls.
+2. There's no distinct general internal or external area. Every call exposes an interface and has its own internal implementation; but that internal representation is also made of calls. Rather than a few blockish components exchanging rays of data over the network, we have a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with calls expanding into further calls.
 
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
+Considering any call and response to be an interface liberates us from the burden of having to sharply distinguish "internal" from "external" operations; instead, every call has an external surface (its interface) and its internal surface (its implementation). Through [self-similarity](https://en.wikipedia.org/wiki/Self-similarity), we overcome the separateness between user and system, and more generally between any two parts of our system.
 
-Despite the break in tradition, many of the best system design decisions of the last fifty years stem from these ideas:
-- Unix not distinguishing between user and system calls.
-- Shells being userland programs.
-- Unidirectional data flow in UIs.
+This doesn't mean that users have to work with zeroes and ones, or that every call can be trusted without verification. A self-similar system can still show graphical data and enforce security policies. But that's a matter of the content of those calls, rather than enforced by separateness between user and system, between trusted and untrusted components.
+
+Self-similarity is not a new idea, but it is often forgotten in most design efforts. It is worth remembering some very useful patterns that have come from this idea:
+- Unix treating everything as a file: User and system interactions follow the same read/write interface, maintaining a consistent pattern.
+- Shells as userland programs: A shell operates like any other program, using the same system interfaces it exposes to users.
+- Unidirectional data flow in UIs: The same principles of state updates and data propagation apply at all levels, from individual components to the entire app.
 
 Most of the time, users are the originators of many calls in a system. From the perspective of the computer, when a user initiates an action (like loading up an interface), the initiative (call) belongs to the user. However, this is usually reversed: imagine that the app delivered a notification to the user, which prompted them to then open the app: in that case, the initiative belongs to the computer, and the user's call is just a consequence (do we dare say *implementation*?) of the notification sent by the app.
 
-As of this writing, we have come to expect interfaces not just to be graphical, but also to reflect the current state of the dataspace. If we are staring at an interface for a few seconds, we've come to request that, if that portion of the dataspace we're looking at is updated, our interface *should be updated too*. A concrete example is a table with real-time stock prices.
+Having broken the separation between user and system, we will now attempt to break the separation between time and dataspace.
 
-
-@ is reactive. reactivity comes here. @ is reactive, when the references change, things are re-run. internally this is implemented as a loop over subscribers.
-
-- Something that responds to changes.
-
-- Reactivity requires time. We go beyond one moment.
-
-reactivity is going beyond immediate mode in computing.
-
-state is just part of the dataspace.
-
-interface mapped to state! see the data being displayed and the possible transformations.
-
-reactivity is no mere gimmick or superficial convenience, there's something deeper: autopoiesis. when our perception changes, everything that that perception is based upon also changes in ourselves.
-
-Identity is tackled here, because this is where you can have an entrypoint for humans. Identity as data.
-
-reactivity and the dataspace solve the cache problem. you know what things you want to keep around, and then you keep them updated using the minimum number of operations. problem solved. this is the only good solution to the general problem.
-
-messages! in console: send command, see stdout. in ui: clicking or writing are also messages.
-
-The way I prefer to picture computation is like a yin yang process, where there's a permanent energy flow that constantly produces change. The change is determined by the current situation of the whole. Given the current situation, a new change takes place. That change modifies the situtation into a new one, different but still very related to the previous one. Based on the new situation, a new change comes in. The process keeps on repeating endlessly.
+The roots of DIS, and still its dominant paradigm, is [batch processing](https://en.wikipedia.org/wiki/Batch_processing). Systems are conceived to receive a call, process it and then provide a response. In this paradigm, once a call is made and its response is obtained, no further updates are necessary.
 
 ```
-reality -> change -> new reality -> new change...
+"copy of orientalism" @ http call method get
+                             path /api/books/1234
+                      = body author "Edward Said"
+                             id 1234
+                             isbn 978-0-394-42814-7
+                             title Orientalism
+                        code 200
 ```
 
-This perspective also connects DIS to life forms through the concept of [dissipative structures](https://en.wikipedia.org/wiki/Dissipative_system), but I digress.
+In the batch paradigm, once we get the book, the response will not change. If, for example, the entry for the book is changed in the database after the copy is made, the copy will not be updated.
 
-Go beyond 1:1. a call that generates multiple responses.
+The contrasting paradigm to batching, and the one that we embrace here, is the [reactive paradigm](https://en.wikipedia.org/wiki/Reactive_programming). They were introduced by spreadsheets. Consider the following example:
 
-A system is that's who is listening and therefore can respond. Computers are responders, they are waiting on interrupts. This is a general pattern. The idea is to extend it all the way, make it fine grained, rather than batch (batch is responding to a call to start the whole thing).
+```
+    A      B
+1|  5  |   5  |
+2|     |=A1+B1|
+```
 
-System is always running. No need to keep it running on a while loop.
+Now, what would the value of B2 be? Since it references A1, which is `5`, and B1, which is also `5`, the result will be `10`. Now, if either A1 or B1 change, the value will be updated. This is reactivity! In a batch program, you would have to *re-run* the program to make use of the updated values of A1 and B1.
+
+What a reactive system does is to update the dataspace when a change happens. For example, when A1 is updated, any cell dependent on it will be updated. And what *updated* means is that the call that sums A1 and B1 *will be made again*.
+
+If a cell doesn't directly depend on A1, but on another cell that in turns depend on A1 (like, for example, A2), that cell will also make a call again to get its value when A1 is updated. A reactive system is a system that repeats a calls whenever the destination of the call, or its message, experiences a change.
+
+```
+@ destination message
+= response
+```
+
+To say it one more time: whenever `destination` or `message` change, a call is made again and the response is updated. And if any other part of the dataspace depends on that response, either directly or indirectly, it will also make the call again.
+
+Now, why does this overcome separateness between time and (data)space? Because, in a DIS, what marks the passage of time is changes to data. Systems that are not reactive are plagued with stale data; the dataspace is connected in space, but not time. A reactive system, by repeating calls when change happens, keeps the system connected in time as well as space.
+
+If a given part of the dataspace is a call, then we can say that that part of the dataspace *depends* on both the destination of the call and its message.
+
+```
+location @ destination message
+         = response
+```
+
+In the example above, `location` depends on both `destination` and `message`. If `message` had a reference to another part of the dataspace, `location` would also be dependent on that part of the dataspace too.
+
+If instead of referencing a part of the dataspace, we copied its value, then the dependency would be broken. This is why reference is crucial: because not only it connects its current value with another part of the dataspace: it connects its value with another part of the dataspace for as long as the reference exists.
+
+Some calls, however, have bounded reactivity:
+
+```
+"copy of orientalism" @ http call method get
+                             path /api/books/1234
+                      = body author "Edward Said"
+                             id 1234
+                             isbn 978-0-394-42814-7
+                             title Orientalism
+                        code 200
+```
+
+In the call above, `http` makes a HTTP call over the network. But that call has no way of "knowing" if the HTTP handler on the other end has experienced a change. Thus, it is still possible to have non-reactive calls, particularly when those calls go over certain system boundaries (like another computer). If, however, either the method or the path changed (or even the implementation of `http`), then the call would be repeated.
+
+Reactivity is not just convenient: it allows the system to always stay in-sync with itself. This also happens in biological systems: when a living being perceives a change in their environment, everything that in the being's mind depends on the environment will also react to that change. And if a change takes place internally, that will trigger further changes in the organism. As I understand it, this is the basis of [autopoiesis](https://en.wikipedia.org/wiki/Autopoiesis): self-production.
+
+In practice, reactivity gives us a system where the notion of "running a program" dissolves. A user can construct their system, and the system will respond (react) to changes brought by the user, as well as other parts of the system, as soon as the changes happen.
+
+Reactive systems are much more *alive* than their batch counterparts. Every reference can be understood to be alive, in the sense that it is listening (and reacting) to changes in another part of the system. This means that every reference requires resources to keep it alive; but then again, that's a small price to pay in order to work with a system that shows life (as opposed to systems that are as dead as a [coffin nail](https://steve-yegge.blogspot.com/2007/01/pinocchio-problem.html)).
+
+Reactive systems are always running: they are always ready to receive calls, and to generate further calls if a change happens in a part of the dataspace that is a dependency of another part of the dataspace.
+
+Reactivity can be implemented by tracking what parts of the system depend on other parts of the system, and repeating calls for those parts that are affected by a change. The main concern of the implementation should be to avoid and report circular dependencies which might send the system into a crash.
+
+We can already understand that a single change to the dataspace can trigger multiple calls in its dependencies. This 1:N relationship between a call and all possible calls that might be done in response to that original call, is a feature shared with [event systems](https://en.wikipedia.org/wiki/Event-driven_architecture). It may be even possible to replace event systems with reactive systems, since they share both the 1:n relationship described above, plus the fact that the dependency doesn't care which part of the system depends upon it (this is traditionally described as *loose coupling* but is best understood as an arrow that goes in one direction).
+
+One last point concerning updates: when a new response replaces an old one, a system may still keep around the old value of the response. This is called [version control](https://en.wikipedia.org/wiki/Version_control) and allows users to be able to see a previous state of the system. In other words, version control is time travel in the context of the system. Version control is almost always a great idea; the most challenging part of it is to determine what should be forgotten (deleted), either because of lack of space or because of privacy concerns.
+
+We've come a long way through the last five pillars. Hopefully we have, by now, established a systematic way to look at digital information systems. In the last part of the treatise we will discuss some applications of the theory to specific areas. The core of the treatise, however, is concluded here.
+
+**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 ## How to test the (hypo)thesis of this treatise
 
-- inverse relationship between data hiding and system quality and ROI
+If you've made it this far into the treatise, the best thing you could do is to find out for yourself whether any of it stands the test of reality. If it does, and particularly if it doesn't, I would very much appreciate if you could let me know about your results, privately or publicly.
 
-This is why REST is better than non-REST, why microservices are more tractable than monoliths.
-- Microservices give you more rest. Corba also. Vs rpc; rpc can be represented as data, but less contractual.
-
-
-
-- importance of observability
-- security
+Some possible hypothesis and questions you may consider:
+- When studying an existing sytem or designing a new one: is the design naturally expressible in terms of calls and responses? Does the model allow you to hide and show detail in a practical way?
+- When stuyding design flaws: do these flaws stem from lack of understanding of data flows? Do they emerge as failures of self-similarity?
+- When implementing a system: does the unified dataspace provide an adequate representation of the actual data flows?
+- When running a system: is it practical to consider the logs of the system as an integral part of their data?
 
 ## Applications of the theory
 
 ### Team organization
 
-For creation of general DIS:
-- Any analytically capable person can read and write these data sequences. Focus on analysis and [organizational principles](https://prog21.dadgum.com/177.html). These data sequences define 90-99% of the implementation and its tests. Working on the data sequences directly is the most effective way to create a simple and reliable system.
-- Specialization works for certain areas: interface design, tool making, data science.
+For the creation of a general purpose DIS, any analytically capable person can read and write calls and their logic. The team can be staffed by analytically strong people with a good understand of the problem domain. They should focus on understanding the data flows and establishing [organizational principles](https://prog21.dadgum.com/177.html). Understanding the organization and flow of data defines 90-99% of the implementation and its tests.
+
+Specialization works for certain areas: interface design, tool making, specialized algorithms, data science, AI.
 
 ### Understanding existing systems
 
-- put the dbs first into dataspace: the data itself, and the constraints too
-- capture logs of operation, all inputs and outputs and put them in the space too. see the transitions. feel free to add more logging of the data.
-- use the system for real, eschew unit tests. go with the real thing. unit tests are only useful in highly documented, high quality systems.
-- network analysis to see who's who.
-- go 80/20 rather than all in
-- valuable code is only that that performs nontrivial operations, and can usually be isolated.
-- feed data to an llm to find patterns for you too.
-- to connect systems: see paths as relative.
+- Obtain a dump of all the databases. Convert it to fourdata and put it in a single dataspace.
+- Write constraints, if any, that are present in the data (for example: types of different fields, relationships, possible values or valid ranges). In my experience, these checks cover 90-99% of the constraints: type, equality (or non-equality), range (for numbers), matching a pattern (for texts).
+- Capture logs of the system and use it to see which logs are generated. Add more logging in critical calls to see what goes into them and what comes out of them. Put this data in the dataspace too.
+- Use the system for real, eschew unit tests. Always go with the real thing.
+- In sufficiently complicated systems, perform network analysis to see who's who, and add that information to the logs.
+- Go 80/20 rather than all in: a few calls represent most of the value of the system, or perhaps most of the mystery. Understanding a few core calls well (or a few mysteries) will bring most of the payoff.
+- Valuable code is only that that performs nontrivial operations, and can usually be isolated.
+- Feed data to a LLM to find patterns. Having the data and the logs in an unified dataspace will make this easier.
 
 ### Designing and implementing new systems
 
-- design data at rest
-- design data transitions
-- build up surfaces for those data transitions
-
-from an organizational perspective
-
-- stores: at rest
-- internal calls (inside org): change according to rules
-- external calls (connections): uses calls to change own store, and also uses calls on systems of external orgs
-- interfaces to perform internal calls & external calls
+- Design the data at rest in an unified dataspace.
+- Design the interface of the main calls, using concrete examples of which response is generated by which call + message.
+- Tackle the implementation of the most challenging calls to detect algorithmic issues early.
+- Strictly define and validate the inputs to all of the calls to your system.
 
 ### Running systems
 
-Logs are data. Keep them. Query them with the same mechanisms.
+- Treat logs as data. Keep them in a queryable dataspace.
 
 ### Security
 
@@ -2090,13 +2129,9 @@ Locks can be implemented as calls on sections of the dataspace.
 
 the problem of parallelism and consistency is making writes ordered, by either waiting or giving an error.
 
-### Forgetting
+### The tradeoff trilemma
 
-definition of noise: data that you're better off ignoring.
-
-### Tradeoffs
-
-wait, you have the blockchain trilemma (security, scalability, distribution). That to me maps completely to CAP's consistency, availability (especially with the modified CAP theorem about latency). Perhaps the general pattern is perfection, cost (in time, space and energy) and distribution/resilience. PCR. It is interesting, because it breaks the typical dilemma between quality and cost. It's really about three things, not two.
+you have the blockchain trilemma (security, scalability, distribution). That to me maps completely to CAP's consistency, availability (especially with the modified CAP theorem about latency). Perhaps the general pattern is perfection, cost (in time, space and energy) and distribution/resilience. PCR. It is interesting, because it breaks the typical dilemma between quality and cost. It's really about three things, not two.
 
 ### Quality
 
