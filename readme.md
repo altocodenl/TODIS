@@ -2074,7 +2074,7 @@ Some possible hypothesis and questions you may consider:
 
 For the creation of a general purpose DIS, any analytically capable person can read and write calls and their logic. The team can be staffed by analytically strong people with a good understand of the problem domain. They should focus on understanding the data flows and establishing [organizational principles](https://prog21.dadgum.com/177.html). Understanding the organization and flow of data defines 90-99% of the implementation and its tests.
 
-Specialization works for certain areas: interface design, tool making, specialized algorithms, data science, AI.
+Specialization works for certain areas: interface design, tool making, algorithm selection & implementation, data science, AI.
 
 ### Understanding existing systems
 
@@ -2100,20 +2100,39 @@ Specialization works for certain areas: interface design, tool making, specializ
 
 ### Security
 
-Security is about data in the context of DIS (and perhaps generally).
+From the perspective of this treatise, a secure system shows three qualities:
 
-It is about data, not about perimeter; it's zero trust but naturally. And kerchoffs principle: no unnecessary layers.
-Control is still key.
+1. [Identification & authentication](https://en.wikipedia.org/wiki/Authentication): is able to properly identify someone.
+2. [Authorization](https://en.wikipedia.org/wiki/Authorization): is able to enforce access control so that only those that are allowed to make a call can in fact make it.
+3. [Encryption](https://en.wikipedia.org/wiki/Encryption): sends data over the network in such a way that only the caller can read the response.
 
-- access control through a sequence. certain parts of the dataspace need to have a lock that can only be opened by a certain sequence.
+In other words, a secure system is one that properly perceives identity, makes sure that calls are done by those who are supposed to do them, and makes sure that eavesdropping is not possible.
 
-auth as extra info. zero trust as checking the auth credentials with someone you trust. yet, how do you know that someone you trust is there? if https, it's not zero trust. it'd have to be through a key exchange, but what about getting the keys in the first place? you need to trust. if you're in the same place and then you separate, then you had a trust network that then got partitioned.
+At the time of writing, encryption is generally provided; all that system designers need to do is to make sure that encryption is being used.
 
-self protecting structures, first come first serve, gets key that opens it. or projects that only share through apis. these are the two ways of doing it, either blocking some things (internal approach) or allowing some things (external approach).
+Concerning the first two points, the crucial fact is to understand that data concerning users and permissions *can be part of the dataspace*. Generally, this is not the case, which is a source of great inefficiency and even outright security issues. Consider both users and permissions as data; the part of the dataspace on which they reside must, naturally, be very restricted.
 
-the difference between internal and external is that in internal you explicitly block, in external you explicitly allow. that's it. because access needs to be there, otherwise nothing could work (if no access is needed, it's a nonproblem, but almost always, access is needed). whether access is a direct memory addressing, inter process communication, http, digitalized smoke signals, it doesn't matter. the core difference is between whitelisting and blacklisting.
+In Pillar 5 we have attempted to break away from a model that separates the internal from the external and the user from the system. We can do the same with security, by abandoning security perimeters and moving to a [zero trust architecture](https://en.wikipedia.org/wiki/Zero_trust_architecture). Essentially, what this means is that every call checks for the identity and permissions of who makes the call. For any non-public call, authentication and authorization will be the first thing that the implementation does.
+
+There are two objections to this type of design: performance and complexity. The performance impact is small and should not be a concern if lookups are done on a database that is fast enough. The complexity impact can be minimized by defining a single call that makes the authentication and authorization checks. Said call can "wrap" the other calls.
+
+Interestingly enough, if we want to maintain zero trust, the internal calls originating from our system as a result from an external call can also send authentication and authorization information. This is not always necessary or desirable, but at least considering the possibility can significantly improve the security of the system, because then we leave behind the notion of being "inside". This treats security in a self-similar way, with every call potentially checking for identity and authorization.
+
+As a North Star, it is worth upholding the [Kerckhoffs's principle](https://en.wikipedia.org/wiki/Kerckhoffs%27s_principle): don't rely on obscurity to protect your system. Instead, build security upon a clean, consistent design and solid cryptographic primitives.
 
 ### On scaling, consistency and parallelism
+
+Consistency vs parallelism.
+
+Partition vs latency, just a continuum. Cause of unreachability does not matter for the overall design.
+
+problems of multithreading or of partitioning are the same.
+
+triviality of scaling up if you don't have to maintain consistency, and the sheer power of computers nowadays. fears of scaling are overblown, fears of inconsistency are underestimated.
+
+distributed, strict serialization is hard. only spanner has done it.
+
+Consistency is about serialization.
 
 if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data. but it's not control, it's causality. this would also be the case if we had multiple computers.
 
