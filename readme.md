@@ -2170,6 +2170,8 @@ What we are facing here is a *consistency* issue. We have logic that is correct 
 
 Interestingly enough, adding more space (memory), even if distributed across multiple geographical locations, doesn't create consistency issues if you are doing things one at a time. But, since memory in disparate geographical locations can only be accessed by processors at the very same location, in practice increasing the amount of processors, and therefore we have the same problem.
 
+Also interestingly enough, systems that are in a single computer but have multiple processors have the same problem, even if they don't have memory in different geographical locations. The problem of consistency or parallelism is not related with splitting a system in space.
+
 How could we tackle this problem? In my view, there are only two solutions.
 
 1. We could restrict the system to process transactions involving a certain account one at a time. Whether this is achieved by [queues](https://en.wikipedia.org/wiki/Queue_(abstract_data_type)), [locks](https://en.wikipedia.org/wiki/Lock_(computer_science)), [database transactions](https://en.wikipedia.org/wiki/Database_transaction) or [consensus algorithms](https://en.wikipedia.org/wiki/Consensus_(computer_science)), the upshot is the same: one calls need to wait for the other. This is choosing **consistency over performance**.
