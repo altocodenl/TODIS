@@ -2120,33 +2120,71 @@ Interestingly enough, if we want to maintain zero trust, the internal calls orig
 
 As a North Star, it is worth upholding the [Kerckhoffs's principle](https://en.wikipedia.org/wiki/Kerckhoffs%27s_principle): don't rely on obscurity to protect your system. Instead, build security upon a clean, consistent design and solid cryptographic primitives.
 
-### On scaling, consistency and parallelism
+### Scaling: consistency or performance
 
-Consistency vs parallelism.
+[Scaling](https://en.wikipedia.org/wiki/Scalability) a system is the act of adding more resources (memory and processors) to it, while keeping the system *correct*.
 
-Partition vs latency, just a continuum. Cause of unreachability does not matter for the overall design.
+Adding hardware resources, in itself, is now very easy thanks to 1) the unbelievable size and speed of modern computers; 2) cloud providers which allow you to hire more resources on demand.
 
-problems of multithreading or of partitioning are the same.
+What is still hard about scaling is maintaining the correctness of the system when you scale it. This is the core problem of scaling.
 
-triviality of scaling up if you don't have to maintain consistency, and the sheer power of computers nowadays. fears of scaling are overblown, fears of inconsistency are underestimated.
+Why do we need to scale a system, in the first place? We only need to scale a system if:
 
-distributed, strict serialization is hard. only spanner has done it.
+1. We need to store more data in it: if we don't have enough capacity to store the data, we can simply add more memory.
+2. We want to improve the system's resilience: if we have our data in multiple computers, if one of those computer fails, we will still have multiple copies. This reduces the odds of losing data. It also reduces the odds of a call getting an error instead of a proper response.
+3. We have to respond to more calls without the responses taking longer: we can add processors to handle calls **in parallel**.
 
-Consistency is about serialization.
+Adding more memory, even when geographically distributed, is not challenging. As long as there is a design that puts every part of that new memory in the dataspace, the system will keep on working as it scales.
 
-if we use it at this level, then we need both wait and return value. control is the wait, the return value is the data. but it's not control, it's causality. this would also be the case if we had multiple computers.
+Point 3 above needs more explanation: imagine a system that can only do one thing at a time. This means that it can only respond to one call at a time; any other calls that come in have to be queued. Once the call currently being processed is responded, then the next call from the queue will be attended to. In systems with many concurrent users, this wait for the previous call can grow unacceptably. Any system that has to support multiple users, or a system that has one call that takes a very long time, will benefit from **parallel processing**.
 
-inconsistencies are also data and thus can be analyzed from the system, but if you want to be sure, then your queries on that data need to be consistent!
+A system that processes things in parallel is a system that *does multiple things at the same time*. In the context of scaling, this means that there are multiple processors responding to multiple calls at the same time.
 
-- Distributed and parallel: consistency. Scalability with that assured is trivial (throw more nodes in), except for the "inside api" problem that Hickey points out.
+The problem with a system that does multiple things at the same time is that, by doing so, it can yield incorrect responses. Consider the following system:
 
-understanding CAP: when distributed surface (distributed as amenable to experiencing partitioning) receives data, it either rejects (rejection as the lack of upating and also reading, indicating that that's not data) and presents/maintains consistency, vs remains available and has either temporary or permanent inconsistency. consistent system, in a partition does not present or update state, only stores it.
+- We have a system with bank accounts.
+- Money can be transferred from one account to another.
+- No bank account may have a negative amount.
 
-Consistency is not about enough resources or not, it is about locking a part of the dataspace until an operation is done.
+Now, the call for transferring money could look something like this:
 
-Locks can be implemented as calls on sections of the dataspace.
+```
+transfer : m 1 @ if cond < 1 @ m from
+                           2 @ m amount
+                    do res error "Insufficient funds"
+             2 @ set @ m to @ + 1 @ m to
+                                2 @ m amount
+             3 @ set @ m from @ - 1 @ m from
+                                  2 @ m amount
+```
 
-the problem of parallelism and consistency is making writes ordered, by either waiting or giving an error.
+In other words, we first check if the source account has enough funds. If it does, we add the amount to the target account and then withdraw it from the source account.
+
+If this system does one thing at a time, the logic of `transfer` is correct. What would happen, however, if two calls for transferring money from the same account happened at the same time, and there was not enough money to cover them both?
+
+If the calls happened at the same time, it could be perfectly possible that both transactions went through; more specifically, if the second transaction expanded call `1` (the conditional) before the first transaction expanded call `3` (the withdrawal), then we'd end up with a negative amount of money in the source account!
+
+If we reshuffle the logic so that the withdrawal comes before the deposit, we might reduce the chance of an inconsistency, but not altogether eliminate it. Since calls don't happen instantly, no matter how fast they are, if our system does more than one thing at a time, we will encounter this issue.
+
+What we are facing here is a *consistency* issue. We have logic that is correct if things happen one at a time, but that stops being correct if a specific set of parallel calls takes place.
+
+Interestingly enough, adding more space (memory), even if distributed across multiple geographical locations, doesn't create consistency issues if you are doing things one at a time. But, since memory in disparate geographical locations can only be accessed by processors at the very same location, in practice increasing the amount of processors, and therefore we have the same problem.
+
+How could we tackle this problem? In my view, there are only two solutions.
+
+1. We could restrict the system to process transactions involving a certain account one at a time. Whether this is achieved by [queues](https://en.wikipedia.org/wiki/Queue_(abstract_data_type)), [locks](https://en.wikipedia.org/wiki/Lock_(computer_science)), [database transactions](https://en.wikipedia.org/wiki/Database_transaction) or [consensus algorithms](https://en.wikipedia.org/wiki/Consensus_(computer_science)), the upshot is the same: one calls need to wait for the other. This is choosing **consistency over performance**.
+2. We could just let transactions happen as quickly as possible, and report and fix consistency issues when we notice them. For example, in the example above, we could let `transfer` check if `@ m from` has now a negative balance, and if it does so, perform corrective actions or report the problem. This is choosing **performance over consistency**.
+
+If consistency is chosen over performance, the challenge of scaling consists of figuring out how to let multiple calls happen at the same time while forcing them to wait as little as possible for other calls. Calls that are completely independent from each other can happen at the same time; calls that are not should be expanded one at a time.
+
+If performance is chosen over consistency, the challenge of scaling consists of minimizing inconsistencies by adding checks and corrective actions in our system.
+
+While parallelism is not the only cause of consistency failures, it is a very common one, as well as the hardest to eliminate. Other sources of data inconsistency can be:
+
+1. Outright errors in logic.
+2. Not checking for errors in multi-step sequences. For example, if the `+` operation fails when depositing funds but we still withdraw funds from the source account, the bank will lose money.
+
+I prefer consistency over performance for the reason that a consistent system is easier to reason about. However, in many systems, loss of consistency might be bounded or negligible, and performance extremely important.
 
 ### The tradeoff trilemma
 
