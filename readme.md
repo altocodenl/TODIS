@@ -12,9 +12,15 @@ We currently live in the [Information Age](https://en.wikipedia.org/wiki/Informa
 
 Our digital world is run by **digital information systems**. Digital information systems (DIS) are what we use when we interact with a digital device connected to the internet, such as as a smartphone or computer.
 
-The purpose of this treatise is to provide a novel and systematic way to understand DIS. Through this novel perspective, it should be much easier to understand existing DIS, as well as designing, implementing and operating new ones.
+The purpose of this treatise is to provide a novel and systematic way to understand DIS. The goal is to provide a coherent perspective to make it easier to understand existing DIS, as well as designing, implementing and operating new ones.
 
-We call DIS by many names: apps, (web)pages, services, websites, programs, even servers. Unless you are an expert, they can blend into each other. What is clear about them is that these systems are:
+My hypothesis, which I'm actively testing as of the time of writing, is that the approach presented here can increase the speed of development of a DIS by an order of magnitude (~10x), while having very significant improvements (50-200%) in quality and the value of its features. The success or failure of the perspective presented here should be measured by whether they bring *at least* a 10x improvement to the speed, quality and value delivered by a team understanding an existing DIS or producing a new DIS.
+
+My hope is that, by making DIS radically easier to understand and implement, more humans will be empowered to bring their best to the world.
+
+## What is a DIS?
+
+We call a DIS by many names: apps, (web)pages, services, websites, programs, even servers. Unless you are an expert, they can blend into each other. What is clear about them is that these systems are:
 
 - **digital**: you need a phone or computer to interact with them.
 - **interconnected**: you need an internet connection to access them.
@@ -22,11 +28,7 @@ We call DIS by many names: apps, (web)pages, services, websites, programs, even 
 
 A fast-growing minority is tasked with designing, implementing and operating DIS. This is challenging work. For makers of information systems, the main challenge is also to make sense of the systems they interact with, and also of the systems that they create themselves.
 
-My hypothesis, which I'm actively testing as of the time of writing, is that the approach presented here can increase the speed of development of a DIS by an order of magnitude (~10x), while having very significant improvements (50-200%) in quality and the value of its features. The success or failure of these tools should be measured by whether they bring *at least* a 10x improvement to the speed, quality and value delivered by a team producing a DIS.
-
 The main challenge posed by an information society is to make sense of it. The information that makes up our digital world is vast and grows and changes at a vertiginous rate.
-
-My hope is that, by making DIS radically easier to understand and implement, more humans will be empowered to bring their best to the world.
 
 ## Information as data
 
@@ -1934,7 +1936,7 @@ We can consider these expansions as the [negative](https://en.wikipedia.org/wiki
 
 One more heresy before we move to our fifth and final pillar: there is an established practice of distinguishing between [imperative/procedural logic](https://en.wikipedia.org/wiki/Imperative_programming) (which "tells the computer what to do") and [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) (which "tells the computer what you want, leaving the details to the computer"). But where do we draw the distinction between micromanaging the computer and managing the computer? To me, this distinction is squarely in the eye of the beholder. Microcode could be seen as a declarative interface to a CPU ("I tell the CPU what operation I want and let the CPU actually manage its own logic gates"). Similarly, a line of a very high level program might be seen as imperative ("give me all the rows from this database where the creation time is less than three seconds ago"). I propose that we eliminate this distinction and instead focus on tools to create good abstractions: whether they specify the "what" or the "how" is a matter of how you see it. There will always be a "how" always underpining any "what". In other words, the "what" is the interface, the "how" is its implementation. And because they are layered, it makes no sense to call some of them "whats" and some of them "hows".
 
-We're ready to move to our fifth and final pillar: interface as a response that makes calls.
+We're ready to move to our fifth and final pillar: interface as call and response.
 
 ### Pillar 5: interface is call and response
 
@@ -2012,7 +2014,7 @@ The roots of DIS, and still its dominant paradigm, is [batch processing](https:/
 
 In the batch paradigm, once we get the book, the response will not change. If, for example, the entry for the book is changed in the database after the copy is made, the copy will not be updated.
 
-The contrasting paradigm to batching, and the one that we embrace here, is the [reactive paradigm](https://en.wikipedia.org/wiki/Reactive_programming). They were introduced by spreadsheets. Consider the following example:
+The contrasting paradigm to batching, and the one that we embrace here, is the [reactive paradigm](https://en.wikipedia.org/wiki/Reactive_programming). This paradigm was introduced by electronic spreadsheets. Consider the following example:
 
 ```
     A      B
@@ -2075,8 +2077,6 @@ We can already understand that a single change to the dataspace can trigger mult
 One last point concerning updates: when a new response replaces an old one, a system may still keep around the old value of the response. This is called [version control](https://en.wikipedia.org/wiki/Version_control) and allows users to be able to see a previous state of the system. In other words, version control is time travel in the context of the system. Version control is almost always a great idea; the most challenging part of it is to determine what should be forgotten (deleted), either because of lack of space or because of privacy concerns.
 
 We've come a long way through the last five pillars. Hopefully we have, by now, established a systematic way to look at digital information systems. In the last part of the treatise we will discuss some applications of the theory to specific areas. The core of the treatise, however, is concluded here.
-
-**DEAR READER: this treatise is in its [Hadean stage](https://en.wikipedia.org/wiki/Hadean); everything below this message has to undergo intense transformations to achieve a more stable shape. Below are very roughly sketched areas. They are quite unreadable. If they don't make sense to you, it's likely because they don't make sense at all, yet.**
 
 ## How to test the (hypo)thesis of this treatise
 
@@ -2216,23 +2216,32 @@ While parallelism is not the only cause of consistency failures, it is a very co
 
 I prefer consistency over performance for the reason that a consistent system is easier to reason about. However, in many systems, loss of consistency might be bounded or negligible, and performance extremely important. The problem will often hint at the solution.
 
-### Quality
+### On manufacturing and waste
 
-By considering data, the substance that both makes and justifies information systems, we can now apply principles used for material manufacturing to data.
-Considering informati
+If we consider that the value of a DIS is in the data flows it enables, and we consider data to be akin to a physical object (rather than inmaterial), it becomes possible to apply concepts of manufacturing to the development and improvement of DIS.
 
-Implementing the Toyota Production System
-- autoactivation
-- flow backwards, with reactive
+An extremely fruitful school of thought is the one spearheaded by [Taiichi Ohno](https://en.wikipedia.org/wiki/Taiichi_Ohno) at [Toyota](https://en.wikipedia.org/wiki/Toyota_Production_System). Inspired by earlier work by Henry Ford and W. Edwards Deming, he developed principles of manufacturing that leapfrogged the quality and cost of processes by a large factor.
 
-muri & mura as redraws that only hurt performance or also as inconsistencies (defects), respectively. muri is performance waste, mura is inconsistency.
+These ideas are usually associated with the notion of quality, leanness (doing more with less), kaizen (constant improvement), just-in-time, or kanban. My interpretation of Ohno's own view is that he looked for (and found) principles that would *elminate waste* in the process; in fact, the art of process design is to iteratively reach a process that wastes as little as possible to accomplish the result it intends.
 
-testing
-- convergence to mathematical proof
-- to generate, you must understand the order of validations.
-- see errors as valid outputs, validate all the way.
+Ohno's categorization of the Seven Wastes can be fruitfully applied to DIS, once we consider that what's flowing in the system is data:
 
-Simple systems are amenable to proof.
+1. Delay, waiting or time spent in a queue with no value being added
+2. Producing more than you need
+3. Over processing or undertaking non-value added activity
+4. Transportation
+5. Unnecessary movement or motion
+6. Inventory
+7. Defects in the Product
+
+The same goes for the two main principles of Ohno's system:
+
+1. [Autonomation/jidoka](https://en.wikipedia.org/wiki/Autonomation): stopping the process when an error is found and addressing the root cause)
+2. [Just-in-time](https://en.wikipedia.org/wiki/Lean_manufacturing): doing only what is needed when it's needed in the right amount
+
+In this context, tests can be seen as specific production runs that we do over and over, where certain inputs generate certain results.
+
+If physical manufacturing, which deals with materials with far greater imperfections and cost than digital data, is able to achieve incredibly low rates of error (errors are usually measured per million parts), we should be able to do even better than that when building and implementing DIS. Using the methods of physical manufacturing to achieve the same results should be, in principle, at least worth a good try.
 
 ## Acknowledgments
 
