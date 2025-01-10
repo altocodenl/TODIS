@@ -1,6 +1,10 @@
 # The Organization of Digital Information Systems
 
-## [Click here for a Visual Summary](http://altocode.nl/todis/visual)
+### [Click here for the Visual Summary](http://altocode.nl/todis/visual)
+
+### [Click here to skip the intro and go to the main point: Focus on the Data](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#the-main-thesis-to-organize-the-system-always-focus-on-the-data)
+
+### [If you are a programmer, you may want to jump to the Programmers' Prelude](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#programmers-prelude)
 
 > "The fundamental problem of communication is that of reproducing at one point either exactly or approximately a message selected at another point." -- [Claude Shannon](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf)
 
@@ -134,11 +138,11 @@ This is the central thesis of this treatise. We'll explore now how to make this 
 
 ## The five pillars
 
-1. **Single representation of data** (overcomes not being able to look and describe data in unambiguous terms).
-2. **Single dataspace**. (overcomes having parts of the system floating around instead of being part of one whole picture).
-3. **Call and response** (overcomes the invisibility of how data is transformed inside a DIS).
-4. **Logic is what happens between call and response** (overcomes doubts about the shape of the solution for a clearly specified problem).
-5. **Interface is call and response** (overcomes separateness between system and user and between data and time).
+1. [**Single representation of data**](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#pillar-1-single-representation-of-data) (overcomes not being able to look and describe data in unambiguous terms).
+2. [**Single dataspace**](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#pillar-2-single-dataspace) (overcomes having parts of the system floating around instead of being part of one whole picture).
+3. [**Call and response**](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#pillar-3-call-and-response) (overcomes the invisibility of how data is transformed inside a DIS).
+4. [**Logic is what happens between call and response**](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#pillar-4-logic-is-what-happens-between-call-and-response) (overcomes doubts about the shape of the solution for a clearly specified problem).
+5. [**Interface is call and response**](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#pillar-5-interface-is-call-and-response) (overcomes separateness between system and user and between data and time).
 
 ### Pillar 1: single representation of data
 
@@ -1813,7 +1817,7 @@ We can then call `report` with the actual error received. If for some reason the
 
 The error element saves us a **lot** of conditional logic. In the example above, it saves us from writing every call to check every value to see if it is an error or not, and if it is, to call `report`. If we wanted to make that dynamic, we would have to pass a call to handle the error (`report`) into each of the calls, starting with `make cake`, then `mix` and `bake`, even `chocolate`, `flour` and `butter`! That will quickly turn a beautiful sequence into a brittle eyesore.
 
-You might be thinking: if computesr are so fast and so precise, why do they have errors at all? That's a great question. I believe that we should have an asymptotic attitude towards error (which means that we're working to make them exponentially less likely as time goes by -- more on this in the Quality section below). However, errors are still a reality of DIS, particularly when you interact with less reliable DIS (which will happen a lot of the time).
+You might be thinking: if computers are so fast and so precise, why do they have errors at all? That's a great question. I believe that we should have an asymptotic attitude towards error (which means that we're working to make them exponentially less likely as time goes by -- more on this in the Quality section below). However, errors are still a reality of DIS, particularly when you interact with less reliable DIS (which will happen a lot of the time).
 
 Rich Hickey [takes it further](https://www.youtube.com/watch?v=ROor6_NGIWU&ab_channel=ClojureTV) and argues that what distinguishes a language from a system is that, in systems, errors are an unavoidable part of the landscape. Probably anyone with any practical experience writing systems will agree with that statement.
 
@@ -2243,7 +2247,35 @@ In this context, tests can be seen as specific production runs that we do over a
 
 If physical manufacturing, which deals with materials with far greater imperfections and cost than digital data, is able to achieve incredibly low rates of error (errors are usually measured per million parts), we should be able to do even better than that when building and implementing DIS. Using the methods of physical manufacturing to achieve the same results should be, in principle, at least worth a good try.
 
+## Programmers' Prelude
+
+This section is intended for programmers who want to "get the diff" between what they already know and what they might learn from here.
+
+At the top I set a goal of making this framework provide *at least* an order of magnitude in our capacity to design, implement and understand a system. This is explicitly looking for a [silver bullet](https://en.wikipedia.org/wiki/No_Silver_Bullet), in the sense of Brooks. I'm aware how difficult or unlikely this is. But what if it is possible?
+
+The order of magnitude comes from the following observation: I strongly suspect that at least 90% of our software activity is accidental complexity, in the sense of Fred Brooks. An order of magnitude leap therefore is possible, if we find a systematic way to get rid of most of our accidental complexity. The silver bullet is perhaps possible if we drop most of the weight that we're unnecessarily carrying around when building software. I exhort you to consider this viewpoint with both an open mind and strong skepticism.
+
+This treatise came as a result of attempting a synthesis by analysis. Perhaps intuitively, I found a few ideas that suggested a coherent whole. The treatise puts them in a linear order and analyzes them while explaining them.
+
+I omitted a lot of detail concerning topics such as operating systems, programming languages and systems in general. In general, I tried to say as little as possible, and to reference the minimum amount of examples that would get the point across. This was greatly helped by my ignorance of a lot of the literature on these topics. Although it might not seem like it, I really tried to keep this treatise as short as possible.
+
+Here's a possible "diff" between what you already know and what you may see here that strikes you as novel:
+
+- A definition of digital information systems centered on three actions on data: communicate, store, transform.
+- The central thesis: focus on the data, not the tools.
+- A data representation that works for everything (except perhaps for binary data), with four types only, and an unambiguous, fully determined textual representation.
+- A way to connect the data of a system together in a single representation (the dataspace).
+- A single model to understand all computation: call and response. This model can represent computation at any level, from microcode to a high level DSL. It replaces both expressions and statements, and it springs forward from the data representation using a convention (whatever is prepended by `@` is a call).
+- A notation that can also become an executable programming language (perhaps, I still have to actually do it in [cell](https://github.com/altocodenl/cell)).
+- The notion that the interface is the outside part of the call (the what), and that logic is its internal part (the how). Every what has its how, and every how has many whats inside. This works at all levels, at any layer.
+- Going beyond Lisp's limitation of the list as the only compound data type, by bringing the hash as a first class citizen.
+- Going beyond Forth's limitation of having words relying on a stack to pass parameters, and instead having (or hinting at) a semi-lexical scope by going up the dataspace to find a free variable.
+- Having almost no syntax *and* a fully deterministic pretty-printing of the code by relying on (still not defined, only hinted at) a certain order of expansion (evaluation) that is both left-to-right and right-to-left.
+- A model of logic that requires only three building blocks: reference, sequence and conditional.
+
 ## Acknowledgments
+
+Jimmy Miller, Andrew F and Duncan Cragg have contributed valuable ideas and objections in our discussions at [Future of Coding](futureofcoding.org).
 
 OpenAI's ChatGPT models 4o and o1 have contributed very valuable feedback, and even encouragement.
 
