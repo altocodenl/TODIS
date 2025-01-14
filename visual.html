@@ -14,9 +14,6 @@
      <a href="https://github.com/altocodenl/todis?tab=readme-ov-file#the-organization-of-digital-information-systems" class="no-underline">
         <p class="f1 white">The Organization of Digital Information Systems</p>
      </a>
-     <div class="flex flex-wrap justify-center">
-        <p class="f2 white">A guide to the perplexed</p>
-     </div>
     <div class="flex flex-wrap justify-center">
         <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-light-yellow">
            <p class="f4"><i><strong>The fundamental problem of communication</strong> is reproducing a message from one point to another.</i> — Claude Shannon</p>
@@ -160,8 +157,8 @@
         </div>
 
         <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-dark-pink white">
-            <p class="f3 b">Pillar 5: Interface is a response that makes calls</p>
-            <p class="f5">Overcomes separateness between system and user.</p>
+            <p class="f3 b">Pillar 5: Interface is call and response</p>
+            <p class="f5">Overcomes separateness between system and user and between data and time.</p>
         </div>
      </div>
 
@@ -268,12 +265,178 @@ body 1 h1 "Hello World!"
      </a>
 
      <div class="flex flex-wrap justify-center">
-        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-hot-pink white">
-           <p class="f3 white">Work in progress...</p>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-navy white">
+           <p class="f4 white">Every piece of data in our system has a path to it.</p>
+           <p class="f4 white">A path is a <b>sequence of texts and numbers</b>.</p>
         </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-green white">
+           <p class="f4 white">The path to <i>eggs</i> is <i>breakfast 1</i></p>
+                     <textarea rows="5" cols="30" class="di pa3 bg-black white code">
+breakfast 1 "orange juice"
+          2 "eggs"
+          3 croissant
+          4 yoghurt
+</textarea>
+           <p class="f4 white">Paths are themselves data because they consist of numbers and texts.</p>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-blue white">
+           <p class="f4 white">Every data point in our system has a path to it.</p>
+           <p class="f3 white">Paths don't just <i>point</i> to data, <b>they are the data!</b></p>
+           <p class="f4 white">Paths make places <i>memorable, associative, </i>even <i>permanent</i>.</p>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-light-purple white">
+           <p class="f4 white">To the left, there is <i>context</i>. To the right, <i>detail</i>.</p>
+                     <textarea rows="3" cols="30" class="di pa3 bg-black white code">
+ books 1 author "Edward Said"
+<---------------------------->
+more context       more detail
+</textarea>
+           <p class="f4 white">Paths are themselves data because they consist of numbers and texts.</p>
+        </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 white">
+           <p class="f4 white">Every DIS stores its data in two primary forms: <b>files</b> and <b>databases</b>. <br><br>Both can be placed in the dataspace.</p>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-dark-pink white">
+           <p class="f4 white">For files, put the path to the file as a hash, followed by its content:</p>
+           <textarea rows="2" cols="40" class="di pa3 bg-black white code">
+C: Users dmr code hello.c "hello world!"
+           </textarea>
+           <p class="f5 white">Files can also be represented in binary format</p>
+           <textarea rows="5" cols="40" class="di pa3 bg-black white code">
+C: Users dmr code hello.c 011010000110010101101100011011000110111100100000011101110110111101110010011011000110010000100001
+           </textarea>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-mid-gray white">
+           <p class="f4 white">For databases:<ul><li>Use a hash to represent database name and table/collection name</li><li>A list of hashes for each of the rows/documents</li></ul></p>
+           <textarea rows="2" cols="30" class="di pa3 bg-black white code">
+mysql users 1 id fpereiro
+            2 id deadmau5
+           </textarea>
+           <textarea rows="4" cols="45" class="di pa3 bg-black white code">
+mongo visitors 1 date 2024-11-11T16:42:01.322Z
+                 ip 140.28.111.224
+               2 date 2024-11-11T16:42:02.299Z
+                 ip 220.49.66.236
+           </textarea>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-green white">
+           <p class="f4 white">The dataspace is not where the data is.<br><br>The dataspace <b><u>is</u></b> the data.</p>
+        </div>
+     </div>
+
+     <a href="https://github.com/altocodenl/todis?tab=readme-ov-file#pillar-3-call-and-response" class="no-underline">
+        <p class="f2 white ph4">Pillar 3: Call and response</p>
+     </a>
+
+     <div class="flex flex-wrap justify-center">
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-orange white">
+           <p class="f3 white">The combination of a call and a response can be used to express any data transformation.</p>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-purple white">
+           <p class="f3 white">The formula of a call:</p>
+           <textarea rows="2" cols="35" class="di pa3 bg-black white code">
+@ destination message
+= response
+           </textarea>
+           <p class="f5 white"><ul><li>@ denotes a call</li><li>= denotes its response</li></p>
+        </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-red white">
+           <p class="f3 white">A reference to a variable:</p>
+           <textarea rows="3" cols="35" class="di pa3 bg-black white code">
+value @ widgets
+      = 100
+widgets 100
+           </textarea>
+        </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-dark-gray white">
+           <p class="f3 white">A function call:</p>
+           <textarea rows="3" cols="15" class="di pa3 bg-black white code">
+@ + 1 10
+    2 10
+= 20
+           </textarea>
+        </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-hot-pink white">
+           <p class="f3 white">A database query:</p>
+           <textarea rows="5" cols="45" class="di pa3 bg-black white code">
+users @ "Main Database" "select * from users"
+      = 1 id 1
+          username deadmau5
+        2 id 2
+          username faxingberlin
+           </textarea>
+        </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-dark-blue white">
+           <p class="f3 white">An HTTP call:</p>
+           <textarea rows="7" cols="40" class="di pa3 bg-black white code">
+orientalism @ http headers Accept application/json
+                   host example.com
+                   method GET
+                   path /api/user/1234
+            = body id 1234
+                   username deadmau5
+           </textarea>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-light-gray white">
+           <p class="f3 black">An assembler instruction:</p>
+           <textarea rows="2" cols="20" class="di pa3 bg-black white code">
+@ mov eax 0x1A3F
+= 00100001
+           </textarea>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-green white">
+           <p class="f3 white">Call and response represent the dynamic nature of data <b>while still being data.</b></p>
+        </div>
+
+     </div>
+
+
+
+     <a href="https://github.com/altocodenl/todis?tab=readme-ov-file#pillar-4-logic-is-what-happens-between-call-and-response" class="no-underline">
+        <p class="f2 white ph4">Pillar 4: Logic is what happens between call and response</p>
+     </a>
+     <div class="flex flex-wrap justify-center">
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-dark-green white">
+           <p class="f3 white">Logic is <b>how</b> a call creates a response.</p>
+           <p class="f5 white">(Logic is intentional transformation of data).</p>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-red white">
+           <p class="f3">The five elements of logic:
+           <ol class="f4">
+              <li><b>Reference</b>: destination of a call.</li>
+              <li><b>Sequence</b>: calls made by a call.</li>
+              <li><b>Conditional</b>: choice between sequences.</li>
+              <li><b>Loop</b>: conditional repetition of a sequence.</li>
+              <li><b>Error</b>: special type of conditional response.</li>
+            </ol>
+         </p>
+         <p class="f5">The first three are essential, the last two are <i>nice to have</i>.</p>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-purple white">
+           Work in progress...
+        </div>
+
+        no declarative vs imperative.In other words, the "what" is the interface, the "how" is its logic or implementation. And because they are layered, it makes no sense to call some of them "whats" and some of them "hows".
+     </div>
+
+
+     <a href="https://github.com/altocodenl/todis?tab=readme-ov-file#pillar-4-logic-is-what-happens-between-call-and-response" class="no-underline">
+        <p class="f2 white ph4">Pillar 5: Interface is call and response</p>
+     </a>
+     <div class="flex flex-wrap justify-center">
      </div>
 
 
 
   </div>
 </body>
+
+
+
+

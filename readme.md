@@ -142,7 +142,7 @@ This is the central thesis of this treatise. We'll explore now how to make this 
 2. [**Single dataspace**](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#pillar-2-single-dataspace) (overcomes having parts of the system floating around instead of being part of one whole picture).
 3. [**Call and response**](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#pillar-3-call-and-response) (overcomes the invisibility of how data is transformed inside a DIS).
 4. [**Logic is what happens between call and response**](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#pillar-4-logic-is-what-happens-between-call-and-response) (overcomes doubts about the shape of the solution for a clearly specified problem).
-5. [**Interface is call and response**](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#pillar-5-interface-is-call-and-response) (overcomes separateness between system and user and between data and time).
+5. [**Interface is call and response**](https://github.com/altocodenl/TODIS/?tab=readme-ov-file#pillar-5-interface-is-call-and-response) (overcomes separateness between system and user and between space and time).
 
 ### Pillar 1: single representation of data
 
@@ -408,9 +408,9 @@ After this example, we can notice two things:
 
 
 ```
-              "Main Database" books 1 author "Edward Said"
-
-more context <--------------------------------------------> more detail
+ books 1 author "Edward Said"
+<---------------------------->
+more context       more detail
 ```
 
 2. We can see the rightmost value of any path also as part of the path! Since a path is a sequence of texts and numbers, and rightmost values must also be texts and numbers (since they don't contain anything else), we can just simply put that value at the end of the path. If we did that, we could see something like this as a path:
@@ -480,20 +480,20 @@ C:\Users\dmr\clang\hello.c 00100011011010010110111001100011011011000111010101100
 A better way to do it is to split the path into hashes (that is, into a path), and add the contents as the last item.
 
 ```
-C Users dmr clang hello.c 0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010
+C: Users dmr clang hello.c 0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010
 ```
 
 Using this structure allows us to group files that are in the same directories in a way that's easy to see. For example, if we have a second file in the same directory, we could represent it like this:
 
 ```
-C Users dmr clang hello.c 0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010
+C: Users dmr clang hello.c 0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010
                   indefatigable.c 001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111001011100110100000111110000010100111011001101111011010010110010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111011101101000011010010110110001100101001000000010100000110001001010010010000001111011011111010111110100001010
 ```
 
 Now, where *is* this main hard disk? Hard disks must be attached to a computer in order to be accessible. In the context of DIS, these computers are usually called [servers](https://en.wikipedia.org/wiki/Server_(computing)), to distinguish them from computers to which a user has direct physical access. Let's call this server the `Main Server`. Then, we can represent our two files like this:
 
 ```
-"Main Server" C Users dmr clang hello.c 0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010
+"Main Server" C: Users dmr clang hello.c 0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010
                                 indefatigable.c 001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111001011100110100000111110000010100111011001101111011010010110010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111011101101000011010010110110001100101001000000010100000110001001010010010000001111011011111010111110100001010
 ```
 
@@ -502,7 +502,7 @@ You might notice we haven't used a single list yet to represent files. Instead, 
 With the approach above, we can now say that we have a *path* for each of the files in our system. For example, the *path* to the contents `hello.c` is:
 
 ```
-"Main Server" C Users dmr clang hello.c
+"Main Server" C: Users dmr clang hello.c
 ```
 
 So the definition of *path* in a file system paths (`C:\Users\dmr\clang|hello.c`) and that from a web URL (`https://example.com/clang/examples/hello`) meld into one.
@@ -684,7 +684,7 @@ Before we move on to databases, we can see the [CSV](https://en.wikipedia.org/wi
 Let's say we have a CSV file with the top ten hit songs of [1985](https://en.wikipedia.org/wiki/1985).
 
 ```
-"Main Server" C Users dmr clang hello.c 0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010
+"Main Server" C: Users dmr clang hello.c 0010001101101001011011100110001101101100011101010110010001100101001000000011110001110011011101000110010001101001011011110010111001101000001111100000101001101001011011100111010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111000001110010011010010110111001110100011001100010100000100010010010000110010101101100011011000110111100101100001000000101011101101111011100100110110001100100001000010010001000101001001110110000101000100000011100100110010101110100011101010111001001101110001000000011000000111011000010100111110100001010
                                 indefatigable.c 001000110110100101101110011000110110110001110101011001000110010100100000001111000111001101110100011001000110100101101111001011100110100000111110000010100111011001101111011010010110010000100000011011010110000101101001011011100010100000101001001000000111101100001010001000000111011101101000011010010110110001100101001000000010100000110001001010010010000001111011011111010111110100001010
                           music hits1985.csv 01010010011000010110111001101011001011000101010001101001011101000110110001100101001011000100000101110010011101000110100101110011011101000010110001010111011001010110010101101011011100110010000001100001011101000010000000100011001100010000101000110001001011000100001101100001011100100110010101101100011001010111001101110011001000000101011101101000011010010111001101110000011001010111001000101100010101110110100001100001011011010010000100100000011001100110010101100001011101000111010101110010011010010110111001100111001000000100011101100101011011110111001001100111011001010010000001001101011010010110001101101000011000010110010101101100001011000011001100001010001100100010110001001100011010010110101101100101001000000110000100100000010101100110100101110010011001110110100101101110001011000100110101100001011001000110111101101110011011100110000100101100001101100000101000110011001011000101011101100001011010110110010100100000010011010110010100100000010101010111000000100000010000100110010101100110011011110111001001100101001000000101100101101111011101010010000001000111011011110010110101000111011011110010110001010111011010000110000101101101001000010010110000110011000010100000101000110100001011000100100100100000010101110110000101101110011101000010000001110100011011110010000001001011011011100110111101110111001000000101011101101000011000010111010000100000010011000110111101110110011001010010000001001001011100110010110001000110011011110111001001100101011010010110011101101110011001010111001000101100001100100000101000110101001011000100100100100000010001100110010101100101011011000010000001100110011011110111001000100000010110010110111101110101001011000100001101101000011000010110101101100001001000000100101101101000011000010110111000101100001100110000101000110110001011000100111101110101011101000010000001101111011001100010000001010100011011110111010101100011011010000010110001000100011000010111001001111001011011000010000001001000011000010110110001101100001000000010011000100000010010100110111101101000011011100010000001001111011000010111010001100101011100110010110000110010000010100011011100101100010101000110100001100101001000000101000001101111011101110110010101110010001000000110111101100110001000000100110001101111011101100110010100101100010010000111010101100101011110010010000001001100011001010111011101101001011100110010000001100001011011100110010000100000011101000110100001100101001000000100111001100101011101110111001100101100001100100000101000111000001011000100010101110110011001010111001001111001011000100110111101100100011110010010000001010111011000010110111001110100011100110010000001110100011011110010000001010010011101010110110001100101001000000111010001101000011001010010000001010111011011110111001001101100011001000010110001010100011001010110000101110010011100110010000001100110011011110111001000100000010001100110010101100001011100100111001100101100001100100000101000111001001011000100110101101111011011100110010101111001001000000110011001101111011100100010000001001110011011110111010001101000011010010110111001100111001011000100010001101001011100100110010100100000010100110111010001110010011000010110100101110100011100110010110000110011000010100011000100110000001011000100001101110010011000010111101001111001001000000110011001101111011100100010000001011001011011110111010100101100010011010110000101100100011011110110111001101110011000010010110000110001
 ```
@@ -1124,7 +1124,7 @@ In the next pillar, we will understand logic, which is what happens between a ca
 
 ### Pillar 4: Logic is what happens between call and response
 
-Armed with the pattern of call and response, we can now explore what happens between one and the other. Any call happening in a DIS will have a [deliberate](https://en.wikipedia.org/wiki/Teleology) response. The purpose of a call is to become a response. Logic is how this transformation happens. In other words, logic is intentional transformation of data.
+Armed with the pattern of call and response, we can now explore what happens between one and the other. Any call happening in a DIS will have a [deliberate](https://en.wikipedia.org/wiki/Teleology) response. The purpose of a call is to become a response. Logic is **how** this transformation happens. In other words, logic is intentional transformation of data.
 
 The original definition of [logic](https://en.wikipedia.org/wiki/Logic) is concerned with correct reasoning. In the context of a DIS, logic is something rather more basic: given a purpose for a certain call, we want to be able to express it as a sequence of simpler calls. Eventually, those simpler calls become tiny operations at the [CPU level](https://en.wikipedia.org/wiki/Central_processing_unit). At that point, the software people (the author included) shrug, declare "[here be dragons](https://en.wikipedia.org/wiki/Here_be_dragons)", and leave those details to the hardware makers.
 
@@ -1938,7 +1938,7 @@ These expansions are sometimes called [side effects](https://en.wikipedia.org/wi
 
 We can consider these expansions as the [negative](https://en.wikipedia.org/wiki/Negative_(photography)) of the calls through which data flows. They are every bit as important as the final results.
 
-One more heresy before we move to our fifth and final pillar: there is an established practice of distinguishing between [imperative/procedural logic](https://en.wikipedia.org/wiki/Imperative_programming) (which "tells the computer what to do") and [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) (which "tells the computer what you want, leaving the details to the computer"). But where do we draw the distinction between micromanaging the computer and managing the computer? To me, this distinction is squarely in the eye of the beholder. Microcode could be seen as a declarative interface to a CPU ("I tell the CPU what operation I want and let the CPU actually manage its own logic gates"). Similarly, a line of a very high level program might be seen as imperative ("give me all the rows from this database where the creation time is less than three seconds ago"). I propose that we eliminate this distinction and instead focus on tools to create good abstractions: whether they specify the "what" or the "how" is a matter of how you see it. There will always be a "how" always underpining any "what". In other words, the "what" is the interface, the "how" is its implementation. And because they are layered, it makes no sense to call some of them "whats" and some of them "hows".
+One more heresy before we move to our fifth and final pillar: there is an established practice of distinguishing between [imperative/procedural logic](https://en.wikipedia.org/wiki/Imperative_programming) (which "tells the computer what to do") and [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) (which "tells the computer what you want, leaving the details to the computer"). But where do we draw the distinction between micromanaging the computer and managing the computer? To me, this distinction is squarely in the eye of the beholder. Microcode could be seen as a declarative interface to a CPU ("I tell the CPU what operation I want and let the CPU actually manage its own logic gates"). Similarly, a line of a very high level program might be seen as imperative ("give me all the rows from this database where the creation time is less than three seconds ago"). I propose that we eliminate this distinction and instead focus on tools to create good abstractions: whether they specify the "what" or the "how" is a matter of how you see it. There will always be a "how" always underpining any "what". In other words, the "what" is the interface, the "how" is its logic. And because they are layered, it makes no sense to call some of them "whats" and some of them "hows".
 
 We're ready to move to our fifth and final pillar: interface as call and response.
 
@@ -1974,24 +1974,24 @@ A very concrete example is an interface that displays a table and has a couple o
 
 In more abstract terms, an [interface](https://en.wikipedia.org/wiki/Interface_(computing)) is generally considered *a boundary between a DIS and a human*, over which they exchange information. In our framework, every call is a boundary between two parts of the system. If we consider a user to be part of the system it interacts with, we can then say that every interaction between the user and the rest of the system is a call.
 
-What is then an interface? We could say that the interface is the combination of a call and its response; whereas the sequence of calls that make the call possible are considered the *implementation*.
+What is then an interface? We could say that the interface is the combination of a call and its response; whereas the sequence of calls that make the call possible are considered the *logic*. Another word for the "internals" of the call is *implementation*, but we'll go with logic to build upon pillar 4.
 
 ```
-implementation 1 "what transforms a call into a response"
+logic 1 "what transforms a call into a response"
 interface 1 call
           2 response
 ```
 
-In other words: an interface is the call and its message, plus what comes back. What is **not** the interface is the logic behind a call, which transforms the call itself into a response. Each call is an interface to its underlying implementation. And this is the entire point of building calls with calls: they allow us to organize ever larger and more meaningful units of communication and transformation of data.
+In other words: an interface is the call and its message, plus what comes back. What is **not** the interface is the logic behind a call, which transforms the call itself into a response. Each call is an interface to its underlying logic. And this is the entire point of building calls with calls: they allow us to organize ever larger and more meaningful units of communication and transformation of data.
 
 What is an interface is in the eye of the beholder: a mere ordered list, retrieved from a specific location in the dataspace, can be considered an interface.
 
 If you agree with the above, it's good to pause a minute to understand our departures from tradition:
 
 1. We are doing away with any intrinsic boundary between user and system, considering them both as one. This means that calls vary in their behaviors and in what they respond with, but not in their intrinsic nature. There's no crucial difference between a call to increment a register in a CPU or a call to retrieve an HTML interface. **System calls and user calls are the same**.
-2. There's no distinct general internal or external area. Every call exposes an interface and has its own internal implementation; but that internal representation is also made of calls. Rather than a few blockish components exchanging rays of data over the network, we have a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with calls expanding into further calls.
+2. There's no distinct general internal or external area. Every call exposes an interface and has its own internal logic; but that internal representation is also made of calls. Rather than a few blockish components exchanging rays of data over the network, we have a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with calls expanding into further calls.
 
-Considering any call and response to be an interface liberates us from the burden of having to sharply distinguish "internal" from "external" operations; instead, every call has an external surface (its interface) and its internal surface (its implementation). Through [self-similarity](https://en.wikipedia.org/wiki/Self-similarity), we overcome the separateness between user and system, and more generally between any two parts of our system.
+Considering any call and response to be an interface liberates us from the burden of having to sharply distinguish "internal" from "external" operations; instead, every call has an external surface (its interface) and its internal surface (its logic). Through [self-similarity](https://en.wikipedia.org/wiki/Self-similarity), we overcome the separateness between user and system, and more generally between any two parts of our system.
 
 This doesn't mean that users have to work with zeroes and ones, or that every call can be trusted without verification. A self-similar system can still show graphical data and enforce security policies. But that's a matter of the content of those calls, rather than enforced by separateness between user and system, between trusted and untrusted components.
 
@@ -2000,7 +2000,7 @@ Self-similarity is not a new idea, but it is often forgotten in most design effo
 - Shells as userland programs: A shell operates like any other program, using the same system interfaces it exposes to users.
 - Unidirectional data flow in UIs: The same principles of state updates and data propagation apply at all levels, from individual components to the entire app.
 
-Most of the time, users are the originators of many calls in a system. From the perspective of the computer, when a user initiates an action (like loading up an interface), the initiative (call) belongs to the user. However, this is usually reversed: imagine that the app delivered a notification to the user, which prompted them to then open the app: in that case, the initiative belongs to the computer, and the user's call is just a consequence (do we dare say *implementation*?) of the notification sent by the app.
+Most of the time, users are the originators of many calls in a system. From the perspective of the computer, when a user initiates an action (like loading up an interface), the initiative (call) belongs to the user. However, this is usually reversed: imagine that the app delivered a notification to the user, which prompted them to then open the app: in that case, the initiative belongs to the computer, and the user's call is just a consequence (do we dare say *logic*?) of the notification sent by the app.
 
 Having broken the separation between user and system, we will now attempt to break the separation between time and dataspace.
 
@@ -2064,7 +2064,7 @@ Some calls, however, have bounded reactivity:
                         code 200
 ```
 
-In the call above, `http` makes a HTTP call over the network. But that call has no way of "knowing" if the HTTP handler on the other end has experienced a change. Thus, it is still possible to have non-reactive calls, particularly when those calls go over certain system boundaries (like another computer). If, however, either the method or the path changed (or even the implementation of `http`), then the call would be repeated.
+In the call above, `http` makes a HTTP call over the network. But that call has no way of "knowing" if the HTTP handler on the other end has experienced a change. Thus, it is still possible to have non-reactive calls, particularly when those calls go over certain system boundaries (like another computer). If, however, either the method or the path changed (or even the logic of `http`), then the call would be repeated.
 
 Reactivity is not just convenient: it allows the system to always stay in-sync with itself. This also happens in biological systems: when a living being perceives a change in their environment, everything that in the being's mind depends on the environment will also react to that change. And if a change takes place internally, that will trigger further changes in the organism. As I understand it, this is the basis of [autopoiesis](https://en.wikipedia.org/wiki/Autopoiesis): self-production.
 
@@ -2074,7 +2074,7 @@ Reactive systems are much more *alive* than their batch counterparts. Every refe
 
 Reactive systems are always running: they are always ready to receive calls, and to generate further calls if a change happens in a part of the dataspace that is a dependency of another part of the dataspace.
 
-Reactivity can be implemented by tracking what parts of the system depend on other parts of the system, and repeating calls for those parts that are affected by a change. The main concern of the implementation should be to avoid and report circular dependencies which might send the system into a crash.
+Reactivity can be implemented by tracking what parts of the system depend on other parts of the system, and repeating calls for those parts that are affected by a change. The main concern of the logic should be to avoid and report circular dependencies which might send the system into a crash.
 
 We can already understand that a single change to the dataspace can trigger multiple calls in its dependencies. This 1:N relationship between a call and all possible calls that might be done in response to that original call, is a feature shared with [event systems](https://en.wikipedia.org/wiki/Event-driven_architecture). It may be even possible to replace event systems with reactive systems, since they share both the 1:n relationship described above, plus the fact that the dependency doesn't care which part of the system depends upon it (this is traditionally described as *loose coupling* but is best understood as an arrow that goes in one direction).
 
@@ -2253,7 +2253,7 @@ This section is intended for programmers who want to "get the diff" between what
 
 At the top I set a goal of making this framework provide *at least* an order of magnitude in our capacity to design, implement and understand a system. This is explicitly looking for a [silver bullet](https://en.wikipedia.org/wiki/No_Silver_Bullet), in the sense of Brooks. I'm aware how difficult or unlikely this is. But what if it is possible?
 
-The order of magnitude comes from the following observation: I strongly suspect that at least 90% of our software activity is accidental complexity, in the sense of Fred Brooks. An order of magnitude leap therefore is possible, if we find a systematic way to get rid of most of our accidental complexity. The silver bullet is perhaps possible if we drop most of the weight that we're unnecessarily carrying around when building software. I exhort you to consider this viewpoint with both an open mind and strong skepticism.
+The order of magnitude comes from the following observation: I strongly suspect that at least 90% of our software activity is accidental complexity, also in the sense of Fred Brooks. An order of magnitude leap therefore is possible, if we find a systematic way to get rid of most of our accidental complexity. The silver bullet is perhaps possible if we drop most of the weight that we're unnecessarily carrying around when building software. I exhort you to consider this viewpoint with both an open mind and strong skepticism.
 
 This treatise came as a result of attempting a synthesis by analysis. Perhaps intuitively, I found a few ideas that suggested a coherent whole. The treatise puts them in a linear order and analyzes them while explaining them.
 
