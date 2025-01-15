@@ -1639,7 +1639,7 @@ Other mechanisms can be introduced into `loop`:
                          . 2
                          . 3
                          . 4
-                    filter @ : value "is even" @ value
+                    filter @ : value @ "is even" @ value
              = . 2
                . 4
 ```

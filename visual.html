@@ -406,7 +406,7 @@ orientalism @ http headers Accept application/json
            <p class="f3 white">Logic is <b>how</b> a call creates a response.</p>
            <p class="f5 white">(Logic is intentional transformation of data).</p>
         </div>
-        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-red white">
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-purple white">
            <p class="f3">The five elements of logic:
            <ol class="f4">
               <li><b>Reference</b>: destination of a call.</li>
@@ -418,11 +418,159 @@ orientalism @ http headers Accept application/json
          </p>
          <p class="f5">The first three are essential, the last two are <i>nice to have</i>.</p>
         </div>
-        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-purple white">
-           Work in progress...
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-red white">
+           <p class="f3">A reference is the <i>destination</i> of a call. <br><br>References are links between parts of the dataspace.</p>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-navy white">
+           <p class="f3">A reference can point to a mere value:</p>
+           <textarea rows="3" cols="35" class="di pa3 bg-black white code">
+@ widgets
+= 100
+           </textarea>
+           <p class="f3">And it also can point to a call:</p>
+           <textarea rows="3" cols="35" class="di pa3 bg-black white code">
+@ + 1 10
+    2 10
+= 20
+           </textarea>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-hot-pink white">
+           <p class="f3">Resolving a reference is finding what part of the dataspace it refers to.</p>
+           <p class="f4">Here is one way to do it:</p>
+           <ul class="f4">
+              <li>From the place where the call is made, we go one level up (left) and try to find it. If it's not there, we repeat the process of going one more level up to find it.</li>
+              <li>If we have gone all the way to the left and we can't find it, we obtain an empty text.</li>
+           </ul>
         </div>
 
-        no declarative vs imperative.In other words, the "what" is the interface, the "how" is its logic or implementation. And because they are layered, it makes no sense to call some of them "whats" and some of them "hows".
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-mid-gray white">
+           <p class="f3">A sequence is a <b>list of calls</b>.</p>
+           <p class="f4">The concept of sequence works <i>at any level of abstraction</i>.</p>
+           <p class="f3">Function, flow, procedure, operation, definition, all express the same: <b>a list of calls</b>.</p>
+        </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 white">
+           <p class="f3">A good analogy for a sequence is a recipe:</p>
+           <textarea rows="6" cols="40" class="di pa3 bg-black white code">
+"make cake" @ : 1 @ mix . @ chocolate 100
+                        . @ flour 500
+                        . @ butter 300
+                2 @ bake degrees 200
+                         ingredients @ 1
+           </textarea>
+           <p class="f4">The colon (:) <i>freezes</i> the sequence so that it can be expanded only when it is called.</p>
+         </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-light-purple white">
+           <p class="f3">When we call a sequence, we can see its expansion:</p>
+           <textarea rows="24" cols="40" class="di pa3 bg-black white code">
+@ "make cake" 8
+: 1 @ mix . @ chocolate @ * . @ people
+                              = 8
+                            . 25
+                        = 200
+            = "200 grams of chocolate!"
+          . @ flour @ * . @ people
+                          = 8
+                        . 125
+                    = 1000
+            = "A kilo of flour!"
+          . @ butter @ * . @ people
+                           = 8
+                         . 75
+                     = 600
+            = "600 grams of butter!"
+    = "A mix of 200g of chocolate, a kilo of flour and 600g of butter!"
+  2 @ bake degrees 200
+           ingredients @ 1
+    = "chocolate cake for eight!"
+= "chocolate cake for eight!"
+           </textarea>
+           <p class="f5">Note the colon (:) contains the expansion of the calls.</p>
+         </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-orange white">
+           <p class="f3">Conditionals let you choose between sequences based on a condition:</p>
+           <textarea rows="6" cols="40" class="di pa3 bg-black white code">
+@ if cond 1
+     do @ "make cake" 8
+        = "chocolate cake for eight!"
+= "chocolate cake for eight!"
+           </textarea>
+           <p class="f5">The simplest conditional only has one sequence, which will only be expanded if the condition is true.</p>
+         </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-blue white">
+           <p class="f3">An example with two sequences:</p>
+           <textarea rows="7" cols="40" class="di pa3 bg-black white code">
+dinner @ if cond @ party
+                 = 0
+            do @ "make cake" 8
+            else @ "make healthy dish" 2
+                 = "Beetroot soup!"
+       = "Beetroot soup!"
+party 0
+           </textarea>
+         </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-light-purple white">
+           <p class="f3">Loops are conditional repetition of sequences:</p>
+           <textarea rows="7" cols="25" class="di pa3 bg-black white code">
+@ loop data . 1
+            . 2
+            . 4
+       do @ "plus ten"
+= 1 11
+  2 12
+  3 14
+           </textarea>
+           <p class="f5">This simple type of loop will likely be like at least 50% of the loops in your logic.</p>
+         </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-hot-pink white">
+           <p class="f3">Loops can be used as filters:</p>
+           <textarea rows="7" cols="40" class="di pa3 bg-black white code">
+evens @ loop data . 1
+                  . 2
+                  . 3
+                  . 4
+             filter @ : value @ even @ value
+      = . 2
+        . 4
+           </textarea>
+         </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-green white">
+           <p class="f3">Or as accumulators:</p>
+           <textarea rows="7" cols="40" class="di pa3 bg-black white code">
+"gimme ten" @ loop acc @ +
+                   data . 1
+                        . 2
+                        . 3
+                        . 4
+             = 10
+           </textarea>
+         </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-gray white">
+           <p class="f3">Recursion can be understood as loops with depth:</p>
+           <textarea rows="7" cols="45" class="di pa3 bg-black white code">
+flatten : v @ if cond @ type type list
+                             value @ v
+                 do loop data @ v
+                         do @ flatten
+                 else @ add to "flat list"
+                            value @ v
+           </textarea>
+         </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-orange white">
+           <p class="f4">If calls can represent transformation at any level, we can go <b>beyond declarative vs imperative</b>.</p>
+           <p class="f3">The "what" is the interface, the "how" is its logic. Every call is declarative on the outside, imperative on the inside.</p>
+        </div>
+
+
+
      </div>
 
 
@@ -430,6 +578,36 @@ orientalism @ http headers Accept application/json
         <p class="f2 white ph4">Pillar 5: Interface is call and response</p>
      </a>
      <div class="flex flex-wrap justify-center">
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-green white">
+           <p class="f3">Everyday notion of interface: something made for humans, with graphics.</p>
+           <p class="f3">Formal notion of interface: a boundary between two parts of the system.</p>
+        </div>
+
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-blue white">
+           <p class="f4">A more general way to look at it: an interface is the combination of a call and its response.</p>
+
+           <textarea rows="3" cols="45" class="di pa3 bg-black white code">
+logic "what transforms a call into a response"
+interface 1 call
+          2 response
+           </textarea>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-hot-pink white">
+           <p class="f3">Implications:</p>
+           <ul class="f4">
+              <li>No intrinsic boundary between user and system, both are one.</li>
+              <li>No intrinsic "internal" or "external" areas. A call has an external area (interface) and an internal area (logic).</li>
+           </ul>
+        </div>
+        <div class="grow mw6-l ba bw1 br3 pa3 ma2 bg-purple white">
+           <p class="f3">Calls are <b>reactive</b>.<br><br>When something changes (destination, message, logic), the response is updated.</p>
+           <p class="f4">When a part of the system changes, the system updates itself to stay in sync. This is the true meaning of reactivity.</p>
+        </div>
+
+
+
+
      </div>
 
 
