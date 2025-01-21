@@ -114,7 +114,7 @@ All of the above are necessary, but they are merely tools - means to an end. And
 
 But, at the time of writing, this is not the prevalent paradigm. The way I see it, those making DIS are painters that only look at their their brush or their palette; only rarely do they give a fleeting glimpse to the picture that they are painting.
 
-New developments such as generative AI or big data don't change these facts; the paradigm is neutral towards them.
+New developments such as generative AI or big data don't change these facts; the paradigm is neutral towards them. Although one could say that if AI starts to autonomously create and modify systems, understanding the data of these systems becomes even *more* important.
 
 If you take away one thing from this treatise, it should be this one: **if you are working with a DIS, look at the painting (the data) as much as possible. And ignore as much as possible the brush and the palette (The List).**
 
