@@ -1695,6 +1695,8 @@ We'll now tackle the fifth and last logical element: error.
 
 Errors are data that signal that something has gone wrong. They merit their own (non-essential) logic element because, almost always, when an error occurs we want to stop the sequence that produced it and deal with the error.
 
+Errors can be understood as values that stop the expansion of the sequence in which they happen.
+
 If we go back to the previous example about the cake, what would happen if you couldn't get the butter? If the butter was missing then it doesn't make sense to keep on baking the cake. Possible corrective actions are:
 
 - Replace butter with another ingredient.
@@ -2246,6 +2248,16 @@ The same goes for the two main principles of Ohno's system:
 In this context, tests can be seen as specific production runs that we do over and over, where certain inputs generate certain results.
 
 If physical manufacturing, which deals with materials with far greater imperfections and cost than digital data, is able to achieve incredibly low rates of error (errors are usually measured per million parts), we should be able to do even better than that when building and implementing DIS. Using the methods of physical manufacturing to achieve the same results should be, in principle, at least worth a good try.
+
+## On the "bounciness" of a system
+
+Informally, a "bouncy" system is one that feels light and easy to work with. Like a bouncy ball in a room without sharp borders, it's fun to play with.
+
+I find that the qualities that the calls of a "bouncy" system have three essential qualities:
+
+- **Reversibility**: if you make a mistake, you can immediately notice it and revert it with a single call.
+- **Idempotence**: if you're creating something that is already created, you don't get an error; same goes if you're deleting something that's not there.
+- **Transactionality**: nothing is left half-done in case of an error. If something doesn't go through, you can retry it. There's no fauly intermediate step from which recovery is painful.
 
 ## Programmers' Prelude
 
