@@ -1976,7 +1976,7 @@ A very concrete example is an interface that displays a table and has a couple o
 
 In more abstract terms, an [interface](https://en.wikipedia.org/wiki/Interface_(computing)) is generally considered *a boundary between a DIS and a human*, over which they exchange information. In our framework, every call is a boundary between two parts of the system. If we consider a user to be part of the system it interacts with, we can then say that every interaction between the user and the rest of the system is a call.
 
-What is then an interface? We could say that the interface is the combination of a call and its response; whereas the sequence of calls that make the call possible are considered the *logic*. Another word for the "internals" of the call is *implementation*, but we'll go with logic to build upon pillar 4.
+"What is then an interface? We could say that the interface is the combination of a call and its response; whereas the sequence of calls that make the call possible are considered the *logic*. Another word for the "internals" of the call is *implementation*, but we'll go with *logic* to build upon pillar 4.
 
 ```
 logic 1 "what transforms a call into a response"
@@ -2224,7 +2224,7 @@ I prefer consistency over performance for the reason that a consistent system is
 
 ### On manufacturing and waste
 
-If we consider that the value of a DIS is in the data flows it enables, and we consider data to be akin to a physical object (rather than inmaterial), it becomes possible to apply concepts of manufacturing to the development and improvement of DIS.
+If we consider that the value of a DIS is in the data flows it enables, and we consider data to be akin to a physical object (instead of intangible), it becomes possible to apply concepts of manufacturing to the development and improvement of DIS.
 
 An extremely fruitful school of thought is the one spearheaded by [Taiichi Ohno](https://en.wikipedia.org/wiki/Taiichi_Ohno) at [Toyota](https://en.wikipedia.org/wiki/Toyota_Production_System). Inspired by earlier work by Henry Ford and W. Edwards Deming, he developed principles of manufacturing that leapfrogged the quality and cost of processes by a large factor.
 
@@ -2246,6 +2246,8 @@ The same goes for the two main principles of Ohno's system:
 2. [Just-in-time](https://en.wikipedia.org/wiki/Lean_manufacturing): doing only what is needed when it's needed in the right amount
 
 In this context, tests can be seen as specific production runs that we do over and over, where certain inputs generate certain results.
+
+Interestingly enough, if tests are enumerations of calls and their corresponding responses, tests can therefore be seen as enumerations over interfaces. In other words, a good test suite is a thorough enumeration of an interface. It is also intriguing enough to think that an inductive proof could verify the correctness of an interface.
 
 If physical manufacturing, which deals with materials with far greater imperfections and cost than digital data, is able to achieve incredibly low rates of error (errors are usually measured per million parts), we should be able to do even better than that when building and implementing DIS. Using the methods of physical manufacturing to achieve the same results should be, in principle, at least worth a good try.
 
