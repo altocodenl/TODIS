@@ -247,7 +247,7 @@ musicians 1 born 1959
             lastName Squire
 ```
 
-Note how we indented `1` and `2` to the right of `musicians`. Now, we have a single hash which contains a list, which in turn contains two hashes, each of them containing three texts.
+Note how we indented `1` and `2` to the right of `musicians`. Now, we have a single hash which contains a list, which in turn contains two hashes, each of them containing one number and two texts.
 
 In some cases, it is convenient to put dots instead of numbers for each of the keys of a list. For example, the data above could be represented as:
 
@@ -2066,7 +2066,7 @@ Some calls, however, have bounded reactivity:
                         code 200
 ```
 
-In the call above, `http` makes a HTTP call over the network. But that call has no way of "knowing" if the HTTP handler on the other end has experienced a change. Thus, it is still possible to have non-reactive calls, particularly when those calls go over certain system boundaries (like another computer). If, however, either the method or the path changed (or even the logic of `http`), then the call would be repeated.
+In the call above, `http` makes a HTTP call over the network. But that call has no way of "knowing" if the HTTP handler on the other end has experienced a change. Thus, it is still possible to have non-reactive calls, particularly when those calls go over certain system boundaries (like another computer). If, however, either the method or the path changed (or even the logic of `http`), then the call would be repeated. It could also be possible to pass a parameter to `http` so that the call could be repeated every `n` seconds.
 
 Reactivity is not just convenient: it allows the system to always stay in-sync with itself. This also happens in biological systems: when a living being perceives a change in their environment, everything that in the being's mind depends on the environment will also react to that change. And if a change takes place internally, that will trigger further changes in the organism. As I understand it, this is the basis of [autopoiesis](https://en.wikipedia.org/wiki/Autopoiesis): self-production.
 
@@ -2249,6 +2249,8 @@ In this context, tests can be seen as specific production runs that we do over a
 
 Interestingly enough, if tests are enumerations of calls and their corresponding responses, tests can therefore be seen as enumerations over interfaces. In other words, a good test suite is a thorough enumeration of an interface. It is also intriguing enough to think that an inductive proof could verify the correctness of an interface.
 
+Perhaps, we could even consider an interface to be a specification.
+
 If physical manufacturing, which deals with materials with far greater imperfections and cost than digital data, is able to achieve incredibly low rates of error (errors are usually measured per million parts), we should be able to do even better than that when building and implementing DIS. Using the methods of physical manufacturing to achieve the same results should be, in principle, at least worth a good try.
 
 ## On the "bounciness" of a system
@@ -2277,13 +2279,13 @@ Here's a possible "diff" between what you already know and what you may see here
 
 - A definition of digital information systems centered on three actions on data: communicate, store, transform.
 - The central thesis: focus on the data, not the tools.
-- A data representation that works for everything (except perhaps for binary data), with four types only, and an unambiguous, fully determined textual representation.
+- A data representation that works for everything (except perhaps for binary data), with four types only, and an unambiguous, very low-noise, fully determined textual representation.
 - A way to connect the data of a system together in a single representation (the dataspace).
 - A single model to understand all computation: call and response. This model can represent computation at any level, from microcode to a high level DSL. It replaces both expressions and statements, and it springs forward from the data representation using a convention (whatever is prepended by `@` is a call).
 - A notation that can also become an executable programming language (perhaps, I still have to actually do it in [cell](https://github.com/altocodenl/cell)).
 - The notion that the interface is the outside part of the call (the what), and that logic is its internal part (the how). Every what has its how, and every how has many whats inside. This works at all levels, at any layer.
-- Going beyond Lisp's limitation of the list as the only compound data type, by bringing the hash as a first class citizen.
-- Going beyond Forth's limitation of having words relying on a stack to pass parameters, and instead having (or hinting at) a semi-lexical scope by going up the dataspace to find a free variable.
+- Going beyond Lisp's limitation of the list as the only compound data type, by bringing the hash as a base data type.
+- Going beyond Forth's limitation of having words relying on a stack to pass parameters, and instead having (or hinting at) a semi-lexical scope by walking up the dataspace to find a free variable.
 - Having almost no syntax *and* a fully deterministic pretty-printing of the code by relying on (still not defined, only hinted at) a certain order of expansion (evaluation) that is both left-to-right and right-to-left.
 - A model of logic that requires only three building blocks: reference, sequence and conditional.
 
