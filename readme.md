@@ -44,9 +44,11 @@ What is information to someone might be mere data to someone else; it is a matte
 
 **Therefore, I will use the terms "data" and "information" interchangeably throughout this treatise.**
 
-## What are digital information systems and why do they exist?
+We will also start using the term "data system" instead of "information system", because it's more direct.
 
-An information system is any system that is capable of doing three things:
+## What are digital data systems and why do they exist?
+
+A data system is any system that is capable of doing three things:
 
 1. Communicate data
 2. Store data
@@ -60,21 +62,21 @@ Through their capacity to communicate, store and transform data, DIS can be used
 
 The dual revolution of the [transistor](https://en.wikipedia.org/wiki/Transistor) and [information theory](https://en.wikipedia.org/wiki/Information_theory) allow humans to store, transmit and transform information with incredible speed, precision, and at a very small cost.
 
-What sets *digital* information systems different apart their non-digital predecessors is their incredible speed, accuracy and low cost of operation. Prior to the advent of [digital electronics](https://en.wikipedia.org/wiki/Digital_electronics), information systems were billions of times slower, less accurate and expensive.
+What sets *digital* data systems different apart their non-digital predecessors is their incredible speed, accuracy and low cost of operation. Prior to the advent of [digital electronics](https://en.wikipedia.org/wiki/Digital_electronics), data systems were billions of times slower, less accurate and expensive.
 
-Digital information systems, like their non-digital counterparts, are still physical. Only that instead of representing data with carvings on a stone or ink on paper, they use electrons within electronic devices.
+Digital data systems, like their non-digital counterparts, are still physical. Only that instead of representing data with carvings on a stone or ink on paper, they use electrons within electronic devices.
 
-## Why organization is the key to digital information systems?
+## Why organization is the key to digital data systems?
 
 Organization of information is a problem of abundance; when you have just a little bit of information, it's not a big deal to organize it. If you only have five shirts, you don't need a great organization system. The problem is when you have a lot of it. We now handle billions (or trillions) the amount of information we did before, but we still have the same brains.
 
-The main challenge in building, maintaining and replacing information systems is to understand how data should flow through it. That is: how is its data going to be communicated and transformed? Storage usually doesn't pose a challenge, since it essentially consists of creating and maintaining copies of the data at different points in time, in a number of separate physical locations.
+The main challenge in building, maintaining and replacing data systems is to understand how data should flow through it. That is: how is its data going to be communicated and transformed? Storage usually doesn't pose a challenge, since it essentially consists of creating and maintaining copies of the data at different points in time, in a number of separate physical locations.
 
-The challenge of communicating and transforming data is compounded by the fact that most information systems are alive and must be constantly adapted. When changing the system, the existing data flows should not be broken; and the new data flows should be coherent with the existing ones. So, designing an information system can never be a singular tour de force that, when successful, succeeds for all time; rather, the system must constantly be adapted and improved, even if it was well-designed the first time around.
+The challenge of communicating and transforming data is compounded by the fact that most data systems are alive and must be constantly adapted. When changing the system, the existing data flows should not be broken; and the new data flows should be coherent with the existing ones. So, designing a data system can never be a singular tour de force that, when successful, succeeds for all time; rather, the system must constantly be adapted and improved, even if it was well-designed the first time around.
 
-The challenge to understand an information system is subtle, because most of the software that runs our world is composed of straightforward - even trivial - data transformations. What makes a system challenging to understand is not a single, thorny part of it. But rather: how do all the parts fit together with each other? The parts of an information system are closely and subtly interrelated; and most information systems are comprised of a large number of parts. Therein lies the difficulty in fully understanding the system: how each of the parts work, and how do they relate to each other?
+The challenge to understand a data system is subtle, because most of the software that runs our world is composed of straightforward - even trivial - data transformations. What makes a system challenging to understand is not a single, thorny part of it. But rather: how do all the parts fit together with each other? The parts of a data system are closely and subtly interrelated; and most data systems are comprised of a large number of parts. Therein lies the difficulty in fully understanding the system: how each of the parts work, and how do they relate to each other?
 
-Occasionally, there's a thorny algorithmic problem that's critical to an information system; these are hard and they are fun to tackle. Most of them have efficient solutions that you can just use off the shelf. What's distinctly difficult to pull off the shelf is a way to turn a complex system, made of many trivial parts, into a simple one.
+Occasionally, there's a thorny algorithmic problem that's critical to a data system; these are hard and they are fun to tackle. Most of them have efficient solutions that you can just use off the shelf. What's distinctly difficult to pull off the shelf is a way to turn a complex system, made of many trivial parts, into a simple one.
 
 Simple systems are easier to understand than complex systems. Rich Hickey [brilliantly defines simplicity](https://github.com/matthiasn/talk-transcripts/blob/master/Hickey_Rich/SimpleMadeEasy.md) as something that is not intertwined or entangled with other things; whereas complex things are things that are "folded together", therefore requiring you to understand them not just in isolation, but in all their possible interrelations.
 
@@ -82,9 +84,9 @@ According to [Fred Brooks](https://en.wikipedia.org/wiki/Fred_Brooks), complexit
 
 Whether you pick Hickey's or Brooks' definition, the art of system design is the making of systems that are as simple as possible. For Fred Brooks, the main quality of simple systems is conceptual integrity. Conceptual integrity is an emergent property of a system that is designed by either one person or a small group of persons who have an unified vision of how the system should be. The notion of the concepts of the system being "integral" resonates deeply with Christopher Alexander's notion of strong centers as the main quality of good architectural designs. These two authors may well be talking about the same thing: a good system is composed of consistent parts that are organized harmoniously.
 
-Fred Brooks' recommendation to tackle conceptual integrity was to try to fit the design in the head of a single architect, or of a small and highly coordinated group of architects. I am intrigued by the possibility of going beyond this, and finding conceptual tools that allow information workers to co-create information systems that evolve towards simplicity and create a harmonious whole, not unlike what workmen did five hundred years ago when building a cathedral.
+Fred Brooks' recommendation to tackle conceptual integrity was to try to fit the design in the head of a single architect, or of a small and highly coordinated group of architects. I am intrigued by the possibility of going beyond this, and finding conceptual tools that allow information workers to co-create data systems that evolve towards simplicity and create a harmonious whole, not unlike what workmen did five hundred years ago when building a cathedral.
 
-**The limiting factor for those who create information systems is complexity**. Data transformations, by themselves, are extremely cheap (in terms of the time and the energy used by the computer resources required to do them) and have extremely low error rates. It is the making and maintaining of a coherent information system that can make or break an organization, an institution, and even perhaps the global economy.
+**The limiting factor for those who create data systems is complexity**. Data transformations, by themselves, are extremely cheap (in terms of the time and the energy used by the computer resources required to do them) and have extremely low error rates. It is the making and maintaining of a coherent data system that can make or break an organization, an institution, and even perhaps the global economy.
 
 This is quite interesting, because in pre-information economies, it was energy, not organization, that was the limiting factor of the creation of wealth. Therefore the search for simplicity is not merely an interesting or reasonable pursuit: it is the central way in which complexity, the limiting factor of an information economy, and therefore of wealth creation, can be tackled.
 
@@ -134,7 +136,7 @@ When the data is not seen, the trivial becomes difficult and the nontrivial impo
 
 Data itself is simple and can be directly seen. By using data to understand and make a DIS, we can find the simplest possible expression of the system that will get the job done.
 
-This is the central thesis of this treatise. We'll explore now how to make this a reality through five practical concepts, fancily called *pillars*. Each pillar removes an obstacle to seeing the data flowing through an information system.
+This is the central thesis of this treatise. We'll explore now how to make this a reality through five practical concepts, fancily called *pillars*. Each pillar removes an obstacle to seeing the data flowing through a data system.
 
 ## The five pillars
 
@@ -262,7 +264,7 @@ musicians . born 1959
 
 In this case, dots are understood to be placeholders for the actual numbers that mark the position of each item in the list of `musicians`.
 
-Simple as it is, this data representation can be used to represent any data relevant to an information system. Here are a few examples:
+Simple as it is, this data representation can be used to represent any data relevant to a data system. Here are a few examples:
 
 **An [HTTP](https://en.wikipedia.org/wiki/HTTP) request and response pair**
 
@@ -462,7 +464,7 @@ Normally, files have other things associated with them, such as a creation time,
 A few things to notice about the file above:
 - The `path` starts with `C:`, which means the main [hard disk](https://en.wikipedia.org/wiki/Hard_disk_drive). Then, it has three more parts, subdivided by backslashes (`\`): `Users`, `dmr` and `clang`. All of these are texts.
 - The `name` is also a text.
-- The `contents` are an unreadable sequence of zeroes and ones. With files, we cannot jump to a specific section of its contents, or get a single part. When we get the file, we get the whole thing. But what's good about files is that they are quite close to the "real matter" of an information system: [binary data](https://en.wikipedia.org/wiki/Binary_data).
+- The `contents` are an unreadable sequence of zeroes and ones. With files, we cannot jump to a specific section of its contents, or get a single part. When we get the file, we get the whole thing. But what's good about files is that they are quite close to the "real matter" of a data system: [binary data](https://en.wikipedia.org/wiki/Binary_data).
 
 To simplify things, we could just put the name of the file at the end of the path and get rid of the `name` key.
 
@@ -1108,7 +1110,7 @@ It is also possible to represent errors as responses.
 
 Errors are valid responses, are also data, and are also part of the dataspace.
 
-At every point in time, however, the dataspace is complete. Even if the system is "between" calls, those intermediate states are also valid. And if some call has encountered an error, those error states are also valid. Most digital information systems are in constant flux, so they are always in between calls: by thinking about these states with the same process with which we think about the system at rest (with no calls), we can more clearly understand flux.
+At every point in time, however, the dataspace is complete. Even if the system is "between" calls, those intermediate states are also valid. And if some call has encountered an error, those error states are also valid. Most digital data systems are in constant flux, so they are always in between calls: by thinking about these states with the same process with which we think about the system at rest (with no calls), we can more clearly understand flux.
 
 It is interesting to think that what we normally call an *interface* is really a call: the start of an interaction. And what we normally call an *implementation* is what happens between the call and the response. The call is to the left, the implementation is to the right. We can also use the terms *downstream* and *upstream* to mean that calls go *downstream* and responses go back *upstream*.
 
@@ -2082,7 +2084,7 @@ We can already understand that a single change to the dataspace can trigger mult
 
 One last point concerning updates: when a new response replaces an old one, a system may still keep around the old value of the response. This is called [version control](https://en.wikipedia.org/wiki/Version_control) and allows users to be able to see a previous state of the system. In other words, version control is time travel in the context of the system. Version control is almost always a great idea; the most challenging part of it is to determine what should be forgotten (deleted), either because of lack of space or because of privacy concerns.
 
-We've come a long way through the last five pillars. Hopefully we have, by now, established a systematic way to look at digital information systems. In the last part of the treatise we will discuss some applications of the theory to specific areas. The core of the treatise, however, is concluded here.
+We've come a long way through the last five pillars. Hopefully we have, by now, established a systematic way to look at digital data systems. In the last part of the treatise we will discuss some applications of the theory to specific areas. The core of the treatise, however, is concluded here.
 
 ## How to test the (hypo)thesis of this treatise
 
@@ -2125,6 +2127,16 @@ Specialization works for certain areas: interface design, tool making, algorithm
 - Treat expansions as data. Keep them in a queryable dataspace.
 - Obscure private data in the expansions by deleting it or replacing it with a placeholder.
 - Have a clear policy for deletion of data when requested by users, or when enough time elapses. Enforce these policies as part of the logic of the system. Log the extent of deletions.
+
+### The five-headed beast
+
+For practical purposes, a data system can be understood as five parts:
+
+1. Databases & file systems: the permanent storage.
+2. Backend: the part of the system that controls which data is sent and received to databases & file systems.
+3. Frontend: the part of the system that interacts with the user device and with the backend.
+4. Tests: the part of the system that asserts the correctness (or lack thereof) of the rest of the system. Better understood and kept separately from the rest of the system, so that it can be a portable, executable specification that can straddle different implementations.
+5. Logs & alerts: data that is produced by the operation of the system and that is useful to the maintainers of the system.
 
 ### Security
 
@@ -2277,7 +2289,7 @@ I omitted a lot of detail concerning topics such as operating systems, programmi
 
 Here's a possible "diff" between what you already know and what you may see here that strikes you as novel:
 
-- A definition of digital information systems centered on three actions on data: communicate, store, transform.
+- A definition of digital data systems centered on three actions on data: communicate, store, transform.
 - The central thesis: focus on the data, not the tools.
 - A data representation that works for everything (except perhaps for binary data), with four types only, and an unambiguous, very low-noise, fully determined textual representation.
 - A way to connect the data of a system together in a single representation (the dataspace).
