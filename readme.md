@@ -1725,7 +1725,7 @@ Now, all of these can be expressed with conditionals. But let's just try to do i
                                                 = 8
                                               . 75
                                           = 600
-                                 = error "No butter available!
+                                 = error "No butter available!"
                          = error "An ingredient is missing!"
                        2 @ bake degrees 200
                                 ingredients @ 1
@@ -1753,7 +1753,7 @@ Because we have the expansion available, we can trace back the error back to a l
                                                 = 8
                                               . 75
                                           = 600
-                                 = error "No butter available!
+                                 = error "No butter available!"
                          = error "The spoon got stuck in the mix!"
                        2 @ bake degrees 200
                                 ingredients @ 1
@@ -1783,8 +1783,8 @@ What if, instead, we did something like this?
                                                         = 8
                                                       . 75
                                                   = 600
-                                         = error "No butter available!
-                                 = error "No butter available!
+                                         = error "No butter available!"
+                                 = error "No butter available!"
                              = error "No butter available!"
 ```
 
@@ -1813,8 +1813,8 @@ We can also pass a `then` sequence to do something with the error.
                                                         = 8
                                                       . 75
                                                   = 600
-                                         = error "No butter available!
-                                 = error "No butter available!
+                                         = error "No butter available!"
+                                 = error "No butter available!"
                              = error "No butter available!"
                            then @ : error @ report @ error
 ```
@@ -1944,7 +1944,9 @@ These expansions are sometimes called [side effects](https://en.wikipedia.org/wi
 
 We can consider these expansions as the [negative](https://en.wikipedia.org/wiki/Negative_(photography)) of the calls through which data flows. They are every bit as important as the final results.
 
-One more heresy before we move to our fifth and final pillar: there is an established practice of distinguishing between [imperative/procedural logic](https://en.wikipedia.org/wiki/Imperative_programming) (which "tells the computer what to do") and [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) (which "tells the computer what you want, leaving the details to the computer"). But where do we draw the distinction between micromanaging the computer and managing the computer? To me, this distinction is squarely in the eye of the beholder. Microcode could be seen as a declarative interface to a CPU ("I tell the CPU what operation I want and let the CPU actually manage its own logic gates"). Similarly, a line of a very high level program might be seen as imperative ("give me all the rows from this database where the creation time is less than three seconds ago"). I propose that we eliminate this distinction and instead focus on tools to create good abstractions: whether they specify the "what" or the "how" is a matter of how you see it. There will always be a "how" always underpining any "what". In other words, the "what" is the interface, the "how" is its logic. And because they are layered, it makes no sense to call some of them "whats" and some of them "hows".
+One more heresy before we move to our fifth and final pillar: there is an established practice of distinguishing between [imperative/procedural logic](https://en.wikipedia.org/wiki/Imperative_programming) (which "tells the computer what to do") and [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) (which "tells the computer what you want, leaving the details to the computer"). But where do we draw the distinction between micromanaging the computer and managing the computer? To me, this distinction is squarely in the eye of the beholder. Microcode could be seen as a declarative interface to a CPU ("I tell the CPU what operation I want and let the CPU actually manage its own logic gates"). Similarly, a line of a very high level program might be seen as imperative ("give me all the rows from this database where the creation time is less than three seconds ago"). In contexts where we do not care about the order in which a sequence is executed, we can always state so and let the implementation decide in which order to run things.
+
+I propose that we eliminate this distinction between declarative and imperative and instead focus on tools to create good abstractions: whether they specify the "what" or the "how" is a matter of what side you are looking at. There will always be a "how" always underpining any "what". In other words, the "what" is the interface, the "how" is its logic. And because they are layered, it makes no sense to call some of them "whats" and some of them "hows".
 
 We're ready to move to our fifth and final pillar: interface as call and response.
 
