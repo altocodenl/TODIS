@@ -1149,6 +1149,8 @@ The first three elements are essential, [irreducible](https://en.wikipedia.org/w
 - Without *sequence*, without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On) and allowing a call to make multiple calls (calls which, themselves, will also make further calls) and collecting their responses, our DIS cannot produce responses to the calls it receives.
 - Without being able to choose one path or the other based on a *conditional* (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time.
 
+Computer programs have been described as *a train that lays its own track*. This is a great way to put it. Reference **brings** a new piece of track and puts it in front of the train; sequence **moves** the train forward over that new piece of track; and conditional is what **selects** the next piece of track.
+
 This can be readily seen in the [Turing Machine](https://en.wikipedia.org/wiki/Turing_machine), which is an universal model of computation.
 
 The machine has an infinite tape divided in discrete pieces. If the tape is infinite in one way, we can represent it with a list, where each key is a position in the tape, and each value is the actual value written in the tape. For example:
