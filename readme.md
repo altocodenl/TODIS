@@ -1539,7 +1539,7 @@ This pattern is most useful to do away with branches that are either shorter or 
 
 For those versed in programming, it is interesting to realize that returns are only necessary with conditionals! Neither reference nor sequence require them. Returns make sense only to conditionally break out of a sequence. If a sequence had no conditionals, why would we want to break out early? We could simply delete the calls that we don't need and always have the same definition.
 
-Note that, in our last example, we had to specify the sequence to greeting in another place, "greeting sequence". The reason for this is that we want "greting" to get the response of the *last* call of the sequence; if we had merely put the sequence inside of it, it would have ended up with a list of two empty texts.
+Note that, in our last example, we had to specify the sequence to greeting in another place, "greeting sequence". The reason for this is that we want "greeting" to get the response of the *last* call of the sequence; if we had merely put the sequence inside of it, it would have ended up with a list of two empty texts.
 
 Now that we have set the third and last essential logic element, we can go to our first non-essential (yet incredibly useful) element: loops.
 
