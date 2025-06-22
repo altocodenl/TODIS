@@ -1829,7 +1829,7 @@ You might be thinking: if computers are so fast and so precise, why do they have
 
 Rich Hickey [takes it further](https://www.youtube.com/watch?v=ROor6_NGIWU&ab_channel=ClojureTV) and argues that what distinguishes a language from a system is that, in systems, errors are an unavoidable part of the landscape. Probably anyone with any practical experience writing systems will agree with that statement.
 
-And we're done with logic! We have seen the five elements of logic that are present in DIS. These five elements will cover an overwhelming amount of the logic of any DIS you may encounter or write yourself.
+And we're done with logic! We have seen the five elements of logic that are present in DIS. These five elements (*fivelogic*) will cover an overwhelming amount of the logic of any DIS you may encounter or write yourself.
 
 #### Putting the five elements together
 
@@ -2238,7 +2238,9 @@ While parallelism is not the only cause of consistency failures, it is a very co
 1. Outright errors in logic. For example, forgetting to deduce money from the source account after crediting it to the target account.
 2. Not checking for errors in multi-step sequences. For example, if the `+` operation fails when depositing funds but we still withdraw funds from the source account, the bank will lose money.
 
-I prefer consistency over performance for the reason that a consistent system is easier to reason about. However, in many systems, loss of consistency might be bounded or negligible, and performance extremely important. The problem will often hint at the solution.
+These two, however, are quality issues, not scaling issues.
+
+I prefer consistency over performance for the reason that a consistent system is easier to reason about. However, in many systems, loss of consistency might be bounded or negligible, and performance extremely important. The problem will often hint at the right solution.
 
 ### On manufacturing and waste
 
@@ -2271,6 +2273,16 @@ Perhaps, we could even consider an interface to be a specification.
 
 If physical manufacturing, which deals with materials with far greater imperfections and cost than digital data, is able to achieve incredibly low rates of error (errors are usually measured per million parts), we should be able to do even better than that when building and implementing DIS. Using the methods of physical manufacturing to achieve the same results should be, in principle, at least worth a good try.
 
+## On testing as specification
+
+Picking up the thread of the last section, there's a concrete way to write tests as a specification:
+
+- Tests are done against each of the calls of the system.
+- Each test makes a call and expects a given response. Both the call and the response should be fully determined with an equality check, with clear exceptions that require more dynamism (random identifiers, time).
+- The validation done by the call to its incoming message should be specified in a linear order, and stopping at the first error (auto-activation). This order should be as meaningful as possible.
+- The tests for a given call should be written in a linear fashion, following the order in which the implementation places the validations.
+- While the possible tests will almost always be infinite, through careful design (and perhaps eventually an algorithmic process that can do it for us) we can test each of the families of cases, in a way where every part of a call is properly tested. This effectively reduces infinite possibilities to a finite (even small) number of tests that converge on a proof of correctness of a call - and by extension, of the system.
+
 ## On the "bounciness" of a system
 
 Informally, a "bouncy" system is one that feels light and easy to work with. Like a bouncy ball in a room without sharp borders, it's fun to play with.
@@ -2281,17 +2293,33 @@ I find that the qualities that the calls of a "bouncy" system have three essenti
 - **Idempotence**: if you're creating something that is already created, you don't get an error; same goes if you're deleting something that's not there.
 - **Transactionality**: nothing is left half-done in case of an error. If something doesn't go through, you can retry it. There's no fauly intermediate step from which recovery is painful.
 
+## Speed of movement and speed of fire as the two desiderata of information systems
+
+> "As far as Frederick [The Great] was concerned, there were two major battlefield considerations—speed of march and speed of fire." -- Robert Citino
+
+I wonder if it's the same for information systems; if these two speeds actually determine the capability of an information system.
+
+Speed of movement would be: how quickly can we adapt this system to emerging conditions? What's the degree of effort involved? If you can quickly adapt an existing system with low cost to any new circumstances, that's sounds like fully half of what you'd ask the magic lamp.
+
+Speed of fire would be the actual speed of execution of the operations of the system. Is it fast? Is it responsive? Does it maintain that blazing speed even under load?
+
+Could we reduce the entire desiderata of information systems to these two? I'm immediately thinking of objections: what about simplicity? But if the system is a mess then you surely cannot change it, or you cannot change it quickly, or without breaking things. If the system breaks, that also slows you down. If you need to throw away the system and write a new one, that really slows you down.
+
+But what about quality? If the system intermittently breaks down, that slows down your users. That also reduces the actual rate of fire.
+
+Maybe this is really the entire what. We want a system that we can change quickly and confidently. And a system that runs with blazing speed and doesn't waste anyone's time.
+
 ## Programmers' Prelude
 
 This section is intended for programmers who want to "get the diff" between what they already know and what they might learn from here.
 
 At the top I set a goal of making this framework provide *at least* an order of magnitude in our capacity to design, implement and understand a system. This is explicitly looking for a [silver bullet](https://en.wikipedia.org/wiki/No_Silver_Bullet), in the sense of Brooks. I'm aware how difficult or unlikely this is. But what if it is possible?
 
-The order of magnitude comes from the following observation: I strongly suspect that at least 90% of our software activity is accidental complexity, also in the sense of Fred Brooks. An order of magnitude leap therefore is possible, if we find a systematic way to get rid of most of our accidental complexity. The silver bullet is perhaps possible if we drop most of the weight that we're unnecessarily carrying around when building software. I exhort you to consider this viewpoint with both an open mind and strong skepticism.
+The order of magnitude comes from the following observation: I strongly suspect that at least 90% of our software activity consists of accidental complexity, also in the sense of Fred Brooks. An order of magnitude leap therefore is possible, if we find a systematic way to get rid of most of our accidental complexity. The silver bullet is perhaps possible if we drop most of the weight that we're unnecessarily carrying around when building software. I exhort you to consider this viewpoint with both an open mind and strong skepticism.
 
 This treatise came as a result of attempting a synthesis by analysis. Perhaps intuitively, I found a few ideas that suggested a coherent whole. The treatise puts them in a linear order and analyzes them while explaining them.
 
-I omitted a lot of detail concerning topics such as operating systems, programming languages and systems in general. In general, I tried to say as little as possible, and to reference the minimum amount of examples that would get the point across. This was greatly helped by my ignorance of a lot of the literature on these topics. Although it might not seem like it, I really tried to keep this treatise as short as possible.
+I omitted a lot of detail concerning topics such as operating systems, programming languages and systems in general. In general, I tried to say as little as possible, and to reference the minimum amount of examples that would get the point across. This was greatly helped by my ignorance. Although it might not seem like it, I really tried to keep this treatise as short as possible.
 
 Here's a possible "diff" between what you already know and what you may see here that strikes you as novel:
 
