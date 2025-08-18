@@ -48,6 +48,8 @@ We will also start using the term "data system" instead of "information system",
 
 ## What are digital data systems and why do they exist?
 
+Originally, computers were built to perform long mathematical calculations. We still consider computers to be calculators, but in reality, most of their uses go beyond mere calculation: computers not only calculate, but also store the data on which they calculate (both the inputs and the results). And most of their work is no longer concerned with mathematical calculations, but rather with decision making, communication between humans, entertainment and record keeping. This broader role of computers is what makes data systems possible.
+
 A data system is any system that is capable of doing three things:
 
 1. Communicate data
@@ -114,7 +116,7 @@ What is this everything else that holds the attention of makers of DIS? Here are
 
 All of the above are necessary, but they are merely tools - means to an end. And that end is always about the data: how it's communicated, transformed, and stored. The game is data.
 
-But, at the time of writing, this is not the prevalent paradigm. The way I see it, those making DIS are painters that only look at their their brush or their palette; only rarely do they give a fleeting glimpse to the picture that they are painting.
+But, at the time of writing, this is not the prevalent paradigm. The way I see it, those making DIS are painters that only look at their their brush or their palette; only rarely do they give a fleeting glance to the picture that they are painting.
 
 New developments such as generative AI or big data don't change these facts; the paradigm is neutral towards them. Although one could say that if AI starts to autonomously create and modify systems, understanding the data of these systems becomes even *more* important.
 
@@ -251,18 +253,18 @@ musicians 1 born 1959
 
 Note how we indented `1` and `2` to the right of `musicians`. Now, we have a single hash which contains a list, which in turn contains two hashes, each of them containing one number and two texts.
 
-In some cases, it is convenient to put dots instead of numbers for each of the keys of a list. For example, the data above could be represented as:
+In some cases, it is convenient to put dashes instead of numbers for each of the keys of a list. For example, the data above could be represented as:
 
 ```
-musicians . born 1959
+musicians - born 1959
             firstName Gustavo
             lastName Cerati
-          . born 1962
+          - born 1962
             firstName John
             lastName Squire
 ```
 
-In this case, dots are understood to be placeholders for the actual numbers that mark the position of each item in the list of `musicians`.
+In this case, dashes are understood to be placeholders for the actual numbers that mark the position of each item in the list of `musicians`.
 
 Simple as it is, this data representation can be used to represent any data relevant to a data system. Here are a few examples:
 
@@ -319,9 +321,9 @@ Y 11001010
 
 ```
 head title "Welcome to my site"
-body . h1 "Hello World!"
-     . p . class text
-         . "This is my site"
+body - h1 "Hello World!"
+     - p - class text
+         - "This is my site"
 ```
 
 Fourdata then is a way to look and describe data in unambiguous terms. With text and a few rules, we are able to describe a very broad range of data. With it, we can directly and unambigously look at a piece of data.
@@ -1332,23 +1334,23 @@ Alternative names for a *sequence of calls* are *function*, *flow*, *procedure*,
 A good analogy to illustrate the concept of sequence is a recipe. A recipe of the cake is not a cake. Rather, it tells you how you can make a cake. A DIS will give you even more: not only the instructions on how to make the cake, but also the ingredients.
 
 ```
-"make cake" 1 @ mix . @ chocolate 100
-                    . @ flour 500
-                    . @ butter 300
+"make cake" 1 @ mix - @ chocolate 100
+                    - @ flour 500
+                    - @ butter 300
             2 @ bake degrees 200
                      ingredients @ 1
 ```
 
 In the example above, you can notice that making a cake consists of two steps: mixing ingredients and baking them at 200 degrees (you can also notice that I've never baked a cake). There's two calls made here: `mix` and `bake`. Additionally, there are calls made to `chocolate`, `flour` and `butter` within the `mix` call, presumably to get the ingredients.
 
-Note that we use the dot notation inside `mix`. This makes the sequence more readable. What's important is to remember that those dots are just placeholders for `1`, `2` and `3`.
+Note that we use the dot notation inside `mix`. This makes the sequence more readable. What's important is to remember that those dashes are just placeholders for `1`, `2` and `3`.
 
 We now have a problem, because we don't want those calls to happen when we are writing the sequence. Instead, we want them to happen when another parts of the space calls this sequence. So we need to create a new operator which will "freeze" these calls and only let them happen when the sequence is called. We will use `:`, since it is normally associated with defining something.
 
 ```
-"make cake" @ : 1 @ mix . @ chocolate 100
-                        . @ flour 500
-                        . @ butter 300
+"make cake" @ : 1 @ mix - @ chocolate 100
+                        - @ flour 500
+                        - @ butter 300
                 2 @ bake degrees 200
                          ingredients @ 1
 ```
@@ -1358,9 +1360,9 @@ So `make cake` is not a cake, not even a frozen cake. It is a part of the datasp
 Now, how do we get a cake when we call `make cake`? We can understand that whatever is responded by `bake`, we will get!
 
 ```
-"make cake" @ : 1 @ mix . @ chocolate 100
-                        . @ flour 500
-                        . @ butter 300
+"make cake" @ : 1 @ mix - @ chocolate 100
+                        - @ flour 500
+                        - @ butter 300
                 2 @ bake degrees 200
                          ingredients @ 1
 "today's cake" @ "make cake"
@@ -1374,12 +1376,12 @@ A subtle detail: the call to `bake` references `@ 1`. This references to the fir
 Another detail: `make cake` doesn't receive a message! It will always return the same cake. What if we wanted to send a message to it, perhaps specifying the amount of people that will eat it?
 
 ```
-"make cake" @ : people 1 @ mix . @ chocolate @ * . @ people
-                                                 . 25
-                               . @ flour @ * . @ people
-                                             . 125
-                               . @ butter @ * . @ people
-                                              . 75
+"make cake" @ : people 1 @ mix - @ chocolate @ * - @ people
+                                                 - 25
+                               - @ flour @ * - @ people
+                                             - 125
+                               - @ butter @ * - @ people
+                                              - 75
                        2 @ bake degrees 200
                                 ingredients @ 1
 "today's cake for 8" @ "make cake" 8
@@ -1393,28 +1395,28 @@ By the way, the *outer call* is the call that defines the sequence; the *inner c
 We're now ready to see the expansion of the sequence, which is what happens between the call and the response. We'll omit the definition of `make cake` (since we've just provided it) and focus on how `today's cake for 8` comes into existence.
 
 ```
-"make cake" @ : people 1 @ mix . @ chocolate @ * . @ people
-                                                 . 25
-                               . @ flour @ * . @ people
-                                             . 125
-                               . @ butter @ * . @ people
-                                              . 75
+"make cake" @ : people 1 @ mix - @ chocolate @ * - @ people
+                                                 - 25
+                               - @ flour @ * - @ people
+                                             - 125
+                               - @ butter @ * - @ people
+                                              - 75
                        2 @ bake degrees 200
                                 ingredients @ 1
 "today's cake for 8" @ "make cake" 8
-                     : 1 @ mix . @ chocolate @ * . @ people
+                     : 1 @ mix - @ chocolate @ * - @ people
                                                    = 8
-                                                 . 25
+                                                 - 25
                                              = 200
                                  = "200 grams of chocolate!"
-                               . @ flour @ * . @ people
+                               - @ flour @ * - @ people
                                                = 8
-                                             . 125
+                                             - 125
                                          = 1000
                                  = "A kilo of flour!"
-                               . @ butter @ * . @ people
+                               - @ butter @ * - @ people
                                                 = 8
-                                              . 75
+                                              - 75
                                           = 600
                                  = "600 grams of butter!"
                          = "A mix of 200g of chocolate, a kilo of flour and 600g of butter!"
@@ -1500,9 +1502,9 @@ Conditionals can be nested:
 ```
 greeting @ if cond @ party
                    = 0
-              do @ if @ > . @ people
+              do @ if @ > - @ people
                             = 8
-                          . 4
+                          - 4
                       = 1
                    do @ "make cake" @ people
                                     = 8
@@ -1550,9 +1552,9 @@ A loop is a way to conditionally repeat sequences. Loops put together everything
 The most common kind of loop goes through the elements of a list, performs an operation to each of them, and returns a new list with the responses of each of the calls it did to each of the elements of the list.
 
 ```
-@ loop data . 1
-            . 2
-            . 4
+@ loop data - 1
+            - 2
+            - 4
        do @ "plus ten"
 = 1 11
   2 12
@@ -1573,14 +1575,14 @@ If we add a conditional to the loop, we can make the loop stop before it runs ou
 
 ```
 count 12
-@ loop cond @ < . 10
-                . @ count
-       data . 9
-            . 3
-            . 6
+@ loop cond @ < - 10
+                - @ count
+       data - 9
+            - 3
+            - 6
        do @ : value @ set dest count
-                          value @ + . @ count
-                                    . @ value
+                          value @ + - @ count
+                                    - @ value
 = 1 9
   2 3
 ```
@@ -1596,40 +1598,40 @@ Now, what does the *expansion* of a loop looks like? Let's find out.
 count 12
 @ loop cond @ < 1 10
                 2 @ count
-       data . 9
-            . 3
-            . 6
+       data - 9
+            - 3
+            - 6
        do @ : value @ set dest count
-                          value @ + . @ count
-                                    . @ value
-: 1 cond @ < . 10
-             . @ count
+                          value @ + - @ count
+                                    - @ value
+: 1 cond @ < - 10
+             - @ count
                = 0
     do @ set dest count
-             value @ + . @ count
+             value @ + - @ count
                          = 0
-                       . @ value
+                       - @ value
                          = 9
                    = 9
        = 9
     value 9
-  2 cond @ < . 10
-             . @ count
+  2 cond @ < - 10
+             - @ count
                = 9
     do @ set dest count
-             value @ + . @ count
+             value @ + - @ count
                          = 9
-                       . @ value
+                       - @ value
                          = 3
                    = 12
        = 12
     value 3
-3 cond @ < . 10
-           . @ count
+3 cond @ < - 10
+           - @ count
              = 12
        = 0
-= . 9
-  . 3
+= - 9
+  - 3
 ```
 
 That's a non-trivial expansion and it is quite long. Note however that it captures all of what happens during the execution of the loop: the first two checks with their corresponding calls to `set`, and the third check which stops the loop.
@@ -1641,13 +1643,13 @@ Other mechanisms can be introduced into `loop`:
 1. Filter: returning a list only with values that match a certain condition.
 
 ```
-"only evens" @ loop data . 1
-                         . 2
-                         . 3
-                         . 4
+"only evens" @ loop data - 1
+                         - 2
+                         - 3
+                         - 4
                     filter @ : value @ "is even" @ value
-             = . 2
-               . 4
+             = - 2
+               - 4
 ```
 
 2. Times: repeat a call a specified amount of times, without even passing in a list.
@@ -1655,8 +1657,8 @@ Other mechanisms can be introduced into `loop`:
 ```
 count 10
 "make it ten" @ loop do @ set dest count
-                              value @ + . @ count
-                                        . 1
+                              value @ + - @ count
+                                        - 1
                 times 10
 ```
 
@@ -1664,10 +1666,10 @@ count 10
 
 ```
 "gimme ten" @ loop acc @ +
-                   data . 1
-                        . 2
-                        . 3
-                        . 4
+                   data - 1
+                        - 2
+                        - 3
+                        - 4
              = 10
 ```
 
@@ -1713,19 +1715,19 @@ Now, all of these can be expressed with conditionals. But let's just try to do i
 
 ```
 "today's cake for 8" @ "make cake" 8
-                     : 1 @ mix . @ chocolate @ * . @ people
+                     : 1 @ mix - @ chocolate @ * - @ people
                                                    = 8
-                                                 . 25
+                                                 - 25
                                              = 200
                                  = "200 grams of chocolate!"
-                               . @ flour @ * . @ people
+                               - @ flour @ * - @ people
                                                = 8
-                                             . 125
+                                             - 125
                                          = 1000
                                  = "A kilo of flour!"
-                               . @ butter @ * . @ people
+                               - @ butter @ * - @ people
                                                 = 8
-                                              . 75
+                                              - 75
                                           = 600
                                  = error "No butter available!"
                          = error "An ingredient is missing!"
@@ -1741,19 +1743,19 @@ Because we have the expansion available, we can trace back the error back to a l
 
 ```
 "today's cake for 8" @ "make cake" 8
-                     : 1 @ mix . @ chocolate @ * . @ people
+                     : 1 @ mix - @ chocolate @ * - @ people
                                                    = 8
-                                                 . 25
+                                                 - 25
                                              = 200
                                  = "200 grams of chocolate!"
-                               . @ flour @ * . @ people
+                               - @ flour @ * - @ people
                                                = 8
-                                             . 125
+                                             - 125
                                          = 1000
                                  = "A kilo of flour!"
-                               . @ butter @ * . @ people
+                               - @ butter @ * - @ people
                                                 = 8
-                                              . 75
+                                              - 75
                                           = 600
                                  = error "No butter available!"
                          = error "The spoon got stuck in the mix!"
@@ -1771,19 +1773,19 @@ What if, instead, we did something like this?
 
 ```
 "today's cake for 8" stop do @ "make cake" 8
-                             : 1 @ mix . @ chocolate @ * . @ people
+                             : 1 @ mix - @ chocolate @ * - @ people
                                                            = 8
-                                                         . 25
+                                                         - 25
                                                      = 200
                                          = "200 grams of chocolate!"
-                                       . @ flour @ * . @ people
+                                       - @ flour @ * - @ people
                                                        = 8
-                                                     . 125
+                                                     - 125
                                                  = 1000
                                          = "A kilo of flour!"
-                                       . @ butter @ * . @ people
+                                       - @ butter @ * - @ people
                                                         = 8
-                                                      . 75
+                                                      - 75
                                                   = 600
                                          = error "No butter available!"
                                  = error "No butter available!"
@@ -1801,19 +1803,19 @@ We can also pass a `then` sequence to do something with the error.
 
 ```
 "today's cake for 8" stop do @ "make cake" 8
-                             : 1 @ mix . @ chocolate @ * . @ people
+                             : 1 @ mix - @ chocolate @ * - @ people
                                                            = 8
-                                                         . 25
+                                                         - 25
                                                      = 200
                                          = "200 grams of chocolate!"
-                                       . @ flour @ * . @ people
+                                       - @ flour @ * - @ people
                                                        = 8
-                                                     . 125
+                                                     - 125
                                                  = 1000
                                          = "A kilo of flour!"
-                                       . @ butter @ * . @ people
+                                       - @ butter @ * - @ people
                                                         = 8
-                                                      . 75
+                                                      - 75
                                                   = 600
                                          = error "No butter available!"
                                  = error "No butter available!"
@@ -1859,11 +1861,11 @@ database books 1 author "Edward Said"
                  isbn 978-0-394-42814-7
                  title Orientalism
          "get book" @ : id @ loop data @ books
-                                  filter @ : value @ = . @ value id
-                                                       . id
+                                  filter @ : value @ = - @ value id
+                                                       - id
 server @ http listen do @ : request 1 @ database "get book" @ request path 3
-                                    2 @ if cond @ = . @ 1
-                                                    . ""
+                                    2 @ if cond @ = - @ 1
+                                                    - ""
                                            do 404 "Book not found"
                                            else 200 @ 1
                      method get
@@ -1887,12 +1889,12 @@ An interesting point happens with the expansion. Technically, we could see the e
                             id 1234
                             isbn 978-0-394-42814-7
                             title Orientalism
-                        2 @ if cond @ = . @ 1
+                        2 @ if cond @ = - @ 1
                                           = author "Edward Said"
                                             id 1234
                                             isbn 978-0-394-42814-7
                                             title Orientalism
-                                        . ""
+                                        - ""
                                     = 0
                                else 200 @ 1
                                         = author "Edward Said"
@@ -1912,7 +1914,7 @@ For that reason, it is best for servers (and databases) to not disclose their ex
 
 ```
 database expansions 2024-12-24T14:15:34.889Z @ "get book" @ loop data @ books
-                                                                 filter @ : value @ = . @ value id
+                                                                 filter @ : value @ = - @ value id
                                                                                         = 1234
                                                           = author "Edward Said"
                                                             id 1234
@@ -1924,12 +1926,12 @@ server expansions 2024-12-24T14:15:34.887Z 1 @ database "get book" @ request pat
                                                id 1234
                                                isbn 978-0-394-42814-7
                                                title Orientalism
-                                           2 @ if cond @ = . @ 1
+                                           2 @ if cond @ = - @ 1
                                                              = author "Edward Said"
                                                                id 1234
                                                                isbn 978-0-394-42814-7
                                                                title Orientalism
-                                                           . ""
+                                                           - ""
                                                        = 0
                                                   else 200 @ 1
                                                            = author "Edward Said"
@@ -2195,15 +2197,15 @@ The problem with a system that does multiple things at the same time is that, by
 Now, the call for transferring money could look something like this:
 
 ```
-transfer : m 1 @ if cond < . @ m from
-                           . @ m amount
+transfer : m 1 @ if cond < - @ m from
+                           - @ m amount
                     do res error "Insufficient funds"
              2 @ set dest m to
-                     value @ + . @ m to
-                               . @ m amount
+                     value @ + - @ m to
+                               - @ m amount
              3 @ set dest m from
-                     value @ - . @ m from
-                               . @ m amount
+                     value @ - - @ m from
+                               - @ m amount
 ```
 
 In other words, we first check if the source account has enough funds. If it does, we add the amount to the target account and then withdraw it from the source account.
