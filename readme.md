@@ -2244,6 +2244,8 @@ These two, however, are quality issues, not scaling issues.
 
 I prefer consistency over performance for the reason that a consistent system is easier to reason about. However, in many systems, loss of consistency might be bounded or negligible, and performance extremely important. The problem will often hint at the right solution.
 
+A hypothesis worth exploring: you cannot build a consistency system on top of non-consistent parts. But you can create a non-consistent system built of consistent parts that synchronize over the network.
+
 ### On manufacturing and waste
 
 If we consider that the value of a DIS is in the data flows it enables, and we consider data to be akin to a physical object (instead of intangible), it becomes possible to apply concepts of manufacturing to the development and improvement of DIS.
