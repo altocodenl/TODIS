@@ -2244,7 +2244,7 @@ These two, however, are quality issues, not scaling issues.
 
 I prefer consistency over performance for the reason that a consistent system is easier to reason about. However, in many systems, loss of consistency might be bounded or negligible, and performance extremely important. The problem will often hint at the right solution.
 
-A hypothesis worth exploring: you cannot build a consistency system on top of non-consistent parts. But you can create a non-consistent system built of consistent parts that synchronize over the network.
+A hypothesis worth exploring: you cannot build a consistent system out of non-consistent parts. But you can create a non-consistent system built of consistent parts that synchronize over the network and are not too demanding about accepting changes.
 
 ### On manufacturing and waste
 
