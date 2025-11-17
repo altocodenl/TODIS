@@ -2293,7 +2293,7 @@ Picking up the thread of the last section, there's a concrete way to write tests
 
 Informally, a "bouncy" system is one that feels light and easy to work with. Like a bouncy ball in a room without sharp borders, it's fun to play with.
 
-I find that the qualities that the calls of a "bouncy" system have three essential qualities:
+I find that the calls of a "bouncy" system have three essential qualities:
 
 - **Reversibility**: if you make a mistake, you can immediately notice it and revert it with a single call.
 - **Idempotence**: if you're creating something that is already created, you don't get an error; same goes if you're deleting something that's not there.
