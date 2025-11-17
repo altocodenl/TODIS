@@ -920,7 +920,7 @@ call from "math formula"
 response 20
 ```
 
-Imagine that, rather than a system, we had a particular math formula that was in need of summing 10 and 10. The formula itself doesn't have the means to sum two numbers, but there's another part of the system (let's call it `+`) that knows how to sum a list of numbers and return that result.
+Imagine that, rather than a system, we had a particular math formula that was in need of summing 10 and 10. The formula itself doesn't have the means to sum two numbers, but there's another part of the system (let's call it `+`) that knows how to sum a list of numbers and respond with that result.
 
 In the example above, then, the math formula sends a call containing a list with two elements (10 and 10) to `+`. Then, `+` responds with `20`.
 
@@ -1373,7 +1373,7 @@ More generally: the response to the last call of a sequence will be used as the 
 
 A subtle detail: the call to `bake` references `@ 1`. This references to the first element of whatever list can be found outside of the place where that call is. By going a couple of levels to the left, `@ 1` finds whatever is responded by the call to `mix`. So it is perfectly possible (and actually, generally essential) that a call within a sequence can reference responses from previous calls of the sequence.
 
-Another detail: `make cake` doesn't receive a message! It will always return the same cake. What if we wanted to send a message to it, perhaps specifying the amount of people that will eat it?
+Another detail: `make cake` doesn't receive a message! It will always respond with the same cake. What if we wanted to send a message to it, perhaps specifying the amount of people that will eat it?
 
 ```
 "make cake" @ : people 1 @ mix - @ chocolate @ * - @ people
@@ -1539,7 +1539,7 @@ Note what happened above: if the condition is fulfilled (which in this case, it 
 
 This pattern is most useful to do away with branches that are either shorter or less likely (usually both). In traditional programming, the `res` call is described as a [*return*](https://en.wikipedia.org/wiki/Return_statement), because both data (in this case, empty text) and control (that is, the availability of the system to proceed with the expansion of the next call) are returned to whoever called the sequence. In this treatise, however, we will call this a *response*, because that's simply what it is: we explicitly respond with a value without having to expand the rest of the current sequence.
 
-For those versed in programming, it is interesting to realize that returns are only necessary with conditionals! Neither reference nor sequence require them. Returns make sense only to conditionally break out of a sequence. If a sequence had no conditionals, why would we want to break out early? We could simply delete the calls that we don't need and always have the same definition.
+For those versed in programming, it is interesting to realize that returns are only necessary with conditionals! Neither reference nor sequence require them. Returns make sense only to conditionally break out of a sequence. If a sequence had no conditionals, why would we want to break out early? We could simply not write the calls that we don't need and always have the same definition.
 
 Note that, in our last example, we had to specify the sequence to greeting in another place, "greeting sequence". The reason for this is that we want "greeting" to get the response of the *last* call of the sequence; if we had merely put the sequence inside of it, it would have ended up with a list of two empty texts.
 
@@ -2002,6 +2002,8 @@ If you agree with the above, it's good to pause a minute to understand our depar
 
 1. We are doing away with any intrinsic boundary between user and system, considering them both as one. This means that calls vary in their behaviors and in what they respond with, but not in their intrinsic nature. There's no crucial difference between a call to increment a register in a CPU or a call to retrieve an HTML interface. **System calls and user calls are the same**.
 2. There's no distinct general internal or external area. Every call exposes an interface and has its own internal logic; but that internal representation is also made of calls. Rather than a few blockish components exchanging rays of data over the network, we have a [Koch Snowflake](https://en.wikipedia.org/wiki/Koch_snowflake) with calls expanding into further calls.
+
+In this paradigm, the only dynamic entity, the only agent, is the call and its response.
 
 Considering any call and response to be an interface liberates us from the burden of having to sharply distinguish "internal" from "external" operations; instead, every call has an external surface (its interface) and its internal surface (its logic). Through [self-similarity](https://en.wikipedia.org/wiki/Self-similarity), we overcome the separateness between user and system, and more generally between any two parts of our system.
 
