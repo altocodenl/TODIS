@@ -2125,6 +2125,8 @@ Specialization works for certain areas: interface design, tool making, algorithm
 - Valuable code is only that that performs nontrivial operations, and can usually be isolated.
 - Feed data to a LLM to find patterns. Having the data and the logs in an unified dataspace will make this easier.
 
+Refactoring is changing the implementation of a call without changing its interface.
+
 ### Designing and implementing new systems
 
 - Design the data at rest in an unified dataspace.
@@ -2245,6 +2247,8 @@ While parallelism is not the only cause of consistency failures, it is a very co
 These two, however, are quality issues, not scaling issues.
 
 I prefer consistency over performance for the reason that a consistent system is easier to reason about. However, in many systems, loss of consistency might be bounded or negligible, and performance extremely important. The problem will often hint at the right solution.
+
+The reason that a consistent system is easier to reason about is because the space of possibilities doesn't multiply on each transformation. The system can only be in one state at a time.
 
 A hypothesis worth exploring: you cannot build a consistent system out of non-consistent parts. But you can create a non-consistent system built of consistent parts that synchronize over the network and are not too demanding about accepting changes.
 
