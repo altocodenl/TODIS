@@ -1124,6 +1124,8 @@ In this framework, actors or process can be described in terms of calls. This al
 
 This framework also allows us to go beyond the concept of state as a special type of data. If the "system" is a part of the dataspace, the state of the system (or of a subsystem) is also a part of the dataspace. Everything exists within the same dataspace, so the data in the system is indistinguishable (or rather, integrated) with the rest of the system. Put in another way, the state of our system is [first class](https://en.wikipedia.org/wiki/First-class_citizen) and can therefore be considered to have an identity of its own.
 
+I don't think call and response could be further simplified by making computation to be just about calls. If there were calls without responses, information could never be brought back to the caller. The caller would just emit. The call sends, writes, impresses information in the receiver. The response impresses sends, writes, impresses information on the caller. This symmetry is essential and indispensable.
+
 We have covered a lot of ground in this pillar. In a nutshell, we have found that the combination of a call and a response can express data change of any kind, just by using data itself.
 
 In the next pillar, we will understand logic, which is what happens between a call and a response.
@@ -1147,9 +1149,9 @@ It is my contention that the main elements of logic, in the context of a DIS, ar
 For all of us who are fearful of programming, even those of us who practice it daily, it can be liberating to discover that essentially all logic can be understood through these elements. The diverse and generally abstruse syntax of programming languages hides the fact that most logic is based on very few, intuitively understandable elements. I will spend the rest of this pillar showing how that is the case.
 
 The first three elements are essential, [irreducible](https://en.wikipedia.org/wiki/Irreducibility_(mathematics)).
-- Without *reference*, we have no way to represent the destination of a call. If every value in the dataspace refers only to itself, then we cannot establish relationships between parts of the system.
-- Without *sequence*, without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On) and allowing a call to make multiple calls (calls which, themselves, will also make further calls) and collecting their responses, our DIS cannot produce responses to the calls it receives.
-- Without being able to choose one path or the other based on a *conditional* (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time.
+- Without *reference*, we have no way to represent the destination of a call. If every value in the dataspace refers only to itself, then we cannot establish relationships between parts of the system. Without reference, data can just mean itself, instead of generating new data.
+- Without *sequence*, without ["keeping on keeping on"](https://en.wikipedia.org/wiki/Keep_On_Keeping_On) and allowing a call to make multiple calls (calls which, themselves, will also make further calls) and collecting their responses, our DIS cannot produce responses to the calls it receives. Without sequence, every reference would at most generate one call.
+- Without being able to choose one path or the other based on a *conditional* (which is some data, a part of the dataspace), our DIS would always be doing the same calls, no matter what those calls responded. Without conditionals, our logic would always do the same thing, every time. Even a simple operation, like addition, is not possible without conditionals, since the carry happens only sometimes.
 
 Computer programs have been described as *a train that lays its own track*. This is a great way to put it. Reference **brings** a new piece of track and puts it in front of the train; sequence **moves** the train forward over that new piece of track; and conditional is what **selects** the next piece of track.
 
