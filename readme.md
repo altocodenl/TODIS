@@ -1128,6 +1128,8 @@ I don't think call and response could be further simplified by making computatio
 
 We have covered a lot of ground in this pillar. In a nutshell, we have found that the combination of a call and a response can express data change of any kind, just by using data itself.
 
+Call and response are a single representation (in the pillar 1 sense) of the dynamic nature of data. If fourdata represents data at rest, call and response extends fourdata to represent data in flux.
+
 In the next pillar, we will understand logic, which is what happens between a call and a response.
 
 ### Pillar 4: Logic is what happens between call and response
@@ -2093,6 +2095,8 @@ Reactive systems are always running: they are always ready to receive calls, and
 Reactivity can be implemented by tracking what parts of the system depend on other parts of the system, and repeating calls for those parts that are affected by a change. The main concern of the logic should be to avoid and report circular dependencies which might send the system into a crash.
 
 We can already understand that a single change to the dataspace can trigger multiple calls in its dependencies. This 1:N relationship between a call and all possible calls that might be done in response to that original call, is a feature shared with [event systems](https://en.wikipedia.org/wiki/Event-driven_architecture). It may be even possible to replace event systems with reactive systems, since they share both the 1:n relationship described above, plus the fact that the dependency doesn't care which part of the system depends upon it (this is traditionally described as *loose coupling* but is best understood as an arrow that goes in one direction).
+
+If we circle back to pillar 1, we can consider that a single representation of data (fourdata) is an interface to data itself, with the call being the data itself and the response being the impression produced by the data on the beholder.
 
 One last point concerning updates: when a new response replaces an old one, a system may still keep around the old value of the response. This is called [version control](https://en.wikipedia.org/wiki/Version_control) and allows users to be able to see a previous state of the system. In other words, version control is time travel in the context of the system. Version control is almost always a great idea; the most challenging part of it is to determine what should be forgotten (deleted), either because of lack of space or because of privacy concerns.
 
