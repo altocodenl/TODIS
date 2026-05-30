@@ -866,6 +866,8 @@ innerFunction parent middleFunction
 
 Now that we can represent all the data of our system in a consistent and centralized way, we can see that this single dataspace doesn’t just represent data: it also organizes, contextualizes, and connects data. In short, it *is* the data. In a more traditional way of looking at data, the path to the data is not the data itself. But, in the dataspace we propose, all data is *made* of paths. Each element of a path carries both meaning and connection to other elements. The paths contain the meaning of the system. The connections, therefore, are meaningful, and the entire system can be understood as a set of connections. This starts to look a lot like a brain, or a [large language model](https://en.wikipedia.org/wiki/Large_language_model).
 
+An important point is that an unified dataspace doesn't require the data to be in one place. The dataspace is a way to bring together data that exists in different places. A single dataspace is unified because it unifies, not because everything has to be placed inside it before we can use it. The dataspace is where data comes together.
+
 Now that we have mastered the data at rest, we're ready to tackle data communication and transformation in pillar 3, where the system comes to life.
 
 ### Pillar 3: call and response
