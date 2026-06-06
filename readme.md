@@ -2182,6 +2182,16 @@ As a North Star, it is worth upholding the [Kerckhoffs's principle](https://en.w
 
 ### Scaling: consistency or performance
 
+```
+TODO: incorporate this insight into the framework:
+
+> The key (perhaps) to make TODIS work with several concurrent processes is to add 1) the possibility of a call not waiting for a response, but keeping on making calls (call and ignore); and 2) a call to "block" until another the response to another call comes in (wait). Intuitively, I think this could cover all the cases that are not covered by sequential calls. Both call and ignore and wait could take N calls. As for a cancellation of a call, it could be expressed as termination of a sequence from outside: the sequence is wrapped by a loop that checks for an interrupt. So, cancellation can be expressed just as a repeated conditional.
+
+But a wait is just a dormant call. The mechanism is that a response, when arrives, acts as a call. The wait, in essence, appends the waiting call as the last step of the logic of the call that was made earlier. The way in which a wait can function is by making a reference to a response that hasn't arrived yet.
+
+As for the call with ignore, the engine just jumps forward to the next call and leaves the result inconclusive; when the result arrives, whatever depends on it resumes. But this has to be considered a different sequence. The call with ignore essentially starts a new sequence.
+```
+
 [Scaling](https://en.wikipedia.org/wiki/Scalability) a system is the act of adding more resources (memory and processors) to it, while keeping the system *correct*.
 
 Adding hardware resources, in itself, is now very easy thanks to 1) the unbelievable size and speed of modern computers; 2) cloud providers which allow you to hire more resources on demand.
