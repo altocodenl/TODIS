@@ -2183,13 +2183,74 @@ As a North Star, it is worth upholding the [Kerckhoffs's principle](https://en.w
 ### Scaling: consistency or performance
 
 ```
-TODO: incorporate this insight into the framework:
+TODO: incorporate these ideas into the framework:
 
 > The key (perhaps) to make TODIS work with several concurrent processes is to add 1) the possibility of a call not waiting for a response, but keeping on making calls (call and ignore); and 2) a call to "block" until another the response to another call comes in (wait). Intuitively, I think this could cover all the cases that are not covered by sequential calls. Both call and ignore and wait could take N calls. As for a cancellation of a call, it could be expressed as termination of a sequence from outside: the sequence is wrapped by a loop that checks for an interrupt. So, cancellation can be expressed just as a repeated conditional.
 
 But a wait is just a dormant call. The mechanism is that a response, when arrives, acts as a call. The wait, in essence, appends the waiting call as the last step of the logic of the call that was made earlier. The way in which a wait can function is by making a reference to a response that hasn't arrived yet.
 
 As for the call with ignore, the engine just jumps forward to the next call and leaves the result inconclusive; when the result arrives, whatever depends on it resumes. But this has to be considered a different sequence. The call with ignore essentially starts a new sequence.
+
+If we wait for N calls, wouldn't this be an event system?
+
+I need to rethink and rewrite TODIS on sequence to explain forks. That's the missing piece. A fork is when you send off something and don't wait. If you send it off without waiting, that's a new sequence that is forked. Wait is the converse: a merge. If the fork kept on going and never came back to anybody waiting, it'd be just a sequence. But the wait is the merge. So: fork and merge.
+
+The actor is a sequence.
+For concurrency: fork and wait. a fork is a call for which you don't wait the response, you just keep on going. a wait is a call triggered by a change of value on a location.
+Errors can be handled with stop and catch.
+
+Multiple forks can write to the same place, but they can use an add call instead of just a write.
+And wait can wait for multiple places. to decide if it's ready, it can do a read on all the locations and decide conditionally, with normal logic, if it should proceed or wait.
+A wait is a reverse call: instead of the caller deciding what to trigger, a call writes something; that change in that something triggers a call.
+
+Calls are atomic.
+Concurrency is essentially non-deterministic, unless you determine how things run.
+Reactivity: just like a spreadsheet, no batching, order of dependencies.
+Wait is reactive. a wait is a reference to a blank place.
+Dynamic scoping: that's a tough one. i feel this dynamic scope is macro-like. what'd be interesting is to be able to pack the environment in a containing sequence. So i'm headed to literal closures of sorts. that'd be an intersting one
+
+claude:
+"Fork is @ without =. The sequence keeps going; the response lands at a location in the dataspace whenever it arrives.
+Wait is = without @. The sequence pauses until a value at a location changes, then resumes with that value."
+
+Three files: stdin is arguments, stdout is return value, stderr is something unexpected that bubbles up and is caught. understand error handling as a constant conditional that bubbles up, rather than being written constantly.
+
+To stream is to unhook and put a listener on where the results go! The listener is a call that can either put another stream or instead conditionally wait until the stream is done. The "done" should then be represented as data.
+
+Redux: fork is to decouple @ from =. wait is to couple a change of a value (or n values) with a call. That's all we need for concurrency.
+
+Interesting to understand that an event is like a reverse call: when X location changes, consider it to be a call.
+
+Rather than wait, it should just be: when X location changes, trigger a sequence with that value as argument. So wait would be the call that sets the event, taking n locations as input, plus a sequence. When any of these change, the sequence is triggered with all n values from those n locations. That sequence can then decide what to do with that.
+
+The big question for superseding these models is: how can a call replace both the process and the actor?
+I need to provide a mapping from CSP and the actor model to TODIS, and show that TODIS works more simply, and for 100% of what those models cover.
+
+CSP:
+- **Processes**: independent sequential computations.
+- **Events**: atomic, observable actions.
+- **Channels**: named conduits for synchronous communication. The sender blocks until the receiver is ready, and vice versa. Communication *is* synchronization.
+
+Mapping:
+Process: sequence
+Event: call
+Channel: location
+
+Actor Model
+- **Actor**
+- **Message send**
+- **Mailbox**
+
+Mapping:
+Actor: sequence (but without private state)
+Message: call
+Mailbox: location
+
+Sequences are single threaded (one thing at a time) unless they call fork, but then that fork just creates a new sequence. It's 1:1 what a child async process would be at the OS level. The opposite of fork is wait. There's no opaqueness/private state, but that doesn't mean everyone can access everything either.
+
+It is interesting that both CSP and the actor model have the actual transformation (sequence), the steps of the transformation (calls) and the place (location). That hints at a single structure.
+
+It is also interesting that the sequence, though it is just a bunch of calls, really becomes a doer. If the trinity above is doer, deed and place, the sequence becomes the doer. Structured sequences become agents. Agents are structured sequences. Logic animates a single call into a process, which with enough complexity becomes an entity. Dawkins would like this.
 ```
 
 [Scaling](https://en.wikipedia.org/wiki/Scalability) a system is the act of adding more resources (memory and processors) to it, while keeping the system *correct*.
