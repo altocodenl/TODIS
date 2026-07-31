@@ -2251,6 +2251,8 @@ Sequences are single threaded (one thing at a time) unless they call fork, but t
 It is interesting that both CSP and the actor model have the actual transformation (sequence), the steps of the transformation (calls) and the place (location). That hints at a single structure.
 
 It is also interesting that the sequence, though it is just a bunch of calls, really becomes a doer. If the trinity above is doer, deed and place, the sequence becomes the doer. Structured sequences become agents. Agents are structured sequences. Logic animates a single call into a process, which with enough complexity becomes an entity. Dawkins would like this.
+
+jump, keep on going, choose, duplicate, merge. those are the five.
 ```
 
 [Scaling](https://en.wikipedia.org/wiki/Scalability) a system is the act of adding more resources (memory and processors) to it, while keeping the system *correct*.
